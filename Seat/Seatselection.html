@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seat Selection</title>
+    <style>
+        .seat {
+            width: 40px;
+            height: 40px;
+            background-color: #ccc;
+            margin: 5px;
+            text-align: center;
+            line-height: 40px;
+            cursor: pointer;
+        }
+        .booked {
+            background-color: #f00;
+        }
+        .selected {
+            background-color: #0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Select Your Seats</h1>
+    <form action="reserve.php" method="post">
+        <div id="seat-map">
+            <!-- Seats will be generated here -->
+        </div>
+        <input type="hidden" id="selected-seats" name="selected_seats">
+        <button type="submit">Reserve Seats</button>
+    </form>
+
+    <script>
+        const rows = 5;
+        const seatsPerRow = 10;
+        const bookedSeats = [3, 12, 23]; // Sample of booked seat IDs (should come from PHP)
+
+        const seatMap = document.getElementById('seat-map');
+        let selectedSeats = [];
+
+        // Create seat grid
+        for (let row = 1; row <= rows; row++) {
+            for (let seat = 1; seat <= seatsPerRow; seat++) {
+                const seatID = (row - 1) * seatsPerRow + seat;
+                const seatDiv = document.createElement('div');
+                seatDiv.className = 'seat';
+                seatDiv.innerText = seatID;
+                seatDiv.dataset.seatId = seatID;
+
+                // Mark booked seats
+                if (bookedSeats.includes(seatID)) {
+                    seatDiv.classList.add('booked');
+                } else {
+                    seatDiv.addEventListener('click', function () {
+                        if (!seatDiv.classList.contains('booked')) {
+                            seatDiv.classList.toggle('selected');
+                            if (seatDiv.classList.contains('selected')) {
+                                selectedSeats.push(seatID);
+                            } else {
+                                selectedSeats = selectedSeats.filter(id => id !== seatID);
+                            }
+                            document.getElementById('selected-seats').value = selectedSeats.join(',');
+                        }
+                    });
+                }
+                seatMap.appendChild(seatDiv);
+            }
+        }
+    </script>
+</body>
+</html>
