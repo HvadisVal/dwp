@@ -2,112 +2,153 @@ DROP DATABASE IF EXISTS dwp;
 CREATE DATABASE dwp;
 USE dwp;
 
--- Create Genre table
+-- Genre Table
 CREATE TABLE Genre (
-    GenreID INT PRIMARY KEY AUTO_INCREMENT,
-    Name VARCHAR(255) NOT NULL,
+    Genre_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100),
     Description TEXT
 );
 
--- Create Version table
+-- Version Table
 CREATE TABLE Version (
-    VersionID INT PRIMARY KEY AUTO_INCREMENT,
-    Format VARCHAR(255) NOT NULL,
-    AdditionalFee DECIMAL(10, 2) DEFAULT 0
+    Version_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Format VARCHAR(50),
+    AdditionalFee DECIMAL(10, 2)
 );
 
--- Create Movie table (Added VersionID FK)
+-- Movie Table
 CREATE TABLE Movie (
-    MovieID INT PRIMARY KEY AUTO_INCREMENT,
-    Title VARCHAR(255) NOT NULL,
-    Director VARCHAR(255),
+    Movie_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Title VARCHAR(255),
+    Director VARCHAR(100),
     Language VARCHAR(50),
     Year INT,
-    Duration INT,
-    Rating VARCHAR(10),
+    Duration TIME,
+    Rating INT,
     Description TEXT,
-    GenreID INT,
-    VersionID INT,  -- Added VersionID
-    FOREIGN KEY (GenreID) REFERENCES Genre(GenreID),
-    FOREIGN KEY (VersionID) REFERENCES Version(VersionID)  -- FK to Version
+    Genre_ID INT,
+    Version_ID INT,
+    FOREIGN KEY (Genre_ID) REFERENCES Genre(Genre_ID),
+    FOREIGN KEY (Version_ID) REFERENCES Version(Version_ID)
 );
 
--- Create CinemaHall table
-CREATE TABLE CinemaHall (
-    CinemaHallID INT PRIMARY KEY AUTO_INCREMENT,
-    Name VARCHAR(255) NOT NULL,
-    TotalSeats INT NOT NULL
+-- Payment Table
+CREATE TABLE Payment (
+    Payment_ID INT PRIMARY KEY AUTO_INCREMENT,
+    AmountPaid DECIMAL(10, 2),
+    PaymentMethod VARCHAR(50),
+    PaymentDate DATE,
+    PaymentStatus VARCHAR(50)
 );
 
--- Create Screening table (reference MovieID not MovieTitle)
-CREATE TABLE Screening (
-    ScreeningID INT PRIMARY KEY AUTO_INCREMENT,
-    MovieID INT,
-    ShowTime DATETIME NOT NULL,
-    CinemaHallID INT,
-    FOREIGN KEY (MovieID) REFERENCES Movie(MovieID),
-    FOREIGN KEY (CinemaHallID) REFERENCES CinemaHall(CinemaHallID)
+-- Invoice Table
+CREATE TABLE Invoice (
+    Invoice_ID INT PRIMARY KEY AUTO_INCREMENT,
+    InvoiceDate DATE,
+    AmountDue DECIMAL(10, 2),
+    InvoiceStatus VARCHAR(50)
 );
 
--- Create Seat table
-CREATE TABLE Seat (
-    SeatID INT PRIMARY KEY AUTO_INCREMENT,
-    SeatNumber VARCHAR(10) NOT NULL,
-    Row VARCHAR(10),
-    Status ENUM('Available', 'Booked') DEFAULT 'Available',
-    CinemaHallID INT,
-    FOREIGN KEY (CinemaHallID) REFERENCES CinemaHall(CinemaHallID)
-);
-
--- Create Coupon table
+-- Coupon Table
 CREATE TABLE Coupon (
-    CouponID INT PRIMARY KEY AUTO_INCREMENT,
-    CouponCode VARCHAR(50) NOT NULL UNIQUE,
-    DiscountAmount DECIMAL(10, 2) NOT NULL
+    Coupon_ID INT PRIMARY KEY AUTO_INCREMENT,
+    CouponCode VARCHAR(50),
+    DiscountAmount DECIMAL(10, 2)
 );
 
--- Create Ticket table
+-- CinemaHall Table
+CREATE TABLE CinemaHall (
+    CinemaHall_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(255),
+    TotalSeats INT
+);
+
+-- Screening Table
+CREATE TABLE Screening (
+    Screening_ID INT PRIMARY KEY AUTO_INCREMENT,
+    MovieTitle VARCHAR(255),
+    ShowTime TIME,
+    CinemaHall_ID INT,
+    FOREIGN KEY (CinemaHall_ID) REFERENCES CinemaHall(CinemaHall_ID)
+);
+
+
+-- Seat Table
+CREATE TABLE Seat (
+    Seat_ID INT PRIMARY KEY AUTO_INCREMENT,
+    SeatNumber INT,
+    Row INT,
+    Status VARCHAR(50),
+    CinemaHall_ID INT,
+    FOREIGN KEY (CinemaHall_ID) REFERENCES CinemaHall(CinemaHall_ID)
+);
+
+-- Ticket Table
 CREATE TABLE Ticket (
-    TicketID INT PRIMARY KEY AUTO_INCREMENT,
-    TotalPrice DECIMAL(10, 2) NOT NULL,
+    Ticket_ID INT PRIMARY KEY AUTO_INCREMENT,
+    TotalPrice DECIMAL(10, 2),
     Type VARCHAR(50),
-    ScreeningID INT,
-    SeatID INT,
-    CouponID INT,
-    FOREIGN KEY (ScreeningID) REFERENCES Screening(ScreeningID),
-    FOREIGN KEY (SeatID) REFERENCES Seat(SeatID),
-    FOREIGN KEY (CouponID) REFERENCES Coupon(CouponID)
+    Screening_ID INT,
+    Seat_ID INT,
+    Coupon_ID INT,
+    FOREIGN KEY (Screening_ID) REFERENCES Screening(Screening_ID),
+    FOREIGN KEY (Seat_ID) REFERENCES Seat(Seat_ID),
+    FOREIGN KEY (Coupon_ID) REFERENCES Coupon(Coupon_ID)
 );
 
--- Create Profile table (removed UNSIGNED)
-CREATE TABLE Profile (
-    ProfileID INT PRIMARY KEY AUTO_INCREMENT,
-    Name VARCHAR(255) NOT NULL,
-    Email VARCHAR(255),
-    TelephoneNumber VARCHAR(20)
+-- User Table
+CREATE TABLE User (
+    User_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100),
+    Email VARCHAR(100),
+    TelephoneNumber INT,
+    Password VARCHAR(255)
 );
 
--- Create User table
-CREATE TABLE `User` (
-    UserID INT PRIMARY KEY AUTO_INCREMENT,
-    Name VARCHAR(255) NOT NULL,
-    Email VARCHAR(255) NOT NULL UNIQUE,
-    TelephoneNumber VARCHAR(20),
-    ProfileID INT,
-    FOREIGN KEY (ProfileID) REFERENCES Profile(ProfileID)
+-- GuestUser Table
+CREATE TABLE GuestUser (
+    GuestUser_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Firstname VARCHAR(100),
+    Lastname VARCHAR(100),
+    Email VARCHAR(100),
+    TelephoneNumber INT
 );
 
--- Create Booking table
+-- Booking Table
 CREATE TABLE Booking (
-    BookingID INT PRIMARY KEY AUTO_INCREMENT,
-    MovieID INT,
-    UserID INT,
-    TicketID INT,
-    NumberOfTickets INT NOT NULL,
-    BookingDate DATETIME NOT NULL,
-    PaymentStatus ENUM('Pending', 'Completed') DEFAULT 'Pending',
-    TotalPrice DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (MovieID) REFERENCES Movie(MovieID),
-    FOREIGN KEY (UserID) REFERENCES `User`(UserID),
-    FOREIGN KEY (TicketID) REFERENCES Ticket(TicketID)
+    Booking_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Movie_ID INT,
+    User_ID INT,
+    GuestUser_ID INT,
+    BookingDate DATE,
+    NumberOfTickets INT,
+    PaymentStatus VARCHAR(50),
+    TotalPrice DECIMAL(10, 2),
+    Ticket_ID INT,
+    Payment_ID INT,
+    Invoice_ID INT,
+    FOREIGN KEY (Movie_ID) REFERENCES Movie(Movie_ID),
+    FOREIGN KEY (User_ID) REFERENCES User(User_ID),
+    FOREIGN KEY (GuestUser_ID) REFERENCES GuestUser(GuestUser_ID),
+    FOREIGN KEY (Ticket_ID) REFERENCES Ticket(Ticket_ID),
+    FOREIGN KEY (Payment_ID) REFERENCES Payment(Payment_ID),
+    FOREIGN KEY (Invoice_ID) REFERENCES Invoice(Invoice_ID)
+);
+
+-- News Table
+CREATE TABLE News (
+    News_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Title VARCHAR(255),
+    Content TEXT,
+    DatePosted DATE,
+    IsFeatured BOOLEAN
+);
+
+-- Company Table
+CREATE TABLE Company (
+    Company_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(255),
+    Description TEXT,
+    OpeningHours VARCHAR(50),
+    ContactInfo VARCHAR(255)
 );
