@@ -2,6 +2,14 @@ DROP DATABASE IF EXISTS dwp;
 CREATE DATABASE dwp;
 USE dwp;
 
+-- Admin Table
+CREATE TABLE Admin (
+    Admin_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Email VARCHAR(100),
+    Password VARCHAR(255)
+);
+
+
 -- Genre Table
 CREATE TABLE Genre (
     Genre_ID INT PRIMARY KEY AUTO_INCREMENT,
