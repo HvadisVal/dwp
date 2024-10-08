@@ -9,27 +9,20 @@ CREATE TABLE Admin (
     Password VARCHAR(255)
 );
 
-
--- Genre Table
+-- Genre Table ?
 CREATE TABLE Genre (
     Genre_ID INT PRIMARY KEY AUTO_INCREMENT,
     Name VARCHAR(100),
     Description TEXT
 );
 
--- Version Table
-CREATE TABLE Version (
-    Version_ID INT PRIMARY KEY AUTO_INCREMENT,
-    Format VARCHAR(50),
-    AdditionalFee DECIMAL(10, 2)
-);
-
--- Movie Table
+-- Movie Table ?
 CREATE TABLE Movie (
     Movie_ID INT PRIMARY KEY AUTO_INCREMENT,
     Title VARCHAR(255),
     Director VARCHAR(100),
     Language VARCHAR(50),
+    Format Enum('2D', '3D', 'IMAX') NOT NULL,
     Year INT,
     Duration TIME,
     Rating INT,
@@ -38,6 +31,18 @@ CREATE TABLE Movie (
     Version_ID INT,
     FOREIGN KEY (Genre_ID) REFERENCES Genre(Genre_ID),
     FOREIGN KEY (Version_ID) REFERENCES Version(Version_ID)
+);
+
+-- Media Table
+CREATE TABLE Media (
+    Media_ID INT PRIMARY KEY AUTO_INCREMENT,
+    FileName VARCHAR(255),
+    UploadAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    IsFeatured BOOLEAN DEFAULT 0,
+    MediaType Enum('Image', 'Video') NOT NULL,
+    Format Enum('jpg', 'png', 'mp4') NOT NULL,
+    Movie_ID INT,
+    FOREIGN KEY (Movie_ID) REFERENCES Movie(Movie_ID)
 );
 
 -- Payment Table
@@ -57,45 +62,46 @@ CREATE TABLE Invoice (
     InvoiceStatus VARCHAR(50)
 );
 
--- Coupon Table
+-- Coupon Table ? 5
 CREATE TABLE Coupon (
     Coupon_ID INT PRIMARY KEY AUTO_INCREMENT,
     CouponCode VARCHAR(50),
     DiscountAmount DECIMAL(10, 2)
 );
 
--- CinemaHall Table
+-- CinemaHall Table ? 10
 CREATE TABLE CinemaHall (
     CinemaHall_ID INT PRIMARY KEY AUTO_INCREMENT,
     Name VARCHAR(255),
     TotalSeats INT
 );
 
--- Screening Table
+-- Screening Table ? 100 change in er and rdm
 CREATE TABLE Screening (
     Screening_ID INT PRIMARY KEY AUTO_INCREMENT,
-    MovieTitle VARCHAR(255),
     ShowTime TIME,
     CinemaHall_ID INT,
-    FOREIGN KEY (CinemaHall_ID) REFERENCES CinemaHall(CinemaHall_ID)
+    Movie_ID INT,
+    FOREIGN KEY (CinemaHall_ID) REFERENCES CinemaHall(CinemaHall_ID),
+    FOREIGN KEY (Movie_ID) REFERENCES Movie(Movie_ID)
 );
 
 
--- Seat Table
+-- Seat Table ? 50
 CREATE TABLE Seat (
     Seat_ID INT PRIMARY KEY AUTO_INCREMENT,
     SeatNumber INT,
     Row INT,
-    Status VARCHAR(50),
+    Status Enum('Available', 'Reserved', 'Booked') NOT NULL,
     CinemaHall_ID INT,
     FOREIGN KEY (CinemaHall_ID) REFERENCES CinemaHall(CinemaHall_ID)
 );
 
--- Ticket Table
+-- Ticket Table ? 100  
 CREATE TABLE Ticket (
     Ticket_ID INT PRIMARY KEY AUTO_INCREMENT,
     TotalPrice DECIMAL(10, 2),
-    Type VARCHAR(50),
+    Type Enum('Adult', 'Child', 'Senior', 'Student') NOT NULL,
     Screening_ID INT,
     Seat_ID INT,
     Coupon_ID INT,
@@ -104,7 +110,7 @@ CREATE TABLE Ticket (
     FOREIGN KEY (Coupon_ID) REFERENCES Coupon(Coupon_ID)
 );
 
--- User Table
+-- User Table ? 100
 CREATE TABLE User (
     User_ID INT PRIMARY KEY AUTO_INCREMENT,
     Name VARCHAR(100),
@@ -113,7 +119,7 @@ CREATE TABLE User (
     Password VARCHAR(255)
 );
 
--- GuestUser Table
+-- GuestUser Table ? 50
 CREATE TABLE GuestUser (
     GuestUser_ID INT PRIMARY KEY AUTO_INCREMENT,
     Firstname VARCHAR(100),
@@ -122,7 +128,7 @@ CREATE TABLE GuestUser (
     TelephoneNumber INT
 );
 
--- Booking Table
+-- Booking Table ? 100
 CREATE TABLE Booking (
     Booking_ID INT PRIMARY KEY AUTO_INCREMENT,
     Movie_ID INT,
@@ -130,7 +136,7 @@ CREATE TABLE Booking (
     GuestUser_ID INT,
     BookingDate DATE,
     NumberOfTickets INT,
-    PaymentStatus VARCHAR(50),
+    PaymentStatus Enum('Paid', 'Failed', 'Unpaid') NOT NULL,
     TotalPrice DECIMAL(10, 2),
     Ticket_ID INT,
     Payment_ID INT,
@@ -143,16 +149,18 @@ CREATE TABLE Booking (
     FOREIGN KEY (Invoice_ID) REFERENCES Invoice(Invoice_ID)
 );
 
--- News Table
+-- News Table ? 10 er and rdm change
 CREATE TABLE News (
     News_ID INT PRIMARY KEY AUTO_INCREMENT,
     Title VARCHAR(255),
     Content TEXT,
     DatePosted DATE,
-    IsFeatured BOOLEAN
+    IsFeatured BOOLEAN,
+    Media_ID INT,
+    FOREIGN KEY (Media_ID) REFERENCES Media(Media_ID)
 );
 
--- Company Table
+-- Company Table ?
 CREATE TABLE Company (
     Company_ID INT PRIMARY KEY AUTO_INCREMENT,
     Name VARCHAR(255),
