@@ -152,3 +152,10 @@ CREATE TABLE Company (
     OpeningHours VARCHAR(50),
     ContactInfo VARCHAR(255)
 );
+
+
+CREATE TABLE Admin (
+    Admin_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Email VARCHAR(100),
+    Password VARCHAR(255)
+)
