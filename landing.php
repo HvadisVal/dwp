@@ -1,114 +1,216 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cinema Website</title>
-    <!-- Materialize CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #000;
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background: #1a1a1a;
+        }
+
+        .logo {
+            background: white;
+            padding: 0.5rem 1rem;
+            color: black;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .cart-icon {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .hero {
+            background: #8B0000;
+            padding: 2rem;
+            position: relative;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .book-ticket {
+            background: #333;
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            text-decoration: none;
+            margin-top: 1rem;
+        }
+
+        .cinema-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            padding: 2rem;
+        }
+
+        .cinema-card {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 1rem;
+            min-height: 200px;
+        }
+
+        .film-description {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            background: #333;
+        }
+
+        .film-description img {
+            width: 200px;
+            border-radius: 8px;
+        }
+
+        .coming-soon {
+            padding: 2rem;
+        }
+
+        .coming-soon h2 {
+            margin-bottom: 1rem;
+        }
+
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .movie-card img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        footer {
+            background: #1a1a1a;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        footer a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+    </style>
 </head>
-
-
-
 <body>
+    <nav>
+        <div class="logo">logo</div>
+        <div class="nav-links">
+            <a href="#">NEWS</a>
+            <a href="#">FILMS</a>
+            <a href="#">TICKETS</a>
+            <a href="#">ABOUT US</a>
+        </div>
+        <div class="cart-icon">🛒</div>
+    </nav>
 
-    <!-- Navigation -->
-    <header>
-        <nav>
-            <div class="container">
-                <a href="#" class="brand-logo">Cinema Logo</a>
-                <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li><a href="#">News</a></li>
-                    <li><a href="#">Films</a></li>
-                    <li><a href="#">Tickets</a></li>
-                    <li><a href="#">About</a></li>
-                </ul>
-            </div>
-        </nav>
-    </header>
+    <div class="hero">
+        <h1>SPIDER-MAN<br>REMASTERED</h1>
+        <a href="#" class="book-ticket">Book a ticket</a>
+    </div>
 
-    <!-- Hero Section -->
-    <section>
-        <img src="path-to-spiderman-image.png" alt="Spider-Man Remastered" class="responsive-img">
-        <h1>SPIDER-MAN REMASTERED</h1>
+    <div class="cinema-cards">
+        <div class="cinema-card">
+            <h3>Cinema website</h3>
+            <p>Lorem ipsum text example</p>
+        </div>
+        <div class="cinema-card">
+            <h3>Cinema website</h3>
+            <p>Lorem ipsum text example</p>
+        </div>
+    </div>
+
+    <div class="film-description">
+        <img src="/api/placeholder/200/300" alt="Spider-Man poster">
         <div>
-            <button class="btn-large waves-effect waves-light">Book Ticket</button>
+            <h2>Film Description/News</h2>
+            <p>Lorem ipsum description text</p>
         </div>
-    </section>
+    </div>
 
-    <!-- Content Section -->
-    <section class="container">
-        <div class="row">
-            <div class="col s12 m6">
-                <div class="card">
-                    <div class="card-image">
-                        <img src="path-to-cinema-image1.png" alt="Cinema Image 1">
-                    </div>
-                    <div class="card-content">
-                        <p>Cinema Website Description</p>
-                    </div>
-                </div>
+    <div class="coming-soon">
+        <h2>Soon Out ></h2>
+        <div class="movie-grid">
+            <div class="movie-card">
+                <img src="/api/placeholder/150/225" alt="Movie poster">
             </div>
-            <div class="col s12 m6">
-                <div class="card">
-                    <div class="card-image">
-                        <img src="path-to-cinema-image2.png" alt="Cinema Image 2">
-                    </div>
-                    <div class="card-content">
-                        <p>Cinema Website Description</p>
-                    </div>
-                </div>
+            <div class="movie-card">
+                <img src="/api/placeholder/150/225" alt="Movie poster">
+            </div>
+            <div class="movie-card">
+                <img src="/api/placeholder/150/225" alt="Movie poster">
+            </div>
+            <div class="movie-card">
+                <img src="/api/placeholder/150/225" alt="Movie poster">
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Soon Out Section -->
-    <section class="container">
-        <h3 class="center-align">Soon Out</h3>
-        <div class="row">
-            <div class="col s4">
-                <img src="path-to-movie-image1.png" alt="Movie 1" class="responsive-img">
-            </div>
-            <div class="col s4">
-                <img src="path-to-movie-image2.png" alt="Movie 2" class="responsive-img">
-            </div>
-            <div class="col s4">
-                <img src="path-to-movie-image3.png" alt="Movie 3" class="responsive-img">
-            </div>
+    <footer>
+        <div class="footer-links">
+            <a href="#">News</a>
+            <a href="#">Films</a>
+            <a href="#">Tickets</a>
+            <a href="#">About Us</a>
         </div>
-    </section>
-
-    <!-- Footer Section -->
-    <footer class="page-footer">
-        <div class="container">
-            <div class="row">
-                <div class="col l4">
-                    <h5>Menu</h5>
-                    <ul>
-                        <li><a href="#">News</a></li>
-                        <li><a href="#">Films</a></li>
-                        <li><a href="#">Tickets</a></li>
-                        <li><a href="#">About</a></li>
-                    </ul>
-                </div>
-                <div class="col l4">
-                    <h5>Contact Us</h5>
-                    <address>
-                        Gradybet 73C, 110<br>
-                        Esbjerg 6700<br>
-                        <a href="mailto:esbjerghcinema@gmail.com">esbjerghcinema@gmail.com</a>
-                    </address>
-                </div>
-                <div class="col l4">
-                    <h5>Follow Us</h5>
-                    <p>Social Media Links</p>
-                </div>
+        <div class="contact-info">
+            <h3>Contact Us</h3>
+            <p>esbjergcin@gmail.com</p>
+            <p>Grådybet 73C 6700 Esbjerg</p>
+            <div class="social-icons">
+                <span>📷</span>
+                <span>👻</span>
             </div>
         </div>
     </footer>
-
-    <!-- Materialize JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 </html>
