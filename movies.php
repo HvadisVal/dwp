@@ -3,8 +3,12 @@
 require_once("dbcon.php");
 $dbCon = dbCon($user, $pass);
 
-// Fetch all movies from the database
-$moviesQuery = $dbCon->prepare("SELECT * FROM Movie");
+// Fetch all movies and their showtimes from the database with CinemaHall_ID
+$moviesQuery = $dbCon->prepare("
+    SELECT m.*, s.CinemaHall_ID, s.ShowTime 
+    FROM Movie m 
+    JOIN Screening s ON m.Movie_ID = s.Movie_ID
+");
 $moviesQuery->execute();
 $movies = $moviesQuery->fetchAll(PDO::FETCH_ASSOC);
 
@@ -48,7 +52,7 @@ $showtimes = [
         }
         .showtime {
             background-color: green;
-            padding: 15px 0; /* Adjust padding for uniformity */
+            padding: 15px 0;
             margin: 10px 0;
             border-radius: 8px;
             text-align: center;
@@ -57,10 +61,10 @@ $showtimes = [
             font-size: 16px;
             cursor: pointer;
             transition: transform 0.2s;
-            display: block; /* Ensure each time slot is block-level */
+            display: block;
         }
         .showtime:hover {
-            transform: scale(1.05); /* Slight hover effect */
+            transform: scale(1.05);
         }
         .legend {
             margin-top: 20px;
@@ -84,10 +88,10 @@ $showtimes = [
     <div class="movie-container">
         <!-- Movie Information -->
         <div class="movie-info">
-            <img src="path-to-movie-poster.jpg" alt="<?= $movie['Title']; ?>" class="responsive-img">
-            <h4><?= $movie['Title']; ?></h4>
-            <p><strong>Duration:</strong> <?= $movie['Duration']; ?></p>
-            <p><strong>Rating:</strong> <?= $movie['Rating']; ?> / 10</p>
+            <img src="path-to-movie-poster.jpg" alt="<?= htmlspecialchars($movie['Title']); ?>" class="responsive-img">
+            <h4><?= htmlspecialchars($movie['Title']); ?></h4>
+            <p><strong>Duration:</strong> <?= htmlspecialchars($movie['Duration']); ?></p>
+            <p><strong>Rating:</strong> <?= htmlspecialchars($movie['Rating']); ?> / 10</p>
         </div>
 
         <!-- Movie Showtimes -->
@@ -98,8 +102,8 @@ $showtimes = [
                     <div>
                         <h6><?= $day; ?></h6>
                         <?php foreach ($times as $time): ?>
-                            <a href="../Seat.php?movie_id=<?= $movie['Movie_ID']; ?>&time=<?= urlencode($time); ?>&day=<?= urlencode($day); ?>" class="showtime">
-                                <?= $time; ?>
+                            <a href="Seat.php?movie_id=<?= htmlspecialchars($movie['Movie_ID']); ?>&cinema_hall_id=<?= htmlspecialchars($movie['CinemaHall_ID']); ?>&time=<?= urlencode($time); ?>&day=<?= urlencode($day); ?>" class="showtime">
+                                <?= htmlspecialchars($time); ?>
                             </a>
                         <?php endforeach; ?>
                     </div>
