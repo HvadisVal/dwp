@@ -145,6 +145,52 @@ INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, 
 INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID) VALUES 
 (20, 'Forrest Gump', 'Robert Zemeckis', 'English', 1994, '02:22:00', 8, 'A drama about a man who lives through historic events.', 5, 1);
 
+-- Continuing from Movie_ID 21 to 35
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID) VALUES 
+(21, 'Gladiator', 'Ridley Scott', 'English', 2000, '02:35:00', 8, 'A historical drama about a Roman general turned gladiator.', 5, 1);
+
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID) VALUES 
+(22, 'The Shawshank Redemption', 'Frank Darabont', 'English', 1994, '02:22:00', 9, 'A drama about two men in prison.', 5, 1);
+
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID) VALUES 
+(23, 'Black Panther', 'Ryan Coogler', 'English', 2018, '02:14:00', 8, 'A superhero movie about the king of Wakanda.', 1, 2);
+
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID) VALUES 
+(24, 'Fight Club', 'David Fincher', 'English', 1999, '02:19:00', 8, 'A drama about a secret fight club.', 8, 1);
+
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID) VALUES 
+(25, 'The Lion King', 'Roger Allers', 'English', 1994, '01:28:00', 8, 'An animated movie about a young lion prince.', 10, 1);
+
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID) VALUES 
+(26, 'The Departed', 'Martin Scorsese', 'English', 2006, '02:31:00', 8, 'A crime thriller about an undercover cop and a mole in the police.', 8, 1);
+
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID) VALUES 
+(27, 'Harry Potter and the Sorcerer''s Stone', 'Chris Columbus', 'English', 2001, '02:32:00', 7, 'A fantasy movie about a young wizard.', 15, 2);
+
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID) VALUES 
+(28, '12 Angry Men', 'Sidney Lumet', 'English', 1957, '01:36:00', 9, 'A courtroom drama about a jury deliberating a murder trial.', 5, 1);
+
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID) VALUES 
+(29, 'Braveheart', 'Mel Gibson', 'English', 1995, '03:02:00', 8, 'A historical epic about William Wallace.', 5, 1);
+
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID) VALUES 
+(30, 'The Terminator', 'James Cameron', 'English', 1984, '01:47:00', 8, 'A sci-fi movie about a killer robot from the future.', 14, 1);
+
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID) VALUES 
+(31, 'Rocky', 'John G. Avildsen', 'English', 1976, '02:00:00', 8, 'A drama about a boxer''s rise to fame.', 12, 1);
+
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID) VALUES 
+(32, 'A Beautiful Mind', 'Ron Howard', 'English', 2001, '02:15:00', 8, 'A drama about the life of John Nash.', 5, 1);
+
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID) VALUES 
+(33, 'Casablanca', 'Michael Curtiz', 'English', 1942, '01:42:00', 9, 'A drama about love and sacrifice during World War II.', 5, 1);
+
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID) VALUES 
+(34, 'The Shining', 'Stanley Kubrick', 'English', 1980, '02:26:00', 8, 'A horror movie about a haunted hotel.', 13, 1);
+
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID) VALUES 
+(35, 'Indiana Jones and the Last Crusade', 'Steven Spielberg', 'English', 1989, '02:07:00', 8, 'An adventure movie about the search for the Holy Grail.', 11, 1);
+
 
 -- Payment Table
 CREATE TABLE Payment (

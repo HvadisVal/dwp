@@ -8,9 +8,6 @@ $movie_id = isset($_GET['movie_id']) ? $_GET['movie_id'] : 0;
 $time = isset($_GET['time']) ? $_GET['time'] : '';
 $cinemaHallID = isset($_GET['cinema_hall_id']) ? $_GET['cinema_hall_id'] : 0;
 
-// Debug: Print the cinema hall ID
-echo "CinemaHall_ID being used: " . htmlspecialchars($cinemaHallID) . "<br>";
-
 // Fetch cinema hall information
 $hallQuery = $dbCon->prepare("SELECT * FROM CinemaHall WHERE CinemaHall_ID = :cinema_hall_id");
 $hallQuery->bindParam(':cinema_hall_id', $cinemaHallID);
@@ -20,8 +17,6 @@ $hall = $hallQuery->fetch(PDO::FETCH_ASSOC);
 // Check if hall was found
 if (!$hall) {
     die("Cinema Hall not found.");
-} else {
-    echo "Cinema Hall found: " . htmlspecialchars($hall['Name']) . "<br>";
 }
 
 // Fetch seats for the cinema hall
@@ -61,12 +56,6 @@ if (!$seats) {
             line-height: 30px;
             cursor: pointer;
         }
-        .seat.sold {
-            background-color: red;
-        }
-        .seat.handicap {
-            background-color: blue;
-        }
         .seat.selected {
             background-color: yellow;
         }
@@ -87,8 +76,8 @@ if (!$seats) {
 <body>
 
 <div class="container">
-    <h4><?= $hall['Name']; ?> - Seat Selection</h4>
-    <p>Movie: <?= $movie_id; ?> | Time: <?= $time; ?></p>
+    <h4><?= htmlspecialchars($hall['Name']); ?> - Seat Selection</h4>
+    <p>Movie: <?= htmlspecialchars($movie_id); ?> | Time: <?= htmlspecialchars($time); ?></p>
 
     <div class="screen">
         <strong>SCREEN</strong>
@@ -107,24 +96,15 @@ if (!$seats) {
             echo "<span class='row-label'>" . str_pad($currentRow, 2, '0', STR_PAD_LEFT) . "</span>"; // Row number
         }
 
-        // Set seat status class (e.g., sold, handicap)
-        $seatClass = '';
-        if ($seat['Status'] == 'Sold') {
-            $seatClass = 'sold';
-        } elseif ($seat['Status'] == 'Handicap') {
-            $seatClass = 'handicap';
-        }
-
         // Display seat
-        echo "<div class='seat $seatClass' data-seat-id='" . $seat['Seat_ID'] . "'>" . str_pad($seat['SeatNumber'], 2, '0', STR_PAD_LEFT) . "</div>";
+        echo "<div class='seat' data-seat-id='" . htmlspecialchars($seat['Seat_ID']) . "'>" . str_pad($seat['SeatNumber'], 2, '0', STR_PAD_LEFT) . "</div>";
     }
     ?>
 
     <!-- Seat Info Legend -->
     <div class="seat-info">
         <p><span class="seat"></span> Available</p>
-        <p><span class="seat sold"></span> Sold</p>
-        <p><span class="seat handicap"></span> Handicap</p>
+        <p><span class="seat selected"></span> Selected</p>
     </div>
 </div>
 
@@ -135,9 +115,7 @@ if (!$seats) {
     // Handle seat selection
     document.querySelectorAll('.seat').forEach(seat => {
         seat.addEventListener('click', function() {
-            if (!seat.classList.contains('sold') && !seat.classList.contains('handicap')) {
-                seat.classList.toggle('selected');
-            }
+            seat.classList.toggle('selected');
         });
     });
 </script>

@@ -7,8 +7,8 @@ $dbCon = dbCon($user, $pass);
 $moviesQuery = $dbCon->prepare("
     SELECT m.*, s.CinemaHall_ID, s.ShowTime 
     FROM Movie m 
-    JOIN Screening s ON m.Movie_ID = s.Movie_ID
-");
+    JOIN Screening s ON m.Movie_ID = s.Movie_ID");
+    
 $moviesQuery->execute();
 $movies = $moviesQuery->fetchAll(PDO::FETCH_ASSOC);
 
