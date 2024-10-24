@@ -31,7 +31,6 @@ if (!$seats) {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -56,6 +55,9 @@ if (!$seats) {
             line-height: 30px;
             cursor: pointer;
         }
+        .seat.sold {
+            background-color: red;
+        }
         .seat.selected {
             background-color: yellow;
         }
@@ -70,6 +72,14 @@ if (!$seats) {
         }
         .seat-info {
             margin-top: 20px;
+        }
+        .ticket-controls {
+            display: flex;
+            align-items: center;
+        }
+        .ticket-count {
+            font-size: 18px;
+            margin: 0 10px;
         }
     </style>
 </head>
@@ -97,7 +107,7 @@ if (!$seats) {
         }
 
         // Display seat
-        echo "<div class='seat' data-seat-id='" . htmlspecialchars($seat['Seat_ID']) . "'>" . str_pad($seat['SeatNumber'], 2, '0', STR_PAD_LEFT) . "</div>";
+        echo "<div class='seat' data-seat-id='" . htmlspecialchars($seat['Seat_ID']) . "' data-seat-number='" . htmlspecialchars($seat['SeatNumber']) . "' data-row='" . htmlspecialchars($seat['Row']) . "'>" . str_pad($seat['SeatNumber'], 2, '0', STR_PAD_LEFT) . "</div>";
     }
     ?>
 
@@ -106,17 +116,110 @@ if (!$seats) {
         <p><span class="seat"></span> Available</p>
         <p><span class="seat selected"></span> Selected</p>
     </div>
+
+    <!-- Ticket Selection -->
+    <div class="ticket-selection">
+        <h5>Select Tickets</h5>
+        <div class="ticket-controls">
+            <button class="btn-small" id="decrease-tickets">-</button>
+            <span class="ticket-count" id="ticket-count">0</span>
+            <button class="btn-small" id="increase-tickets">+</button>
+        </div>
+        <p>Max 9 tickets can be purchased per booking.</p>
+    </div>
+
 </div>
 
 <!-- Materialize JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
 <script>
+    let selectedSeats = [];
+    let maxTickets = 9;
+    let currentTickets = 0;
+    let currentRow = null;
+
     // Handle seat selection
     document.querySelectorAll('.seat').forEach(seat => {
         seat.addEventListener('click', function() {
-            seat.classList.toggle('selected');
+            if (!seat.classList.contains('sold')) {
+                if (seat.classList.contains('selected')) {
+                    // Deselect seat
+                    seat.classList.remove('selected');
+                    selectedSeats = selectedSeats.filter(s => s !== seat.dataset.seatNumber);
+                    currentTickets--;
+                } else {
+                    // Check if we are selecting a new row
+                    if (currentRow === null || currentRow === seat.dataset.row) {
+                        if (currentTickets < maxTickets && areSeatsContiguous(seat.dataset.seatNumber)) {
+                            // Select seat in the same row
+                            seat.classList.add('selected');
+                            selectedSeats.push(seat.dataset.seatNumber);
+                            currentTickets++;
+                            currentRow = seat.dataset.row; // Set the current row
+                        }
+                    } else {
+                        // Deselect previous row, but keep the same number of seats
+                        clearSelectedSeats();
+                        seat.classList.add('selected');
+                        selectSeatsInNewRow(seat.dataset.row, currentTickets);
+                        currentRow = seat.dataset.row; // Set the new row
+                    }
+                }
+                document.getElementById('ticket-count').innerText = currentTickets;
+            }
         });
+    });
+
+    // Function to check if the selected seats are contiguous
+    function areSeatsContiguous(newSeat) {
+        if (selectedSeats.length === 0) {
+            return true; // No seats selected yet
+        }
+        const seatNumbers = selectedSeats.map(Number).concat(Number(newSeat)).sort((a, b) => a - b);
+        for (let i = 1; i < seatNumbers.length; i++) {
+            if (seatNumbers[i] - seatNumbers[i - 1] !== 1) {
+                return false; // Non-contiguous seats detected
+            }
+        }
+        return true; // All seats are contiguous
+    }
+
+    // Function to select seats in a new row
+    function selectSeatsInNewRow(row, numSeats) {
+        let availableSeats = document.querySelectorAll('.seat[data-row="' + row + '"]:not(.sold)');
+        let seatsToSelect = [];
+        for (let i = 0; i < availableSeats.length && seatsToSelect.length < numSeats; i++) {
+            seatsToSelect.push(availableSeats[i]);
+        }
+
+        seatsToSelect.forEach(seat => {
+            seat.classList.add('selected');
+            selectedSeats.push(seat.dataset.seatNumber);
+        });
+    }
+
+    // Function to clear selected seats
+    function clearSelectedSeats() {
+        document.querySelectorAll('.seat.selected').forEach(seat => {
+            seat.classList.remove('selected');
+        });
+        selectedSeats = [];
+    }
+
+    // Ticket counter
+    document.getElementById('increase-tickets').addEventListener('click', () => {
+        if (currentTickets < maxTickets) {
+            currentTickets++;
+            document.getElementById('ticket-count').innerText = currentTickets;
+        }
+    });
+
+    document.getElementById('decrease-tickets').addEventListener('click', () => {
+        if (currentTickets > 0) {
+            currentTickets--;
+            document.getElementById('ticket-count').innerText = currentTickets;
+        }
     });
 </script>
 
