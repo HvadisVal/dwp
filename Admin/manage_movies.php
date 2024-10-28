@@ -3,56 +3,119 @@ require_once("../includes/session.php");
 require_once("../includes/connection.php"); 
 require_once("../includes/functions.php"); 
 
+// CSRF Protection: Generate token
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 // Check if admin is logged in, otherwise redirect to login page
 // if (!isset($_SESSION['admin_id'])) {
 //    redirect_to("adminLogin.php"); // Redirect to the admin login page if not logged in
 // }
 
-// Handle the edit form submission
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_movie'])) {
-    $movieId = $_POST['movie_id'];
-    $title = $_POST['title'];
-    $director = $_POST['director'];
-    $language = $_POST['language'];
-    $year = $_POST['year'];
-    $duration = $_POST['duration'];
-    $rating = $_POST['rating'];
-    $description = $_POST['description'];
-    $genreId = $_POST['genre_id'];
-    $versionId = $_POST['version_id'];
+// Handle the form submissions
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // CSRF token check
+    if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        die("Invalid CSRF token.");
+    }
 
-    // Update query
-    $sql = "UPDATE Movie SET 
-            Title = ?, 
-            Director = ?, 
-            Language = ?, 
-            Year = ?, 
-            Duration = ?, 
-            Rating = ?, 
-            Description = ?, 
-            Genre_ID = ?, 
-            Version_ID = ? 
-            WHERE Movie_ID = ?";
+    // Refresh CSRF token to avoid reuse
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
-    // Prepare and execute the statement
-    $stmt = $connection->prepare($sql);
-    if ($stmt->execute([$title, $director, $language, $year, $duration, $rating, $description, $genreId, $versionId, $movieId])) {
-        echo "Movie updated successfully!";
-    } else {
-        echo "Error updating movie.";
+    if (isset($_POST['add_movie'])) {
+        // Add new movie
+        $title = htmlspecialchars(trim($_POST['title']));
+        $director = htmlspecialchars(trim($_POST['director']));
+        $language = htmlspecialchars(trim($_POST['language']));
+        $year = (int)trim($_POST['year']);
+        $duration = trim($_POST['duration']);
+        $rating = (float)trim($_POST['rating']);
+        $description = htmlspecialchars(trim($_POST['description']));
+        $genreId = (int)trim($_POST['genre_id']);
+        $versionId = (int)trim($_POST['version_id']);
+
+        // Insert query with prepared statement
+        $sql = "INSERT INTO Movie (Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $connection->prepare($sql);
+
+        if ($stmt->execute([$title, $director, $language, $year, $duration, $rating, $description, $genreId, $versionId])) {
+            $_SESSION['message'] = "Movie added successfully!";
+            header("Location: manage_movies.php"); 
+            exit();
+        } else {
+            echo "Error adding movie.";
+        }
+    } elseif (isset($_POST['edit_movie'])) {
+        // Update existing movie
+        $movieId = (int)trim($_POST['movie_id']);
+        $title = htmlspecialchars(trim($_POST['title']));
+        $director = htmlspecialchars(trim($_POST['director']));
+        $language = htmlspecialchars(trim($_POST['language']));
+        $year = (int)trim($_POST['year']);
+        $duration = trim($_POST['duration']);
+        $rating = (float)trim($_POST['rating']);
+        $description = htmlspecialchars(trim($_POST['description']));
+        $genreId = (int)trim($_POST['genre_id']);
+        $versionId = (int)trim($_POST['version_id']);
+
+        // Update query with prepared statement
+        $sql = "UPDATE Movie SET 
+                Title = ?, 
+                Director = ?, 
+                Language = ?, 
+                Year = ?, 
+                Duration = ?, 
+                Rating = ?, 
+                Description = ?, 
+                Genre_ID = ?, 
+                Version_ID = ? 
+                WHERE Movie_ID = ?";
+        $stmt = $connection->prepare($sql);
+
+        if ($stmt->execute([$title, $director, $language, $year, $duration, $rating, $description, $genreId, $versionId, $movieId])) {
+            $_SESSION['message'] = "Movie updated successfully!";
+            header("Location: manage_movies.php"); 
+            exit();
+        } else {
+            echo "Error updating movie.";
+        }
+    } elseif (isset($_POST['delete_movie'])) {
+        // Delete movie logic
+        $movieId = (int)trim($_POST['movie_id']);
+
+        // Delete query with prepared statement
+        $sql = "DELETE FROM Movie WHERE Movie_ID = ?";
+        $stmt = $connection->prepare($sql);
+
+        if ($stmt->execute([$movieId])) {
+            $_SESSION['message'] = "Movie deleted successfully!";
+        } else {
+            echo "Error deleting movie.";
+        }
+
+        // Redirect to the same page after deletion
+        header("Location: manage_movies.php");
+        exit();
     }
 }
 
 // Fetch movies for display
-$sql = "SELECT m.Movie_ID, m.Title, m.Director, m.Language, m.Year, m.Duration, m.Rating, m.Description, g.Name AS Genre_Name, v.Format AS Version_Format 
-        FROM Movie m 
-        LEFT JOIN Genre g ON m.Genre_ID = g.Genre_ID 
-        LEFT JOIN Version v ON m.Version_ID = v.Version_ID";
-
-$stmt = $connection->query($sql);
+$sql = "SELECT m.Movie_ID, m.Title, m.Director, m.Language, m.Year, m.Duration, m.Rating, m.Description, m.Genre_ID, m.Version_ID
+        FROM Movie m";
+$stmt = $connection->prepare($sql);
+$stmt->execute();
 $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Fetch genres and versions
+$genres = $connection->query("SELECT Genre_ID, Name FROM Genre")->fetchAll(PDO::FETCH_ASSOC);
+$versions = $connection->query("SELECT Version_ID, Format FROM Version")->fetchAll(PDO::FETCH_ASSOC);
 
+if (isset($_SESSION['message'])) {
+    echo "<p>{$_SESSION['message']}</p>";
+    unset($_SESSION['message']); // Clear the message after displaying
+}
 ?>
 
 <!DOCTYPE html>
@@ -61,33 +124,32 @@ $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Movies</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Optional CSS for styling -->
+    <link rel="stylesheet" href="styles.css">
     <style>
-        /* Basic styles for movie divs */
-        .movie-card {
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 16px;
-            margin: 16px 0;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        /* Styling */
+        #moviesContainer { display: flex; flex-direction: column; gap: 16px; }
+        .movie-card { border: 1px solid #ddd; border-radius: 8px; padding: 16px; box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); background-color: #f9f9f9; }
+        .movie-card label { font-weight: bold; margin-top: 8px; display: block; color: #333; }
+        .movie-card input[type="text"], .movie-card input[type="number"], .movie-card input[type="time"], .movie-card textarea {
+            display: block; width: 100%; border: none; border-bottom: 1px solid #ccc; background-color: transparent; padding: 4px 0; font-size: 16px; color: #555;
         }
-        .movie-card h2 {
-            margin: 0;
-            font-size: 24px;
+        .movie-card textarea { resize: none; height: 60px; }
+        .movie-card select { width: 100%; padding: 4px 0; border: none; border-bottom: 1px solid #ccc; font-size: 16px; color: #555; background-color: transparent; }
+        .movie-card input:focus, .movie-card textarea:focus, .movie-card select:focus { outline: none; border-bottom: 1px solid #007bff; }
+        .edit-button, .add-button { margin-top: 16px; background-color: #007bff; color: white; border: none; padding: 10px 16px; border-radius: 4px; cursor: pointer; transition: background-color 0.3s; }
+        .edit-button:hover, .add-button:hover { background-color: #0056b3; }
+        .delete-button { 
+            margin-top: 16px; 
+            background-color: #dc3545; 
+            color: white; 
+            border: none; 
+            padding: 10px 16px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            transition: background-color 0.3s; 
         }
-        .movie-card p {
-            margin: 5px 0;
-        }
-        .edit-button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        .edit-button:hover {
-            background-color: #0056b3;
+        .delete-button:hover { 
+            background-color: #c82333; 
         }
     </style>
 </head>
@@ -95,77 +157,103 @@ $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <h1>Manage Movies</h1>
 
-<div id="moviesContainer">
-    <?php if ($movies): ?>
-        <?php foreach ($movies as $row): ?>
-            <div class="movie-card">
-                <h2><?php echo $row['Title']; ?></h2>
-                <p><strong>Director:</strong> <?php echo $row['Director']; ?></p>
-                <p><strong>Language:</strong> <?php echo $row['Language']; ?></p>
-                <p><strong>Year:</strong> <?php echo $row['Year']; ?></p>
-                <p><strong>Duration:</strong> <?php echo $row['Duration']; ?></p>
-                <p><strong>Rating:</strong> <?php echo $row['Rating']; ?></p>
-                <p><strong>Description:</strong> <?php echo $row['Description']; ?></p>
-                <p><strong>Genre:</strong> <?php echo $row['Genre_Name']; ?></p>
-                <p><strong>Version:</strong> <?php echo $row['Version_Format']; ?></p>
-                <button class="edit-button" onclick="editMovie(<?php echo $row['Movie_ID']; ?>)">Edit</button>
-            </div>
+<!-- Add Movie Section -->
+<h2>Add New Movie</h2>
+<form method="POST" class="movie-card">
+    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+
+    <label for="title">Title:</label>
+    <input type="text" name="title" required>
+
+    <label for="director">Director:</label>
+    <input type="text" name="director" required>
+
+    <label for="language">Language:</label>
+    <input type="text" name="language" required>
+
+    <label for="year">Year:</label>
+    <input type="number" name="year" required>
+
+    <label for="duration">Duration:</label>
+    <input type="time" name="duration" required>
+
+    <label for="rating">Rating:</label>
+    <input type="number" name="rating" required min="0" max="10">
+
+    <label for="description">Description:</label>
+    <textarea name="description" required></textarea>
+
+    <label for="genre_id">Genre:</label>
+    <select name="genre_id" required>
+        <?php foreach ($genres as $genre): ?>
+            <option value="<?php echo $genre['Genre_ID']; ?>"><?php echo htmlspecialchars($genre['Name']); ?></option>
         <?php endforeach; ?>
-    <?php else: ?>
-        <p>No movies found</p>
-    <?php endif; ?>
+    </select>
+
+    <label for="version_id">Version:</label>
+    <select name="version_id" required>
+        <?php foreach ($versions as $version): ?>
+            <option value="<?php echo $version['Version_ID']; ?>"><?php echo htmlspecialchars($version['Format']); ?></option>
+        <?php endforeach; ?>
+    </select>
+
+    <button type="submit" name="add_movie" class="add-button">Add Movie</button>
+</form>
+
+<!-- Existing Movies Section -->
+<h2>Existing Movies</h2>
+<div id="moviesContainer">
+    <?php foreach ($movies as $movie): ?>
+        <div class="movie-card">
+            <form method="POST">
+                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                <input type="hidden" name="movie_id" value="<?php echo $movie['Movie_ID']; ?>">
+
+                <label for="title">Title:</label>
+                <input type="text" name="title" value="<?php echo htmlspecialchars($movie['Title']); ?>" required>
+
+                <label for="director">Director:</label>
+                <input type="text" name="director" value="<?php echo htmlspecialchars($movie['Director']); ?>" required>
+
+                <label for="language">Language:</label>
+                <input type="text" name="language" value="<?php echo htmlspecialchars($movie['Language']); ?>" required>
+
+                <label for="year">Year:</label>
+                <input type="number" name="year" value="<?php echo $movie['Year']; ?>" required>
+
+                <label for="duration">Duration:</label>
+                <input type="time" name="duration" value="<?php echo $movie['Duration']; ?>" required>
+
+                <label for="rating">Rating:</label>
+                <input type="number" name="rating" value="<?php echo $movie['Rating']; ?>" required min="0" max="10">
+
+                <label for="description">Description:</label>
+                <textarea name="description" required><?php echo htmlspecialchars($movie['Description']); ?></textarea>
+
+                <label for="genre_id">Genre:</label>
+                <select name="genre_id" required>
+                    <?php foreach ($genres as $genre): ?>
+                        <option value="<?php echo $genre['Genre_ID']; ?>" <?php if ($genre['Genre_ID'] == $movie['Genre_ID']) echo 'selected'; ?>>
+                            <?php echo htmlspecialchars($genre['Name']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+
+                <label for="version_id">Version:</label>
+                <select name="version_id" required>
+                    <?php foreach ($versions as $version): ?>
+                        <option value="<?php echo $version['Version_ID']; ?>" <?php if ($version['Version_ID'] == $movie['Version_ID']) echo 'selected'; ?>>
+                            <?php echo htmlspecialchars($version['Format']); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+
+                <button type="submit" name="edit_movie" class="edit-button">Edit Movie</button>
+                <button type="submit" name="delete_movie" class="delete-button">Delete Movie</button>
+            </form>
+        </div>
+    <?php endforeach; ?>
 </div>
-
-<!-- Edit Movie Modal -->
-<div id="editMovieModal" style="display:none;">
-    <form method="POST" id="editMovieForm">
-        <input type="hidden" name="movie_id" id="movie_id" value="">
-        <label for="title">Title:</label>
-        <input type="text" name="title" id="title" required>
-        <label for="director">Director:</label>
-        <input type="text" name="director" id="director" required>
-        <label for="language">Language:</label>
-        <input type="text" name="language" id="language" required>
-        <label for="year">Year:</label>
-        <input type="number" name="year" id="year" required>
-        <label for="duration">Duration:</label>
-        <input type="time" name="duration" id="duration" required>
-        <label for="rating">Rating:</label>
-        <input type="number" name="rating" id="rating" required min="0" max="10">
-        <label for="description">Description:</label>
-        <textarea name="description" id="description" required></textarea>
-        <label for="genre_id">Genre ID:</label>
-        <input type="number" name="genre_id" id="genre_id" required>
-        <label for="version_id">Version ID:</label>
-        <input type="number" name="version_id" id="version_id" required>
-        <button type="submit" name="edit_movie">Update Movie</button>
-        <button type="button" onclick="closeModal()">Cancel</button>
-    </form>
-</div>
-
-<script>
-function editMovie(movieId) {
-    const row = document.querySelector(`.movie-card h2:contains(${movieId})`).parentElement;
-    const cells = row.getElementsByTagName("p");
-
-    document.getElementById('movie_id').value = movieId;
-    document.getElementById('title').value = cells[0].innerText.replace("Title: ", "");
-    document.getElementById('director').value = cells[1].innerText.replace("Director: ", "");
-    document.getElementById('language').value = cells[2].innerText.replace("Language: ", "");
-    document.getElementById('year').value = cells[3].innerText.replace("Year: ", "");
-    document.getElementById('duration').value = cells[4].innerText.replace("Duration: ", "");
-    document.getElementById('rating').value = cells[5].innerText.replace("Rating: ", "");
-    document.getElementById('description').value = cells[6].innerText.replace("Description: ", "");
-    document.getElementById('genre_id').value = cells[7].innerText.replace("Genre: ", "");
-    document.getElementById('version_id').value = cells[8].innerText.replace("Version: ", "");
-
-    document.getElementById('editMovieModal').style.display = 'block';
-}
-
-function closeModal() {
-    document.getElementById('editMovieModal').style.display = 'none';
-}
-</script>
 
 </body>
 </html>
