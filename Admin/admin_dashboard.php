@@ -4,9 +4,9 @@
 
 <?php
 // Check if admin is logged in, otherwise redirect to login page
-if (!isset($_SESSION['admin_id'])) {
-    redirect_to("adminLogin.php"); // Redirect to the admin login page if not logged in
-}
+// if (!isset($_SESSION['admin_id'])) {
+//    redirect_to("adminLogin.php"); // Redirect to the admin login page if not logged in
+//}
 ?>
 
 <!DOCTYPE html>
