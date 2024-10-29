@@ -34,13 +34,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $description = htmlspecialchars(trim($_POST['description']));
         $genreId = (int)trim($_POST['genre_id']);
         $versionId = (int)trim($_POST['version_id']);
+        $trailerLink = htmlspecialchars(trim($_POST['trailerlink'])); // Get trailer link
+
 
         // Insert query with prepared statement
-        $sql = "INSERT INTO Movie (Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO Movie (Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID, TrailerLink) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $connection->prepare($sql);
 
-        if ($stmt->execute([$title, $director, $language, $year, $duration, $rating, $description, $genreId, $versionId])) {
+        if ($stmt->execute([$title, $director, $language, $year, $duration, $rating, $description, $genreId, $versionId, $trailerLink])) {
+            // Get the last inserted movie ID
+            $movieId = $connection->lastInsertId();
+
             $_SESSION['message'] = "Movie added successfully!";
             header("Location: manage_movies.php"); 
             exit();
@@ -59,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $description = htmlspecialchars(trim($_POST['description']));
         $genreId = (int)trim($_POST['genre_id']);
         $versionId = (int)trim($_POST['version_id']);
+        $trailerLink = htmlspecialchars(trim($_POST['trailerlink'])); // Get trailer link
 
         // Update query with prepared statement
         $sql = "UPDATE Movie SET 
@@ -70,11 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 Rating = ?, 
                 Description = ?, 
                 Genre_ID = ?, 
-                Version_ID = ? 
+                Version_ID = ?, 
+                TrailerLink = ? 
                 WHERE Movie_ID = ?";
         $stmt = $connection->prepare($sql);
 
-        if ($stmt->execute([$title, $director, $language, $year, $duration, $rating, $description, $genreId, $versionId, $movieId])) {
+        if ($stmt->execute([$title, $director, $language, $year, $duration, $rating, $description, $genreId, $versionId, $trailerLink, $movieId])) {
             $_SESSION['message'] = "Movie updated successfully!";
             header("Location: manage_movies.php"); 
             exit();
@@ -84,29 +91,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (isset($_POST['delete_movie'])) {
         // Delete movie logic
         $movieId = (int)trim($_POST['movie_id']);
-
-        // Delete query with prepared statement
+    
+        // 1. Fetch the paths of associated media files
+        $sql = "SELECT FileName FROM Media WHERE Movie_ID = ?";
+        $stmt = $connection->prepare($sql);
+        $stmt->execute([$movieId]);
+        
+    
+        // 4. Delete the movie record
         $sql = "DELETE FROM Movie WHERE Movie_ID = ?";
         $stmt = $connection->prepare($sql);
-
+    
         if ($stmt->execute([$movieId])) {
             $_SESSION['message'] = "Movie deleted successfully!";
         } else {
             echo "Error deleting movie.";
         }
-
-        // Redirect to the same page after deletion
+    
+        // Redirect after deletion
         header("Location: manage_movies.php");
         exit();
     }
+    
 }
 
 // Fetch movies for display
-$sql = "SELECT m.Movie_ID, m.Title, m.Director, m.Language, m.Year, m.Duration, m.Rating, m.Description, m.Genre_ID, m.Version_ID
+$sql = "SELECT m.Movie_ID, m.Title, m.Director, m.Language, m.Year, m.Duration, m.Rating, m.Description, m.Genre_ID, m.Version_ID, m.TrailerLink
         FROM Movie m";
 $stmt = $connection->prepare($sql);
 $stmt->execute();
 $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 // Fetch genres and versions
 $genres = $connection->query("SELECT Genre_ID, Name FROM Genre")->fetchAll(PDO::FETCH_ASSOC);
@@ -159,7 +174,7 @@ if (isset($_SESSION['message'])) {
 
 <!-- Add Movie Section -->
 <h2>Add New Movie</h2>
-<form method="POST" class="movie-card">
+<form method="POST" enctype="multipart/form-data" class="movie-card">
     <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
     <label for="title">Title:</label>
@@ -182,6 +197,9 @@ if (isset($_SESSION['message'])) {
 
     <label for="description">Description:</label>
     <textarea name="description" required></textarea>
+
+    <label for="trailerlink">Trailer Link:</label>
+    <input type="text" name="trailerlink" required placeholder="e.g., https://youtube.com/watch?v=...">
 
     <label for="genre_id">Genre:</label>
     <select name="genre_id" required>
@@ -209,9 +227,11 @@ if (isset($_SESSION['message'])) {
                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                 <input type="hidden" name="movie_id" value="<?php echo $movie['Movie_ID']; ?>">
 
+                <!-- Movie Details (title, director, etc.) -->
                 <label for="title">Title:</label>
                 <input type="text" name="title" value="<?php echo htmlspecialchars($movie['Title']); ?>" required>
 
+                <!-- Continue with other fields... -->
                 <label for="director">Director:</label>
                 <input type="text" name="director" value="<?php echo htmlspecialchars($movie['Director']); ?>" required>
 
@@ -229,6 +249,9 @@ if (isset($_SESSION['message'])) {
 
                 <label for="description">Description:</label>
                 <textarea name="description" required><?php echo htmlspecialchars($movie['Description']); ?></textarea>
+
+                <label for="trailerlink">Trailer Link:</label>
+                <input type="text" name="trailerlink" value="<?php echo htmlspecialchars($movie['TrailerLink']); ?>" required placeholder="e.g., https://youtube.com/watch?v=...">
 
                 <label for="genre_id">Genre:</label>
                 <select name="genre_id" required>
@@ -254,6 +277,7 @@ if (isset($_SESSION['message'])) {
         </div>
     <?php endforeach; ?>
 </div>
+
 
 </body>
 </html>
