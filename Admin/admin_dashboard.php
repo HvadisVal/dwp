@@ -89,7 +89,7 @@
 </head>
 <body>
     <div class="logo">
-        <img src="images/12.png" alt="Logo" height = 70px>
+        <img src="../images/12.png" alt="Logo" height = 70px>
     </div>
 
     <header>
