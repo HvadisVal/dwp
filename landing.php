@@ -26,11 +26,9 @@
         }
 
         .logo {
-            background: white;
-            padding: 0.5rem 3rem;
             color: black;
-            border-radius: 25px;
             font-weight: bold;
+            cursor: pointer;
         }
 
         .nav-links {
@@ -328,7 +326,10 @@
 </head>
 <body>
 <nav>
-        <div class="logo">logo</div>
+    
+        <div class="logo">
+            <img src="images/11.png" alt="Logotype" height="40px" width="145px">
+        </div>
         <div class="nav-links">
             <a href="#">NEWS</a>
             <a href="#">FILMS</a>
