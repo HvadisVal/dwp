@@ -18,8 +18,22 @@
     <!-- Materialize CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+       .logo{
+            display: flex;
+            justify-content: center;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+       }
         body {
             padding: 20px;
+            background: linear-gradient(0deg, rgba(5,15,99,1) 0%, rgba(255,255,255,0.5508578431372548) 100%);
         }
         header {
             text-align: center;
@@ -29,16 +43,54 @@
             max-width: 1000px;
             margin: auto;
         }
+        .card{
+            border-radius: 15px;
+            color: white;
+            background: linear-gradient(to right, #243642, #1a252d)
+        }
         .btn {
             margin-top: 20px;
+            background: white;
+            color: black;
+            border-radius: 15px;
+        }
+
+        .btn-red{
+            background: white;
+            color: black;
+            padding: 10px 30px;
+            border-radius: 15px;
+            border: none;
         }
         footer {
             text-align: center;
+            color: white;
             margin-top: 50px;
         }
+
+
+    .btn:hover {
+    background: #1a252d; 
+    color: white;
+    transition:  0.3s ease, color 0.3s ease;
+    }
+
+    .btn-red:hover {
+    background: #1a252d; 
+    color: white;
+    transition:  0.3s ease, color 0.3s ease; 
+    }
+
+    
+
+   
+
     </style>
 </head>
 <body>
+    <div class="logo">
+        <img src="images/12.png" alt="Logo" height = 70px>
+    </div>
 
     <header>
         <h2>Welcome, Admin!</h2>
@@ -80,6 +132,61 @@
                     </div>
                 </div>
             </div>
+            <div class="col s12 m6">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Manage News</span>
+                        <p>View, edit, or remove news in the system.</p>
+                    </div>
+                    <div class="card-action">
+                        <a href="manage_users.php" class="btn waves-effect waves-light">Manage News</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Manage Screenings</span>
+                        <p>View, edit, or remove screenings in the system.</p>
+                    </div>
+                    <div class="card-action">
+                        <a href="manage_users.php" class="btn waves-effect waves-light">Manage Screenings</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Manage Companies</span>
+                        <p>View, edit, or remove companies in the system.</p>
+                    </div>
+                    <div class="card-action">
+                        <a href="manage_users.php" class="btn waves-effect waves-light">Manage companies</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Manage Coupons</span>
+                        <p>View, edit, or remove coupons in the system.</p>
+                    </div>
+                    <div class="card-action">
+                        <a href="manage_users.php" class="btn waves-effect waves-light">Manage Coupons</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col s12 m6">
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title">Manage Contact Forms</span>
+                        <p>View, edit, or remove contact forms in the system.</p>
+                    </div>
+                    <div class="card-action">
+                        <a href="manage_users.php" class="btn waves-effect waves-light">Manage Contact Forms</a>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Add more sections for admin tasks as needed -->
@@ -88,7 +195,7 @@
     <!-- Logout Button -->
     <div class="container">
         <form action="logout.php" method="POST" style="text-align: center;">
-            <button class="btn red" type="submit">Logout</button>
+            <button class="btn-red" type="submit">LogOut</button>
         </form>
     </div>
 
