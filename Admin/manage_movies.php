@@ -156,39 +156,211 @@ if (isset($_SESSION['message'])) {
     <title>Manage Movies</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Styling */
-        #moviesContainer { display: flex; flex-direction: column; gap: 16px; }
-        .movie-card { border: 1px solid #ddd; border-radius: 8px; padding: 16px; box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); background-color: #f9f9f9; }
-        .movie-card label { font-weight: bold; margin-top: 8px; display: block; color: #333; }
-        .movie-card input[type="text"], .movie-card input[type="number"], .movie-card input[type="time"], .movie-card textarea {
-            display: block; width: 100%; border: none; border-bottom: 1px solid #ccc; background-color: transparent; padding: 4px 0; font-size: 16px; color: #555;
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
-        .movie-card textarea { resize: none; height: 60px; }
-        .movie-card select { width: 100%; padding: 4px 0; border: none; border-bottom: 1px solid #ccc; font-size: 16px; color: #555; background-color: transparent; }
-        .movie-card input:focus, .movie-card textarea:focus, .movie-card select:focus { outline: none; border-bottom: 1px solid #007bff; }
-        .edit-button, .add-button { margin-top: 16px; background-color: #007bff; color: white; border: none; padding: 10px 16px; border-radius: 4px; cursor: pointer; transition: background-color 0.3s; }
-        .edit-button:hover, .add-button:hover { background-color: #0056b3; }
-        .delete-button { 
-            margin-top: 16px; 
-            background-color: #dc3545; 
-            color: white; 
-            border: none; 
-            padding: 10px 16px; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            transition: background-color 0.3s; 
+
+        .header{
+            margin: 20px 0;
+            padding: 10px; 
+            display: flex;
+            justify-content: center;  
         }
-        .delete-button:hover { 
-            background-color: #c82333; 
-        }
+
+   
+#moviesContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 items in a row */
+    gap: 10px; /* space between items */
+    padding: 10px;
+    flex-direction: column;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Grid layout for movie cards */
+.movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+}
+
+/* Form grid layout */
+.movie-card {
+    border: none;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    background-color: white;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+
+
+.movie-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.movie-card label {
+    font-weight: 600;
+    margin-top: 8px;
+    display: block;
+    color: #374151;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.movie-card input[type="text"],
+.movie-card input[type="number"],
+.movie-card input[type="time"],
+.movie-card textarea {
+    display: block;
+    width: 100%;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background-color: #f9fafb;
+    padding: 8px 12px;
+    font-size: 1rem;
+    color: #1f2937;
+    transition: all 0.2s ease;
+    margin-top: 4px;
+}
+
+.movie-card textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.5;
+    grid-column: 1 / -1;
+}
+
+.movie-card select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: #1f2937;
+    background-color: #f9fafb;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px;
+}
+
+.movie-card input:focus,
+.movie-card textarea:focus,
+.movie-card select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    background-color: white;
+}
+
+.buttons-container {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.edit-button,
+.add-button {
+    background: black;
+    color: white;
+    padding: 10px 30px;
+    border-radius: 15px;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 24px;
+}
+
+.edit-button:hover,
+.add-button:hover {
+    background: #1a252d; 
+    color: white;
+    transition:  0.3s ease, color 0.3s ease; 
+    transform: translateY(-1px);
+}
+
+.delete-button {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.delete-button:hover {
+    background-color: #dc2626;
+    transform: translateY(-1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .movies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+/* Add subtle animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.movie-card {
+    animation: fadeIn 0.3s ease-out;
+}
     </style>
 </head>
 <body>
 
-<h1>Manage Movies</h1>
+<h1 class="header">Manage Movies</h1>
 
 <!-- Add Movie Section -->
-<h2>Add New Movie</h2>
+<h2 class="header">Add New Movie</h2>
 <form method="POST" enctype="multipart/form-data" class="movie-card">
     <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
@@ -238,7 +410,7 @@ if (isset($_SESSION['message'])) {
 </form>
 
 <!-- Existing Movies Section -->
-<h2>Existing Movies</h2>
+<h2 class="header">Existing Movies</h2>
 <div id="moviesContainer">
     <?php foreach ($movies as $movie): ?>
         <div class="movie-card">
