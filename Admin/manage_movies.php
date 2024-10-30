@@ -24,7 +24,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
     if (isset($_POST['add_movie'])) {
-        // Add new movie
+        // Check if a new genre needs to be added
+        if ($_POST['genre_id'] === 'other' && !empty(trim($_POST['other_genre']))) {
+            $newGenre = htmlspecialchars(trim($_POST['other_genre']));
+            $sql = "INSERT INTO Genre (Name, Description) VALUES (?, '')";
+            $stmt = $connection->prepare($sql);
+            $stmt->execute([$newGenre]);
+            $genreId = $connection->lastInsertId();  // Use new Genre ID
+        } else {
+            $genreId = (int)trim($_POST['genre_id']);  // Use selected Genre ID
+        }
+    
+        // Check if a new version needs to be added
+        if ($_POST['version_id'] === 'other' && !empty(trim($_POST['other_version']))) {
+            $newVersion = htmlspecialchars(trim($_POST['other_version']));
+            $sql = "INSERT INTO Version (Format, AdditionalFee) VALUES (?, 0.00)";
+            $stmt = $connection->prepare($sql);
+            $stmt->execute([$newVersion]);
+            $versionId = $connection->lastInsertId();  // Use new Version ID
+        } else {
+            $versionId = (int)trim($_POST['version_id']);  // Use selected Version ID
+        }
+    
+        // Continue with inserting the movie using $genreId and $versionId
         $title = htmlspecialchars(trim($_POST['title']));
         $director = htmlspecialchars(trim($_POST['director']));
         $language = htmlspecialchars(trim($_POST['language']));
@@ -32,20 +54,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $duration = trim($_POST['duration']);
         $rating = (float)trim($_POST['rating']);
         $description = htmlspecialchars(trim($_POST['description']));
-        $genreId = (int)trim($_POST['genre_id']);
-        $versionId = (int)trim($_POST['version_id']);
-        $trailerLink = htmlspecialchars(trim($_POST['trailerlink'])); // Get trailer link
-
-
+        $trailerLink = htmlspecialchars(trim($_POST['trailerlink']));
+    
         // Insert query with prepared statement
         $sql = "INSERT INTO Movie (Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID, TrailerLink) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $connection->prepare($sql);
-
         if ($stmt->execute([$title, $director, $language, $year, $duration, $rating, $description, $genreId, $versionId, $trailerLink])) {
-            // Get the last inserted movie ID
-            $movieId = $connection->lastInsertId();
-
             $_SESSION['message'] = "Movie added successfully!";
             header("Location: manage_movies.php"); 
             exit();
@@ -202,18 +217,22 @@ if (isset($_SESSION['message'])) {
     <input type="text" name="trailerlink" required placeholder="e.g., https://youtube.com/watch?v=...">
 
     <label for="genre_id">Genre:</label>
-    <select name="genre_id" required>
+    <select name="genre_id" id="genre_id" required onchange="toggleOtherInput('genre_id', 'other_genre')">
         <?php foreach ($genres as $genre): ?>
             <option value="<?php echo $genre['Genre_ID']; ?>"><?php echo htmlspecialchars($genre['Name']); ?></option>
         <?php endforeach; ?>
+        <option value="other">Other</option>
     </select>
+    <input type="text" id="other_genre" name="other_genre" placeholder="Enter new genre" style="display: none;">
 
     <label for="version_id">Version:</label>
-    <select name="version_id" required>
+    <select name="version_id" id="version_id" required onchange="toggleOtherInput('version_id', 'other_version')">
         <?php foreach ($versions as $version): ?>
             <option value="<?php echo $version['Version_ID']; ?>"><?php echo htmlspecialchars($version['Format']); ?></option>
         <?php endforeach; ?>
+        <option value="other">Other</option>
     </select>
+    <input type="text" id="other_version" name="other_version" placeholder="Enter new version" style="display: none;">
 
     <button type="submit" name="add_movie" class="add-button">Add Movie</button>
 </form>
@@ -281,3 +300,14 @@ if (isset($_SESSION['message'])) {
 
 </body>
 </html>
+<script>
+function toggleOtherInput(selectId, inputId) {
+    var selectElement = document.getElementById(selectId);
+    var inputElement = document.getElementById(inputId);
+    if (selectElement.value === 'other') {
+        inputElement.style.display = 'block';
+    } else {
+        inputElement.style.display = 'none';
+    }
+}
+</script>
