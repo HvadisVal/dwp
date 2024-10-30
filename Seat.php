@@ -39,55 +39,86 @@ if (!$seats) {
     <title>Select Seats</title>
     <!-- Materialize CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+ 
+ 
     <style>
-        body {
-            background-color: #111;
-            color: white;
-        }
-        .seat {
-            width: 30px;
-            height: 30px;
-            margin: 5px;
-            background-color: #4CAF50;
-            border-radius: 5px;
-            display: inline-block;
-            text-align: center;
-            line-height: 30px;
-            cursor: pointer;
-        }
-        .seat.sold {
-            background-color: red;
-        }
-        .seat.selected {
-            background-color: yellow;
-        }
-        .row-label {
-            display: inline-block;
-            width: 30px;
-            text-align: center;
-        }
-        .screen {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .seat-info {
-            margin-top: 20px;
-        }
-        .ticket-controls {
-            display: flex;
-            align-items: center;
-        }
-        .ticket-count {
-            font-size: 18px;
-            margin: 0 10px;
-        }
-    </style>
+    body {
+        background-color: #111;
+        color: white;
+    }
+
+    .seat {
+        width: 30px;
+        height: 30px;
+        margin: 5px;
+        background-color: #4CAF50; /* Green for available seats */
+        border-radius: 5px;
+        display: inline-block;
+        text-align: center;
+        line-height: 30px;
+        cursor: pointer;
+        transition: background-color 0.3s ease; /* Smooth transition for hover */
+    }
+
+    .seat:hover {
+        background-color: #FFD700; /* Yellow on hover */
+    }
+
+    .seat.selected {
+        background-color: yellow; /* Yellow when selected */
+    }
+
+    .seat.sold {
+        background-color: red; /* Red for sold seats */
+        cursor: not-allowed;
+    }
+
+    .row-label {
+        display: inline-block;
+        width: 30px;
+        text-align: center;
+    }
+
+    .screen {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .seat-info {
+        margin-top: 20px;
+    }
+
+    .seat-info .selected-legend {
+        background-color: yellow; /* Fixed yellow for the "Selected" legend */
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        border-radius: 5px;
+    }
+</style>
+
+
+
+
 </head>
 <body>
+
+
 
 <div class="container">
     <h4><?= htmlspecialchars($hall['Name']); ?> - Seat Selection</h4>
     <p>Movie: <?= htmlspecialchars($movie_id); ?> | Time: <?= htmlspecialchars($time); ?></p>
+
+    <!-- Seat Quantity Controls -->
+    <div class="ticket-selection">
+        <h5>Select Number of Seats</h5>
+        <div class="ticket-controls">
+            <button class="btn-small" id="decrease-seats">-</button>
+            <span class="ticket-count" id="seat-count-display">1</span>
+            <button class="btn-small" id="increase-seats">+</button>
+        </div>
+        <p>Max 5 seats can be selected per booking.</p>
+    </div>
 
     <div class="screen">
         <strong>SCREEN</strong>
@@ -97,127 +128,121 @@ if (!$seats) {
     <?php
     $currentRow = 0;
     foreach ($seats as $seat) {
-        // Start a new row
         if ($seat['Row'] != $currentRow) {
             if ($currentRow != 0) {
-                echo "<br>"; // End previous row
+                echo "<br>"; 
             }
             $currentRow = $seat['Row'];
-            echo "<span class='row-label'>" . str_pad($currentRow, 2, '0', STR_PAD_LEFT) . "</span>"; // Row number
+            echo "<span class='row-label'>" . str_pad($currentRow, 2, '0', STR_PAD_LEFT) . "</span>";
         }
 
-        // Display seat
         echo "<div class='seat' data-seat-id='" . htmlspecialchars($seat['Seat_ID']) . "' data-seat-number='" . htmlspecialchars($seat['SeatNumber']) . "' data-row='" . htmlspecialchars($seat['Row']) . "'>" . str_pad($seat['SeatNumber'], 2, '0', STR_PAD_LEFT) . "</div>";
     }
     ?>
 
-    <!-- Seat Info Legend -->
     <div class="seat-info">
         <p><span class="seat"></span> Available</p>
         <p><span class="seat selected"></span> Selected</p>
     </div>
-
-    <!-- Ticket Selection -->
-    <div class="ticket-selection">
-        <h5>Select Tickets</h5>
-        <div class="ticket-controls">
-            <button class="btn-small" id="decrease-tickets">-</button>
-            <span class="ticket-count" id="ticket-count">0</span>
-            <button class="btn-small" id="increase-tickets">+</button>
-        </div>
-        <p>Max 9 tickets can be purchased per booking.</p>
-    </div>
-
 </div>
+
 
 <!-- Materialize JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
+<style>
+    .seat.preview {
+        background-color: #FFD700; /* Yellow color for the preview */
+        opacity: 0.5;
+    }
+</style>
+
 <script>
+    let maxSeats = 1;
     let selectedSeats = [];
-    let selectedCount = 0;
-    const maxTickets = 9;
 
-    // Function to update seat selection display and logic
-    function updateSeats() {
-        document.querySelectorAll('.seat').forEach(seat => {
-            const row = seat.getAttribute('data-row');
-            const seatNumber = seat.getAttribute('data-seat-number');
+    // Function to preview seats during hover
+    function previewSeats(row, startSeat) {
+        // Clear existing preview
+        document.querySelectorAll('.seat.preview').forEach(seat => seat.classList.remove('preview'));
 
-            if (selectedSeats.some(s => s.row === row && s.seatNumber === seatNumber)) {
-                seat.classList.add('selected');
-            } else {
-                seat.classList.remove('selected');
+        // Preview the selected number of seats
+        for (let i = 0; i < maxSeats; i++) {
+            const seatPosition = `${row}-${startSeat + i}`;
+            const seatElement = document.querySelector(`.seat[data-row='${row}'][data-seat-number='${startSeat + i}']`);
+            if (seatElement) {
+                seatElement.classList.add('preview');
             }
-        });
+        }
     }
 
-    // Handle seat selection and dynamically assign seats in the same row
-    document.querySelectorAll('.seat').forEach(seat => {
-        seat.addEventListener('click', function () {
-            const row = seat.getAttribute('data-row');
-            const seatNumber = parseInt(seat.getAttribute('data-seat-number'));
-
-            // If clicking on a new row, clear existing selection and allocate new seats
-            if (selectedSeats.length > 0 && selectedSeats[0].row !== row) {
-                allocateSeatsInRow(row, seatNumber);
-            } else {
-                // Standard seat selection
-                if (seat.classList.contains('selected')) {
-                    // Remove seat from selected list
-                    selectedSeats = selectedSeats.filter(s => !(s.row === row && s.seatNumber === seatNumber));
-                    selectedCount--;
-                } else if (selectedCount < maxTickets) {
-                    // Add seat to selected list
-                    selectedSeats.push({ row, seatNumber });
-                    selectedCount++;
-                }
-            }
-
-            // Update seat selection
-            updateSeats();
-            document.querySelector('.ticket-count').textContent = selectedCount;
+    // Function to place the seats at the chosen position on click
+    function placeSeats(row, startSeat) {
+        // Clear current selection
+        selectedSeats.forEach(pos => {
+            const [r, s] = pos.split('-').map(Number);
+            const seatElement = document.querySelector(`.seat[data-row='${r}'][data-seat-number='${s}']`);
+            if (seatElement) seatElement.classList.remove('selected');
         });
-    });
 
-    // Function to allocate seats dynamically in the selected row
-    function allocateSeatsInRow(row, startingSeat) {
+        // Update selectedSeats with new positions
         selectedSeats = [];
-
-        // Find available seats in the new row
-        const newRowSeats = document.querySelectorAll(`.seat[data-row="${row}"]`);
-
-        // Calculate how many seats we can select starting from the clicked seat
-        for (let i = startingSeat - 1; i < newRowSeats.length && selectedSeats.length < selectedCount; i++) {
-            const seatNumber = newRowSeats[i].getAttribute('data-seat-number');
-            selectedSeats.push({ row, seatNumber });
+        for (let i = 0; i < maxSeats; i++) {
+            const seatPosition = `${row}-${startSeat + i}`;
+            selectedSeats.push(seatPosition);
+            const seatElement = document.querySelector(`.seat[data-row='${row}'][data-seat-number='${startSeat + i}']`);
+            if (seatElement) seatElement.classList.add('selected');
         }
-
-        // If we couldn't allocate enough seats starting from the clicked seat, reset
-        if (selectedSeats.length < selectedCount) {
-            alert("Not enough seats available from this position in the row.");
-            selectedSeats = [];
-        }
-
-        updateSeats();
     }
 
-    // Update ticket counter based on button clicks
-    document.querySelector('.increment').addEventListener('click', function () {
-        if (selectedCount < maxTickets) {
-            selectedCount++;
-            document.querySelector('.ticket-count').textContent = selectedCount;
+    // Event listener for seat hover and click
+    document.querySelectorAll('.seat').forEach(seat => {
+        seat.addEventListener('mouseenter', () => {
+            const row = parseInt(seat.getAttribute('data-row'));
+            const startSeat = parseInt(seat.getAttribute('data-seat-number'));
+            previewSeats(row, startSeat); // Show preview on hover
+        });
+
+        seat.addEventListener('mouseleave', () => {
+            document.querySelectorAll('.seat.preview').forEach(seat => seat.classList.remove('preview')); // Clear preview on mouse leave
+        });
+
+        seat.addEventListener('click', () => {
+            const row = parseInt(seat.getAttribute('data-row'));
+            const startSeat = parseInt(seat.getAttribute('data-seat-number'));
+            placeSeats(row, startSeat); // Place seats on click
+        });
+    });
+
+    // Update maxSeats and reset selection
+    const seatCountDisplay = document.getElementById('seat-count-display');
+    document.getElementById('increase-seats').addEventListener('click', () => {
+        if (maxSeats < 5) {
+            maxSeats++;
+            seatCountDisplay.textContent = maxSeats;
+            resetSeatSelection();
+        } else {
+            alert("Maximum of 5 seats can be selected.");
         }
     });
 
-    document.querySelector('.decrement').addEventListener('click', function () {
-        if (selectedCount > 1) {
-            selectedCount--;
-            document.querySelector('.ticket-count').textContent = selectedCount;
+    document.getElementById('decrease-seats').addEventListener('click', () => {
+        if (maxSeats > 1) {
+            maxSeats--;
+            seatCountDisplay.textContent = maxSeats;
+            resetSeatSelection();
+        } else {
+            alert("You must select at least 1 seat.");
         }
     });
 
+    function resetSeatSelection() {
+        selectedSeats = [];
+        document.querySelectorAll('.seat.selected, .seat.preview').forEach(seat => seat.classList.remove('selected', 'preview'));
+        document.getElementById('ticket-count').textContent = 0;
+    }
 </script>
+
 
 
 </body>
