@@ -135,93 +135,90 @@ if (!$seats) {
 
 <script>
     let selectedSeats = [];
-    let maxTickets = 9;
-    let currentTickets = 0;
-    let currentRow = null;
+    let selectedCount = 0;
+    const maxTickets = 9;
 
-    // Handle seat selection
+    // Function to update seat selection display and logic
+    function updateSeats() {
+        document.querySelectorAll('.seat').forEach(seat => {
+            const row = seat.getAttribute('data-row');
+            const seatNumber = seat.getAttribute('data-seat-number');
+
+            if (selectedSeats.some(s => s.row === row && s.seatNumber === seatNumber)) {
+                seat.classList.add('selected');
+            } else {
+                seat.classList.remove('selected');
+            }
+        });
+    }
+
+    // Handle seat selection and dynamically assign seats in the same row
     document.querySelectorAll('.seat').forEach(seat => {
-        seat.addEventListener('click', function() {
-            if (!seat.classList.contains('sold')) {
+        seat.addEventListener('click', function () {
+            const row = seat.getAttribute('data-row');
+            const seatNumber = parseInt(seat.getAttribute('data-seat-number'));
+
+            // If clicking on a new row, clear existing selection and allocate new seats
+            if (selectedSeats.length > 0 && selectedSeats[0].row !== row) {
+                allocateSeatsInRow(row, seatNumber);
+            } else {
+                // Standard seat selection
                 if (seat.classList.contains('selected')) {
-                    // Deselect seat
-                    seat.classList.remove('selected');
-                    selectedSeats = selectedSeats.filter(s => s !== seat.dataset.seatNumber);
-                    currentTickets--;
-                } else {
-                    // Check if we are selecting a new row
-                    if (currentRow === null || currentRow === seat.dataset.row) {
-                        if (currentTickets < maxTickets && areSeatsContiguous(seat.dataset.seatNumber)) {
-                            // Select seat in the same row
-                            seat.classList.add('selected');
-                            selectedSeats.push(seat.dataset.seatNumber);
-                            currentTickets++;
-                            currentRow = seat.dataset.row; // Set the current row
-                        }
-                    } else {
-                        // Deselect previous row, but keep the same number of seats
-                        clearSelectedSeats();
-                        seat.classList.add('selected');
-                        selectSeatsInNewRow(seat.dataset.row, currentTickets);
-                        currentRow = seat.dataset.row; // Set the new row
-                    }
+                    // Remove seat from selected list
+                    selectedSeats = selectedSeats.filter(s => !(s.row === row && s.seatNumber === seatNumber));
+                    selectedCount--;
+                } else if (selectedCount < maxTickets) {
+                    // Add seat to selected list
+                    selectedSeats.push({ row, seatNumber });
+                    selectedCount++;
                 }
-                document.getElementById('ticket-count').innerText = currentTickets;
             }
+
+            // Update seat selection
+            updateSeats();
+            document.querySelector('.ticket-count').textContent = selectedCount;
         });
     });
 
-    // Function to check if the selected seats are contiguous
-    function areSeatsContiguous(newSeat) {
-        if (selectedSeats.length === 0) {
-            return true; // No seats selected yet
-        }
-        const seatNumbers = selectedSeats.map(Number).concat(Number(newSeat)).sort((a, b) => a - b);
-        for (let i = 1; i < seatNumbers.length; i++) {
-            if (seatNumbers[i] - seatNumbers[i - 1] !== 1) {
-                return false; // Non-contiguous seats detected
-            }
-        }
-        return true; // All seats are contiguous
-    }
-
-    // Function to select seats in a new row
-    function selectSeatsInNewRow(row, numSeats) {
-        let availableSeats = document.querySelectorAll('.seat[data-row="' + row + '"]:not(.sold)');
-        let seatsToSelect = [];
-        for (let i = 0; i < availableSeats.length && seatsToSelect.length < numSeats; i++) {
-            seatsToSelect.push(availableSeats[i]);
-        }
-
-        seatsToSelect.forEach(seat => {
-            seat.classList.add('selected');
-            selectedSeats.push(seat.dataset.seatNumber);
-        });
-    }
-
-    // Function to clear selected seats
-    function clearSelectedSeats() {
-        document.querySelectorAll('.seat.selected').forEach(seat => {
-            seat.classList.remove('selected');
-        });
+    // Function to allocate seats dynamically in the selected row
+    function allocateSeatsInRow(row, startingSeat) {
         selectedSeats = [];
+
+        // Find available seats in the new row
+        const newRowSeats = document.querySelectorAll(`.seat[data-row="${row}"]`);
+
+        // Calculate how many seats we can select starting from the clicked seat
+        for (let i = startingSeat - 1; i < newRowSeats.length && selectedSeats.length < selectedCount; i++) {
+            const seatNumber = newRowSeats[i].getAttribute('data-seat-number');
+            selectedSeats.push({ row, seatNumber });
+        }
+
+        // If we couldn't allocate enough seats starting from the clicked seat, reset
+        if (selectedSeats.length < selectedCount) {
+            alert("Not enough seats available from this position in the row.");
+            selectedSeats = [];
+        }
+
+        updateSeats();
     }
 
-    // Ticket counter
-    document.getElementById('increase-tickets').addEventListener('click', () => {
-        if (currentTickets < maxTickets) {
-            currentTickets++;
-            document.getElementById('ticket-count').innerText = currentTickets;
+    // Update ticket counter based on button clicks
+    document.querySelector('.increment').addEventListener('click', function () {
+        if (selectedCount < maxTickets) {
+            selectedCount++;
+            document.querySelector('.ticket-count').textContent = selectedCount;
         }
     });
 
-    document.getElementById('decrease-tickets').addEventListener('click', () => {
-        if (currentTickets > 0) {
-            currentTickets--;
-            document.getElementById('ticket-count').innerText = currentTickets;
+    document.querySelector('.decrement').addEventListener('click', function () {
+        if (selectedCount > 1) {
+            selectedCount--;
+            document.querySelector('.ticket-count').textContent = selectedCount;
         }
     });
+
 </script>
+
 
 </body>
 </html>
