@@ -1129,9 +1129,24 @@ CREATE TABLE News (
     News_ID INT PRIMARY KEY AUTO_INCREMENT,
     Title VARCHAR(255),
     Content TEXT,
-    DatePosted DATE,
-    IsFeatured BOOLEAN
+    DatePosted DATE
 );
+
+INSERT INTO News (News_ID, Title, Content, DatePosted) VALUES 
+(1, 'Blockbuster Release: ''The Last Adventure''', 'This weekend, cinema-goers will be treated to the much-anticipated release of ''The Last Adventure,'' directed by acclaimed filmmaker Sarah Johnson. The film promises to deliver breathtaking visuals and an engaging story that keeps audiences on the edge of their seats. Don’t miss it!', '2024-10-28');
+
+INSERT INTO News (News_ID, Title, Content, DatePosted) VALUES 
+(2, 'Film Festival Highlights: A Celebration of Indie Cinema', 'The annual Indie Film Festival kicks off this Friday, showcasing a selection of groundbreaking films from emerging filmmakers. With workshops, panels, and screenings, this festival is a must-visit for cinephiles and aspiring artists alike.', '2024-10-29');
+
+INSERT INTO News (News_ID, Title, Content, DatePosted) VALUES 
+(3, 'Oscar Buzz: Early Favorites for 2025', 'As awards season approaches, industry insiders are already discussing the frontrunners for the 2025 Academy Awards. Films like ''Echoes of Time'' and ''Silent Whispers'' have garnered significant acclaim, setting the stage for an exciting race.', '2024-10-30');
+
+INSERT INTO News (News_ID, Title, Content, DatePosted) VALUES 
+(4, 'Behind the Scenes: Making ''Mystery of the Lost Treasure''', 'Get a sneak peek behind the scenes of the upcoming adventure film ''Mystery of the Lost Treasure.'' We explore the creative process, the talented cast, and the breathtaking locations that bring this thrilling story to life.', '2024-10-27');
+
+INSERT INTO News (News_ID, Title, Content, DatePosted) VALUES 
+(5, 'Iconic Film Remake: ''The Phantom Opera'' Returns', 'Fans of classic cinema are in for a treat as ''The Phantom Opera'' is set to be remade with a fresh twist. The film will feature a star-studded cast and modern music, promising to capture the essence of the original while appealing to a new generation.', '2024-10-25');
+
 
 -- Company Table
 CREATE TABLE Company (

@@ -139,7 +139,7 @@
                         <p>View, edit, or remove news in the system.</p>
                     </div>
                     <div class="card-action">
-                        <a href="manage_users.php" class="btn waves-effect waves-light">Manage News</a>
+                        <a href="manage_news.php" class="btn waves-effect waves-light">Manage News</a>
                     </div>
                 </div>
             </div>
