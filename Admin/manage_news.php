@@ -168,28 +168,148 @@ if (isset($_SESSION['message'])) {
     <title>Manage News</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Styling */
-        #newsContainer { display: flex; flex-direction: column; gap: 16px; }
-        .news-card { border: 1px solid #ddd; border-radius: 8px; padding: 16px; box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1); background-color: #f9f9f9; }
-        .news-card label { font-weight: bold; margin-top: 8px; display: block; color: #333; }
-        .news-card input[type="text"], .news-card textarea {
-            display: block; width: 100%; border: none; border-bottom: 1px solid #ccc; background-color: transparent; padding: 4px 0; font-size: 16px; color: #555;
+        /* General Styling */
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
-        .news-card textarea { resize: none; height: 60px; }
-        .image-preview { max-width: 100%; height: auto; margin-top: 8px; }
-        .add-button, .edit-button, .delete-button { 
-            margin-top: 16px; 
-            background-color: #007bff; 
-            color: white; 
-            border: none; 
-            padding: 10px 16px; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            transition: background-color 0.3s; 
+
+        h1, h2 {
+            color: black;
+            text-align: center;
+            margin: 25px 0;
         }
-        .add-button:hover, .edit-button:hover, .delete-button:hover { background-color: #0056b3; }
-        .delete-button { background-color: #dc3545; }
-        .delete-button:hover { background-color: #c82333; }
+
+        h1 {
+            font-size: 2em;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            margin-bottom: 24px;
+        }
+
+        /* Form and Container */
+        .news-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            background-color: #fff;
+        }
+
+        #newsContainer {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            padding: 0 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 16px;
+            display: block;
+            color: #666;
+        }
+
+        input[type="text"], input[type="date"], input[type="file"], textarea {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            font-size: 16px;
+            color: #555;
+            box-sizing: border-box;
+            margin-top: 8px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-top: 12px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Button Styling */
+        .add-button, .edit-button, .delete-button {
+            background: black;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .add-button {
+            background-color: black;
+
+        }
+        
+        .add-button:hover {
+            background: #1a252d; 
+            color: white;
+            transition:  0.3s ease, color 0.3s ease; 
+            transform: translateY(-1px);
+        }
+
+        .edit-button {
+            background-color: black;
+            margin-right: 8px;
+        }
+
+        .edit-button:hover {
+            background: #1a252d; 
+            color: white;
+            transition:  0.3s ease, color 0.3s ease; 
+            transform: translateY(-1px);
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+        }
+
+        .delete-button:hover {
+            background-color: #c82333;
+            color: white;
+            transition:  0.3s ease, color 0.3s ease; 
+            transform: translateY(-1px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            #newsContainer {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            h1, h2 {
+                font-size: 1.5em;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            #newsContainer {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -216,7 +336,6 @@ if (isset($_SESSION['message'])) {
     <button type="submit" name="add_news" class="add-button">Add News</button>
 </form>
 
-
 <!-- Existing News Section -->
 <h2>Existing Articles</h2>
 <div id="newsContainer">
@@ -235,7 +354,6 @@ if (isset($_SESSION['message'])) {
                 <label for="dateposted">Date Posted:</label>
                 <input type="date" name="dateposted" value="<?php echo htmlspecialchars($news['DatePosted']); ?>" required>
 
-                <!-- Display current image associated with the news article -->
                 <label>Current Image:</label>
                 <?php if (!empty($images[$news['News_ID']])): ?>
                     <img src="../uploads/news_images/<?php echo htmlspecialchars($images[$news['News_ID']][0]); ?>" alt="News Image" class="image-preview">
@@ -243,7 +361,6 @@ if (isset($_SESSION['message'])) {
                     <p>No image uploaded for this article.</p>
                 <?php endif; ?>
 
-                <!-- Upload a new image to replace the current one -->
                 <label for="image">Upload New Image:</label>
                 <input type="file" name="image" accept="image/png, image/jpeg">
 
@@ -253,8 +370,6 @@ if (isset($_SESSION['message'])) {
         </div>
     <?php endforeach; ?>
 </div>
-
-
 
 </body>
 </html>
