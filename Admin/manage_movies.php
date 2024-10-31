@@ -282,8 +282,6 @@ if (isset($_SESSION['message'])) {
 .add-button {
     background: black;
     color: white;
-    padding: 10px 30px;
-    border-radius: 15px;
     border: none;
     padding: 12px 24px;
     border-radius: 6px;
