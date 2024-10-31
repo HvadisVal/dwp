@@ -2,6 +2,7 @@
 require_once("../includes/session.php"); 
 require_once("../includes/connection.php"); 
 require_once("../includes/functions.php"); 
+require_once("./image_functions.php"); // Include the new file
 
 // CSRF Protection: Generate token
 if (empty($_SESSION['csrf_token'])) {
@@ -22,19 +23,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Handle adding a news article
         $title = htmlspecialchars(trim($_POST['title']));
         $content = htmlspecialchars(trim($_POST['content']));
-        $datePosted = $_POST['dateposted']; // Use provided date
-        
+        $datePosted = $_POST['dateposted'];
+    
         // Insert query with prepared statement
         $sql = "INSERT INTO News (Title, Content, DatePosted) VALUES (?, ?, ?)";
         $stmt = $connection->prepare($sql);
         if ($stmt->execute([$title, $content, $datePosted])) {
-            $newsId = $connection->lastInsertId(); // Get the last inserted News_ID
+            $newsId = $connection->lastInsertId(); 
             
             // Handle image upload
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-                uploadImage($newsId, $connection);
+                uploadImage($newsId, 'news', $connection); // Include 'news' as type
+            } else {
+                echo "Error uploading image: " . $_FILES['image']['error']; // Handle image upload error
             }
-
+    
             $_SESSION['message'] = "News added successfully!";
             header("Location: manage_news.php"); 
             exit();
@@ -47,96 +50,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $title = htmlspecialchars(trim($_POST['title']));
         $content = htmlspecialchars(trim($_POST['content']));
         $datePosted = $_POST['dateposted'];
-
+    
         // Update query with prepared statement
         $sql = "UPDATE News SET Title = ?, Content = ?, DatePosted = ? WHERE News_ID = ?";
         $stmt = $connection->prepare($sql);
-
+    
         if ($stmt->execute([$title, $content, $datePosted, $newsId])) {
             // Check if a new image is uploaded and process it
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-                // Call the function to handle replacing the image
-                uploadImage($newsId, $connection);
+                uploadImage($newsId, 'news', $connection); // Pass the type as 'news'
             }
-
+    
             $_SESSION['message'] = "News article updated successfully!";
             header("Location: manage_news.php"); 
             exit();
         } else {
             echo "Error updating news article.";
         }
-    } elseif (isset($_POST['delete_news'])) {
+    }
+    
+    elseif (isset($_POST['delete_news'])) {
         // Handle deleting a news article
         $newsId = (int)trim($_POST['news_id']);
-
+    
         // Delete associated image from the server and Media table
-        deleteImage($newsId, $connection);
-
+        deleteImage($newsId, 'news', $connection); // Ensure you're passing the correct type
+    
         // Delete the news article
         $sql = "DELETE FROM News WHERE News_ID = ?";
-        $stmt = $connection->prepare($sql);
-
+        $stmt = $connection->prepare(query: $sql);
+    
         if ($stmt->execute([$newsId])) {
             $_SESSION['message'] = "News deleted successfully!";
         } else {
             echo "Error deleting news.";
         }
-
+    
         header("Location: manage_news.php");
         exit();
     }
-}
-
-// Helper function to upload or replace an image for a news article
-function uploadImage($newsId, $connection) {
-    $fileTmpPath = $_FILES['image']['tmp_name'];
-    $fileName = $_FILES['image']['name'];
-    $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
-    $allowedTypes = ['jpg', 'png'];
-
-    if (in_array(strtolower($fileType), $allowedTypes)) {
-        // Define the directory and unique file name
-        $uploadFileDir = '../uploads/news_images/';
-        $newFileName = md5(time() . $fileName) . '.' . $fileType;
-        $dest_path = $uploadFileDir . $newFileName;
-
-        // Move the file and update the database
-        if (move_uploaded_file($fileTmpPath, $dest_path)) {
-            // Delete the old image if one exists
-            deleteImage($newsId, $connection);
-
-            // Insert new image record into the Media table
-            $mediaSql = "INSERT INTO Media (FileName, Format, News_ID) VALUES (?, ?, ?)";
-            $mediaStmt = $connection->prepare($mediaSql);
-            $mediaStmt->execute([$newFileName, $fileType, $newsId]);
-        } else {
-            echo "Error moving the uploaded file.";
-        }
-    } else {
-        echo "Invalid file type. Only JPG and PNG are allowed.";
-    }
-}
-
-// Helper function to delete an image from the server and Media table
-function deleteImage($newsId, $connection) {
-    // Retrieve the file name of the current image for this news article
-    $mediaSql = "SELECT FileName FROM Media WHERE News_ID = ?";
-    $mediaStmt = $connection->prepare($mediaSql);
-    $mediaStmt->execute([$newsId]);
-    $fileName = $mediaStmt->fetchColumn();
-
-    // If an image exists, delete it from the server
-    if ($fileName) {
-        $filePath = "../uploads/news_images/" . $fileName;
-        if (file_exists($filePath)) {
-            unlink($filePath);
-        }
-
-        // Delete the image record from the Media table
-        $deleteSql = "DELETE FROM Media WHERE News_ID = ?";
-        $deleteStmt = $connection->prepare($deleteSql);
-        $deleteStmt->execute([$newsId]);
-    }
+    
+    
 }
 
 // Fetch news and associated images
@@ -145,6 +99,7 @@ $stmt = $connection->prepare($sql);
 $stmt->execute();
 $newsArticles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+// Fetch associated images
 $images = [];
 foreach ($newsArticles as $news) {
     $newsId = $news['News_ID'];
@@ -156,7 +111,7 @@ foreach ($newsArticles as $news) {
 
 if (isset($_SESSION['message'])) {
     echo "<p>{$_SESSION['message']}</p>";
-    unset($_SESSION['message']); // Clear the message after displaying
+    unset($_SESSION['message']); 
 }
 ?>
 
