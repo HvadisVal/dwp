@@ -2,16 +2,12 @@
 require_once("../includes/session.php"); 
 require_once("../includes/connection.php"); 
 require_once("../includes/functions.php"); 
+require_once("./image_functions.php"); // Include the new file
 
 // CSRF Protection: Generate token
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
-
-// Check if admin is logged in, otherwise redirect to login page
-// if (!isset($_SESSION['admin_id'])) {
-//    redirect_to("adminLogin.php"); // Redirect to the admin login page if not logged in
-// }
 
 // Handle the form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -24,29 +20,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
     if (isset($_POST['add_movie'])) {
-        // Check if a new genre needs to be added
+        // Check and insert new genre if necessary
         if ($_POST['genre_id'] === 'other' && !empty(trim($_POST['other_genre']))) {
             $newGenre = htmlspecialchars(trim($_POST['other_genre']));
             $sql = "INSERT INTO Genre (Name, Description) VALUES (?, '')";
             $stmt = $connection->prepare($sql);
             $stmt->execute([$newGenre]);
-            $genreId = $connection->lastInsertId();  // Use new Genre ID
+            $genreId = $connection->lastInsertId();
         } else {
-            $genreId = (int)trim($_POST['genre_id']);  // Use selected Genre ID
+            $genreId = (int)trim($_POST['genre_id']);
         }
-    
-        // Check if a new version needs to be added
+
+        // Check and insert new version if necessary
         if ($_POST['version_id'] === 'other' && !empty(trim($_POST['other_version']))) {
             $newVersion = htmlspecialchars(trim($_POST['other_version']));
             $sql = "INSERT INTO Version (Format, AdditionalFee) VALUES (?, 0.00)";
             $stmt = $connection->prepare($sql);
             $stmt->execute([$newVersion]);
-            $versionId = $connection->lastInsertId();  // Use new Version ID
+            $versionId = $connection->lastInsertId();
         } else {
-            $versionId = (int)trim($_POST['version_id']);  // Use selected Version ID
+            $versionId = (int)trim($_POST['version_id']);
         }
-    
-        // Continue with inserting the movie using $genreId and $versionId
+
+        // Movie details
         $title = htmlspecialchars(trim($_POST['title']));
         $director = htmlspecialchars(trim($_POST['director']));
         $language = htmlspecialchars(trim($_POST['language']));
@@ -55,12 +51,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $rating = (float)trim($_POST['rating']);
         $description = htmlspecialchars(trim($_POST['description']));
         $trailerLink = htmlspecialchars(trim($_POST['trailerlink']));
-    
-        // Insert query with prepared statement
+
+        // Insert movie
         $sql = "INSERT INTO Movie (Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID, TrailerLink) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $connection->prepare($sql);
         if ($stmt->execute([$title, $director, $language, $year, $duration, $rating, $description, $genreId, $versionId, $trailerLink])) {
+            $movieId = $connection->lastInsertId();
+
+            // Handle image upload
+            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                uploadImage($movieId, 'movie', $connection); // Pass type as 'movie'
+            }
+
             $_SESSION['message'] = "Movie added successfully!";
             header("Location: manage_movies.php"); 
             exit();
@@ -79,9 +82,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $description = htmlspecialchars(trim($_POST['description']));
         $genreId = (int)trim($_POST['genre_id']);
         $versionId = (int)trim($_POST['version_id']);
-        $trailerLink = htmlspecialchars(trim($_POST['trailerlink'])); // Get trailer link
+        $trailerLink = htmlspecialchars(trim($_POST['trailerlink']));
 
-        // Update query with prepared statement
+        // Update movie
         $sql = "UPDATE Movie SET 
                 Title = ?, 
                 Director = ?, 
@@ -97,6 +100,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $connection->prepare($sql);
 
         if ($stmt->execute([$title, $director, $language, $year, $duration, $rating, $description, $genreId, $versionId, $trailerLink, $movieId])) {
+            // Handle image upload if a new image is provided
+            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                deleteImage($movieId, 'movie', $connection); // Delete existing image
+                uploadImage($movieId, 'movie', $connection); // Upload new image
+            }
+
             $_SESSION['message'] = "Movie updated successfully!";
             header("Location: manage_movies.php"); 
             exit();
@@ -106,33 +115,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (isset($_POST['delete_movie'])) {
         // Delete movie logic
         $movieId = (int)trim($_POST['movie_id']);
-    
-        // 1. Fetch the paths of associated media files
-        $sql = "SELECT FileName FROM Media WHERE Movie_ID = ?";
-        $stmt = $connection->prepare($sql);
-        $stmt->execute([$movieId]);
-        
-    
-        // 4. Delete the movie record
+
+        // Delete associated image
+        deleteImage($movieId, 'movie', $connection); // Delete the image before removing the movie
+
+        // Delete the movie record
         $sql = "DELETE FROM Movie WHERE Movie_ID = ?";
         $stmt = $connection->prepare($sql);
-    
+
         if ($stmt->execute([$movieId])) {
             $_SESSION['message'] = "Movie deleted successfully!";
         } else {
             echo "Error deleting movie.";
         }
-    
+
         // Redirect after deletion
         header("Location: manage_movies.php");
         exit();
     }
-    
 }
 
-// Fetch movies for display
-$sql = "SELECT m.Movie_ID, m.Title, m.Director, m.Language, m.Year, m.Duration, m.Rating, m.Description, m.Genre_ID, m.Version_ID, m.TrailerLink
-        FROM Movie m";
+// Fetch movies along with associated images for display
+$sql = "SELECT m.Movie_ID, m.Title, m.Director, m.Language, m.Year, m.Duration, m.Rating, m.Description, m.TrailerLink, 
+               media.FileName AS ImageFileName
+        FROM Movie m
+        LEFT JOIN Media media ON m.Movie_ID = media.Movie_ID";
 $stmt = $connection->prepare($sql);
 $stmt->execute();
 $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -154,7 +161,6 @@ if (isset($_SESSION['message'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Movies</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
          * {
             margin: 0;
@@ -404,6 +410,9 @@ if (isset($_SESSION['message'])) {
     </select>
     <input type="text" id="other_version" name="other_version" placeholder="Enter new version" style="display: none;">
 
+    <label for="image">Upload Movie Image:</label>
+    <input type="file" name="image" accept="image/*" required> <!-- Added image upload input -->
+
     <button type="submit" name="add_movie" class="add-button">Add Movie</button>
 </form>
 
@@ -412,7 +421,7 @@ if (isset($_SESSION['message'])) {
 <div id="moviesContainer">
     <?php foreach ($movies as $movie): ?>
         <div class="movie-card">
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data"> 
                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                 <input type="hidden" name="movie_id" value="<?php echo $movie['Movie_ID']; ?>">
 
@@ -420,7 +429,6 @@ if (isset($_SESSION['message'])) {
                 <label for="title">Title:</label>
                 <input type="text" name="title" value="<?php echo htmlspecialchars($movie['Title']); ?>" required>
 
-                <!-- Continue with other fields... -->
                 <label for="director">Director:</label>
                 <input type="text" name="director" value="<?php echo htmlspecialchars($movie['Director']); ?>" required>
 
@@ -460,6 +468,16 @@ if (isset($_SESSION['message'])) {
                     <?php endforeach; ?>
                 </select>
 
+                <label for="image">Upload New Movie Image (optional):</label>
+                <input type="file" name="image" accept="image/*"> 
+
+                <!-- Display uploaded image -->
+                <?php if (!empty($movie['ImageFileName'])): ?>
+                    <div>
+                        <img src="../uploads/poster/<?php echo htmlspecialchars($movie['ImageFileName']); ?>" alt="<?php echo htmlspecialchars($movie['Title']); ?>" style="max-width: 100%; height: auto;">
+                    </div>
+                <?php endif; ?>
+
                 <button type="submit" name="edit_movie" class="edit-button">Edit Movie</button>
                 <button type="submit" name="delete_movie" class="delete-button">Delete Movie</button>
             </form>
@@ -468,8 +486,6 @@ if (isset($_SESSION['message'])) {
 </div>
 
 
-</body>
-</html>
 <script>
 function toggleOtherInput(selectId, inputId) {
     var selectElement = document.getElementById(selectId);
