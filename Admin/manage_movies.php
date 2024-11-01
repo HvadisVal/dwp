@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Refresh CSRF token to avoid reuse
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
+
     if (isset($_POST['add_movie'])) {
         // Check and insert new genre if necessary
         if ($_POST['genre_id'] === 'other' && !empty(trim($_POST['other_genre']))) {
@@ -59,9 +60,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->execute([$title, $director, $language, $year, $duration, $rating, $description, $genreId, $versionId, $trailerLink])) {
             $movieId = $connection->lastInsertId();
 
-            // Handle image upload
-            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            // Handle image upload for poster
+            if (isset($_FILES['poster']) && $_FILES['poster']['error'] === UPLOAD_ERR_OK) {
+                $_FILES['image'] = $_FILES['poster']; // Set 'poster' as 'image' to work with the function
                 uploadImage($movieId, 'movie', $connection); // Pass type as 'movie'
+            }
+
+
+            // Handle gallery images upload
+            if (isset($_FILES['gallery']['name']) && count($_FILES['gallery']['name']) > 0) {
+                $_FILES['image'] = $_FILES['gallery']; // Reassign 'gallery' files to 'image' for function compatibility
+                uploadImage($movieId, 'gallery', $connection);
             }
 
             $_SESSION['message'] = "Movie added successfully!";
@@ -83,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $genreId = (int)trim($_POST['genre_id']);
         $versionId = (int)trim($_POST['version_id']);
         $trailerLink = htmlspecialchars(trim($_POST['trailerlink']));
-
+    
         // Update movie
         $sql = "UPDATE Movie SET 
                 Title = ?, 
@@ -98,21 +107,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 TrailerLink = ? 
                 WHERE Movie_ID = ?";
         $stmt = $connection->prepare($sql);
-
+    
         if ($stmt->execute([$title, $director, $language, $year, $duration, $rating, $description, $genreId, $versionId, $trailerLink, $movieId])) {
             // Handle image upload if a new image is provided
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-                deleteImage($movieId, 'movie', $connection); // Delete existing image
-                uploadImage($movieId, 'movie', $connection); // Upload new image
+                deletePosterImage($movieId, $connection); // Ensure this function is correct
+                uploadImage($movieId, 'movie', $connection); // Upload new poster image
             }
-
+    
+            // Handle gallery images
+            if (isset($_FILES['gallery']['name']) && count($_FILES['gallery']['name']) > 0) {
+                // Reassign gallery files to 'image' for uploadImage function
+                $_FILES['image'] = $_FILES['gallery']; 
+                uploadImage($movieId, 'gallery', $connection); 
+            }
+            
+            // Handle deletion of selected gallery images
+            if (isset($_POST['delete_gallery_images']) && is_array($_POST['delete_gallery_images'])) {
+                foreach ($_POST['delete_gallery_images'] as $galleryImage) {
+                    deleteGalleryImage($galleryImage, $movieId, $connection); // Ensure this function is defined
+                }
+            }
+    
             $_SESSION['message'] = "Movie updated successfully!";
             header("Location: manage_movies.php"); 
             exit();
         } else {
             echo "Error updating movie.";
         }
-    } elseif (isset($_POST['delete_movie'])) {
+    }
+     elseif (isset($_POST['delete_movie'])) {
         // Delete movie logic
         $movieId = (int)trim($_POST['movie_id']);
 
@@ -135,14 +159,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// Fetch movies along with associated images for display
-$sql = "SELECT m.Movie_ID, m.Title, m.Director, m.Language, m.Year, m.Duration, m.Rating, m.Description, m.TrailerLink, 
-               media.FileName AS ImageFileName
+$sql = "SELECT m.Movie_ID, m.Title, m.Director, m.Language, m.Year, m.Duration, m.Rating, m.Description, 
+               m.TrailerLink, 
+               MAX(CASE WHEN media.IsFeatured = 1 THEN media.FileName END) AS ImageFileName,
+               GROUP_CONCAT(CASE WHEN media.IsFeatured = 0 THEN media.FileName END) AS GalleryImages,
+               g.Genre_ID AS Genre_ID, g.Name AS GenreName,
+               v.Version_ID AS Version_ID, v.Format AS VersionFormat
         FROM Movie m
-        LEFT JOIN Media media ON m.Movie_ID = media.Movie_ID";
+        LEFT JOIN Media media ON m.Movie_ID = media.Movie_ID
+        LEFT JOIN Genre g ON m.Genre_ID = g.Genre_ID
+        LEFT JOIN Version v ON m.Version_ID = v.Version_ID
+        GROUP BY m.Movie_ID";  
 $stmt = $connection->prepare($sql);
 $stmt->execute();
 $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
 
 
 // Fetch genres and versions
@@ -360,6 +392,16 @@ if (isset($_SESSION['message'])) {
     </style>
 </head>
 <body>
+    <script>
+        function validateFileCount(input) {
+    const maxFiles = 5;
+    console.log(`Selected files: ${input.files.length}`); // Log the number of files selected
+    if (input.files.length > maxFiles) {
+        alert(`You can only upload a maximum of ${maxFiles} images.`);
+        input.value = ""; // Clear the input
+    }
+}
+    </script>
 
 <h1 class="header">Manage Movies</h1>
 
@@ -410,11 +452,15 @@ if (isset($_SESSION['message'])) {
     </select>
     <input type="text" id="other_version" name="other_version" placeholder="Enter new version" style="display: none;">
 
-    <label for="image">Upload Movie Image:</label>
-    <input type="file" name="image" accept="image/*" required> <!-- Added image upload input -->
+    <label for="poster">Upload Poster Image:</label>
+    <input type="file" name="poster" accept="image/*" required>
+
+    <label for="gallery">Upload Gallery Images (up to 5):</label>
+    <input type="file" name="gallery[]" accept="image/*" multiple id="galleryInput" onchange="validateFileCount(this)">
 
     <button type="submit" name="add_movie" class="add-button">Add Movie</button>
 </form>
+
 
 <!-- Existing Movies Section -->
 <h2 class="header">Existing Movies</h2>
@@ -450,19 +496,23 @@ if (isset($_SESSION['message'])) {
                 <label for="trailerlink">Trailer Link:</label>
                 <input type="text" name="trailerlink" value="<?php echo htmlspecialchars($movie['TrailerLink']); ?>" required placeholder="e.g., https://youtube.com/watch?v=...">
 
+                <!-- Genre Select -->
                 <label for="genre_id">Genre:</label>
                 <select name="genre_id" required>
                     <?php foreach ($genres as $genre): ?>
-                        <option value="<?php echo $genre['Genre_ID']; ?>" <?php if ($genre['Genre_ID'] == $movie['Genre_ID']) echo 'selected'; ?>>
+                        <option value="<?php echo $genre['Genre_ID']; ?>" 
+                            <?php if ($genre['Genre_ID'] == $movie['Genre_ID']) echo 'selected'; ?>>
                             <?php echo htmlspecialchars($genre['Name']); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
 
+                <!-- Version Select -->
                 <label for="version_id">Version:</label>
                 <select name="version_id" required>
                     <?php foreach ($versions as $version): ?>
-                        <option value="<?php echo $version['Version_ID']; ?>" <?php if ($version['Version_ID'] == $movie['Version_ID']) echo 'selected'; ?>>
+                        <option value="<?php echo $version['Version_ID']; ?>" 
+                            <?php if ($version['Version_ID'] == $movie['Version_ID']) echo 'selected'; ?>>
                             <?php echo htmlspecialchars($version['Format']); ?>
                         </option>
                     <?php endforeach; ?>
@@ -471,19 +521,50 @@ if (isset($_SESSION['message'])) {
                 <label for="image">Upload New Movie Image (optional):</label>
                 <input type="file" name="image" accept="image/*"> 
 
-                <!-- Display uploaded image -->
+                <!-- Display uploaded poster image -->
                 <?php if (!empty($movie['ImageFileName'])): ?>
                     <div>
                         <img src="../uploads/poster/<?php echo htmlspecialchars($movie['ImageFileName']); ?>" alt="<?php echo htmlspecialchars($movie['Title']); ?>" style="max-width: 100%; height: auto;">
                     </div>
+                <?php else: ?>
+                    <p>No image available for this movie.</p>
                 <?php endif; ?>
 
+                <!-- Display gallery images with delete checkboxes -->
+                <?php if (!empty($movie['GalleryImages'])): ?>
+                    <div>
+                        <h4>Gallery Images:</h4>
+                        <?php 
+                        $galleryImages = explode(',', $movie['GalleryImages']);
+                        foreach ($galleryImages as $galleryImage): ?>
+                            <div style="display: flex; align-items: center;">
+                                <img src="../uploads/gallery/<?php echo htmlspecialchars($galleryImage); ?>" alt="<?php echo htmlspecialchars($movie['Title']); ?>" style="max-width: 100px; height: auto; margin: 5px;">
+                                <label>
+                                    <input type="checkbox" name="delete_gallery_images[]" value="<?php echo htmlspecialchars($galleryImage); ?>"> Delete
+                                </label>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+                <?php if (!empty($movie['GalleryImages'])): ?>
+    <?php $galleryImages = explode(',', $movie['GalleryImages']); ?>
+<?php else: ?>
+    <?php $galleryImages = []; ?>
+<?php endif; ?>
+
+                <label for="gallery">Upload Additional Gallery Images (up to 5 total):</label>
+                <input type="file" name="gallery[]" accept="image/*" multiple 
+       id="galleryInput" 
+       data-existing-files-count="<?php echo count($galleryImages); ?>" 
+       onchange="validateExistingFileCount(this)">
                 <button type="submit" name="edit_movie" class="edit-button">Edit Movie</button>
                 <button type="submit" name="delete_movie" class="delete-button">Delete Movie</button>
             </form>
         </div>
     <?php endforeach; ?>
 </div>
+
+
 
 
 <script>
@@ -496,4 +577,15 @@ function toggleOtherInput(selectId, inputId) {
         inputElement.style.display = 'none';
     }
 }
+function validateExistingFileCount(input) {
+    const maxFiles = 5;
+    const existingFilesCount = parseInt(input.getAttribute('data-existing-files-count')) || 0;
+    const fileCount = input.files.length;
+
+    if (fileCount + existingFilesCount > maxFiles) {
+        alert(`You can only upload a maximum of ${maxFiles - existingFilesCount} additional images.`);
+        input.value = ''; // Clear the input
+    }
+}
+
 </script>
