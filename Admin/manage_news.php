@@ -28,47 +28,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Insert query with prepared statement
         $sql = "INSERT INTO News (Title, Content, DatePosted) VALUES (?, ?, ?)";
         $stmt = $connection->prepare($sql);
+        
         if ($stmt->execute([$title, $content, $datePosted])) {
             $newsId = $connection->lastInsertId(); 
             
-            // Handle image upload
+            // Only call uploadImage if the news was added successfully
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                 uploadImage($newsId, 'news', $connection); // Include 'news' as type
-            } else {
-                echo "Error uploading image: " . $_FILES['image']['error']; // Handle image upload error
             }
-    
+            
             $_SESSION['message'] = "News added successfully!";
             header("Location: manage_news.php"); 
             exit();
         } else {
             echo "Error adding news.";
         }
-    } elseif (isset($_POST['edit_news'])) {
-        // Update news article
-        $newsId = (int)trim($_POST['news_id']);
-        $title = htmlspecialchars(trim($_POST['title']));
-        $content = htmlspecialchars(trim($_POST['content']));
-        $datePosted = $_POST['dateposted'];
-    
-        // Update query with prepared statement
-        $sql = "UPDATE News SET Title = ?, Content = ?, DatePosted = ? WHERE News_ID = ?";
-        $stmt = $connection->prepare($sql);
-    
-        if ($stmt->execute([$title, $content, $datePosted, $newsId])) {
-            // Check if a new image is uploaded and process it
-            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-                uploadImage($newsId, 'news', $connection); // Pass the type as 'news'
-            }
-    
-            $_SESSION['message'] = "News article updated successfully!";
-            header("Location: manage_news.php"); 
-            exit();
-        } else {
-            echo "Error updating news article.";
-        }
     }
-    
+     // Inside the POST request handling
+if (isset($_POST['edit_news'])) {
+    // Update news article
+    $newsId = (int)trim($_POST['news_id']);
+    $title = htmlspecialchars(trim($_POST['title']));
+    $content = htmlspecialchars(trim($_POST['content']));
+    $datePosted = $_POST['dateposted'];
+
+    // Update query with prepared statement
+    $sql = "UPDATE News SET Title = ?, Content = ?, DatePosted = ? WHERE News_ID = ?";
+    $stmt = $connection->prepare($sql);
+
+    if ($stmt->execute([$title, $content, $datePosted, $newsId])) {
+        // Check if a new image is uploaded and process it
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            // Delete the existing image before uploading the new one
+            deleteImage($newsId, 'news', $connection);
+            uploadImage($newsId, 'news', $connection); // Pass the type as 'news'
+        }
+
+        $_SESSION['message'] = "News article updated successfully!";
+        header("Location: manage_news.php"); 
+        exit();
+    } else {
+        echo "Error updating news article.";
+    }
+}
+
     elseif (isset($_POST['delete_news'])) {
         // Handle deleting a news article
         $newsId = (int)trim($_POST['news_id']);
