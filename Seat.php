@@ -95,6 +95,73 @@ if (!$seats) {
         height: 30px;
         border-radius: 5px;
     }
+
+    .ticket-summary {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #1a1a1a;
+        color: white;
+        font-size: 16px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    .ticket-details {
+        display: flex;
+        align-items: center;
+    }
+
+    .ticket-icons-container {
+    display: flex;
+    gap: 5px; /* Space between each ticket icon */
+    align-items: center;
+}
+
+.ticket-icon {
+    background-color: #3B82F6;
+    color: white;
+    border-radius: 5px;
+    padding: 4px; /* Smaller padding to reduce size */
+   /* width: 40px; /* Adjust width to fit the smaller size */
+    font-size: 12px; /* Smaller font size */
+    text-align: center;
+}
+
+
+    .ticket-info {
+        margin-right: 20px;
+    }
+
+    .ticket-info p {
+        margin: 0;
+    }
+
+    .total-info {
+        font-weight: bold;
+    }
+
+    .continue-button {
+        background-color: #3B82F6;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .continue-button:hover {
+        background-color: #2563EB;
+    }
+
+    .seat.preview {
+        background-color: #FFD700; /* Yellow color for the preview */
+        opacity: 0.5;
+    }
 </style>
 
 
@@ -146,16 +213,21 @@ if (!$seats) {
     </div>
 </div>
 
+<div class="ticket-summary">
+    <div class="ticket-details">
+    <div class="ticket-icons-container" id="ticket-icons"></div>
+        <div class="ticket-info">
+            <p id="ticket-count">0 tickets</p>
+            <p id="total-price">DKK 0</p>
+        </div>
+    </div>
+    <button class="continue-button" id="continue-button">Continue</button>
+</div>
 
 <!-- Materialize JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-<style>
-    .seat.preview {
-        background-color: #FFD700; /* Yellow color for the preview */
-        opacity: 0.5;
-    }
-</style>
+
 
 <script>
     let maxSeats = 1;
@@ -241,6 +313,64 @@ if (!$seats) {
         document.querySelectorAll('.seat.selected, .seat.preview').forEach(seat => seat.classList.remove('selected', 'preview'));
         document.getElementById('ticket-count').textContent = 0;
     }
+
+    const ticketPrice = 135; // Price per ticket
+
+function updateTicketSummary() {
+    const ticketCount = selectedSeats.length;
+    const totalPrice = ticketCount * ticketPrice;
+    const ticketIcons = document.getElementById("ticket-icons");
+    const ticketCountText = document.getElementById("ticket-count");
+    const totalPriceText = document.getElementById("total-price");
+
+    // Update ticket count and total price display
+    ticketCountText.textContent = `${ticketCount} ticket${ticketCount > 1 ? 's' : ''}`;
+    totalPriceText.textContent = `DKK ${totalPrice}`;
+
+    // Clear previous ticket icons
+    ticketIcons.innerHTML = "";
+
+    // Generate ticket icons for each selected seat
+    selectedSeats.forEach(seat => {
+        const [row, seatNumber] = seat.split('-');
+        const ticketDiv = document.createElement("div");
+        ticketDiv.classList.add("ticket-icon");
+        ticketDiv.innerHTML = `<p>Row ${row.padStart(2, '0')} <br> Seat ${seatNumber.padStart(2, '0')}</p>`;
+        ticketIcons.appendChild(ticketDiv);
+    });
+}
+
+// Call updateTicketSummary after placing seats
+function placeSeats(row, startSeat) {
+    // Clear current selection
+    selectedSeats.forEach(pos => {
+        const [r, s] = pos.split('-').map(Number);
+        const seatElement = document.querySelector(`.seat[data-row='${r}'][data-seat-number='${s}']`);
+        if (seatElement) seatElement.classList.remove('selected');
+    });
+
+    // Update selectedSeats with new positions
+    selectedSeats = [];
+    for (let i = 0; i < maxSeats; i++) {
+        const seatPosition = `${row}-${startSeat + i}`;
+        selectedSeats.push(seatPosition);
+        const seatElement = document.querySelector(`.seat[data-row='${row}'][data-seat-number='${startSeat + i}']`);
+        if (seatElement) seatElement.classList.add('selected');
+    }
+
+    // Update ticket summary with new selections
+    updateTicketSummary();
+}
+
+// Event listener for Continue button
+document.getElementById('continue-button').addEventListener('click', () => {
+    if (selectedSeats.length === 0) {
+        alert("Please select at least one seat.");
+        return;
+    }
+    alert("Proceeding to next step..."); // Replace this with actual redirection logic
+});
+
 </script>
 
 
