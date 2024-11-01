@@ -31,9 +31,21 @@
         .btn {
             width: 100%;
         }
-        p {
+        p.error-message {
             text-align: center;
             color: red;
+        }
+        .links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .links a {
+            color: #3B82F6;
+            text-decoration: none;
+        }
+        .links a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -60,7 +72,6 @@
                 $_SESSION['user_id'] = $found_user['User_ID'];
                 $_SESSION['user'] = $found_user['Name'];
                 redirect_to("../landing.php");
-                //fix the diretion
             } else {
                 $message = "Incorrect username or password.";
             }
@@ -71,7 +82,7 @@
 
     // Display error message if set
     if (!empty($message)) {
-        echo "<p>{$message}</p>";
+        echo "<p class='error-message'>{$message}</p>";
     }
     ?>
 
@@ -86,6 +97,12 @@
         </div>
         <button class="btn waves-effect waves-light" type="submit" name="submit">Login</button>
     </form>
+
+    <!-- Additional Links for Forgot Password and Create User -->
+    <div class="links">
+        <a href="forgot_password.php">Forgot Password?</a>
+        <a href="newUser.php">Create User</a>
+    </div>
 </div>
 
 <!-- Materialize JS -->

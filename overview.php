@@ -1,99 +1,81 @@
 <?php
 session_start();
-require_once("dbcon.php");
-$dbCon = dbCon($user, $pass);
+require_once("includes/connection.php");
 
-// Retrieve booking information from the session
 $movie_id = $_SESSION['movie_id'] ?? null;
 $cinema_hall_id = $_SESSION['cinema_hall_id'] ?? null;
 $showtime = $_SESSION['time'] ?? null;
+$guest_user_id = $_SESSION['guest_user_id'] ?? null;
+$user_id = $_SESSION['user_id'] ?? null;
 
-// Check if required session data is available
 if (!$movie_id || !$cinema_hall_id || !$showtime) {
-    die("Error: Booking information is missing. Please go back and select your movie and showtime.");
+    // Reset to initial state if movie data is missing (e.g., user goes back after guest checkout)
+    unset($_SESSION['guest_user_id'], $_SESSION['user_id']);
+    header("Location: overview.php"); // Refresh the page to reset the session
+    exit();
 }
 
 // Fetch movie details
-$movieQuery = $dbCon->prepare("SELECT Title, Duration, Rating FROM Movie WHERE Movie_ID = :movie_id");
-$movieQuery->bindParam(':movie_id', $movie_id, PDO::PARAM_INT);
+$movieQuery = $connection->prepare("SELECT * FROM Movie WHERE Movie_ID = :movie_id");
+$movieQuery->bindParam(':movie_id', $movie_id);
 $movieQuery->execute();
 $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
 
-// Fetch cinema hall details
-$cinemaHallQuery = $dbCon->prepare("SELECT Name FROM CinemaHall WHERE CinemaHall_ID = :cinema_hall_id");
-$cinemaHallQuery->bindParam(':cinema_hall_id', $cinema_hall_id, PDO::PARAM_INT);
-$cinemaHallQuery->execute();
-$cinemaHall = $cinemaHallQuery->fetchColumn();
-
+// Determine if invoice was sent
+$invoiceSent = $_SESSION['guest_invoice_sent'] ?? false;
+if ($invoiceSent) {
+    // Clear session data related to guest after confirmation is displayed
+    unset($_SESSION['guest_user_id'], $_SESSION['guest_invoice_sent']);
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking Overview</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #111;
-            color: white;
-        }
-        .container {
-            margin-top: 30px;
-        }
-        .movie-details, .seat-summary, .order-summary {
-            background-color: #222;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-        .btn {
-            background-color: #3B82F6;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        .btn:hover {
-            background-color: #2563EB;
-        }
-        .ticket-icons-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .ticket-icon {
-            background-color: #3B82F6;
-            color: white;
-            border-radius: 5px;
-            padding: 5px;
-            font-size: 12px;
-            text-align: center;
-            width: 60px;
-        }
+        .container { margin-top: 20px; }
+        .modal { max-width: 600px; }
+        .action-buttons { margin-top: 20px; }
+        .order-summary, .movie-details, .user-info { padding: 15px; margin-top: 20px; background: #333; color: white; border-radius: 8px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h4>Booking Overview</h4>
-    
-    <!-- Movie and Showtime Details -->
+
+    <!-- Movie Details Section -->
     <div class="movie-details">
-        <h5>Movie: <?= htmlspecialchars($movie['Title']); ?></h5>
-        <p><strong>Duration:</strong> <?= htmlspecialchars($movie['Duration']); ?></p>
-        <p><strong>Rating:</strong> <?= htmlspecialchars($movie['Rating']); ?> / 10</p>
-        <p><strong>Cinema Hall:</strong> <?= htmlspecialchars($cinemaHall); ?></p>
+        <h5>Movie: <?= htmlspecialchars($movie['Title'] ?? 'N/A'); ?></h5>
+        <p><strong>Duration:</strong> <?= htmlspecialchars($movie['Duration'] ?? 'N/A'); ?></p>
+        <p><strong>Rating:</strong> <?= htmlspecialchars($movie['Rating'] ?? 'N/A'); ?> / 10</p>
+        <p><strong>Cinema Hall:</strong> Hall <?= htmlspecialchars($cinema_hall_id); ?></p>
         <p><strong>Showtime:</strong> <?= htmlspecialchars($showtime); ?></p>
     </div>
 
-    <!-- Seat Summary -->
-    <div class="seat-summary">
-        <h5>Selected Seats</h5>
-        <div class="ticket-icons-container" id="seat-icons"></div>
-    </div>
+    <?php if ($invoiceSent): ?>
+        <!-- Invoice Sent Confirmation -->
+        <div class="order-summary">
+            <h5>Confirmation</h5>
+            <p>Your invoice has been sent to your email.</p>
+        </div>
+    <?php elseif ($user_id): ?>
+        <!-- Logged-in User Information -->
+        <div class="order-summary">
+            <h5>User Information</h5>
+            <p><strong>Name:</strong> <?= htmlspecialchars($_SESSION['user'] ?? 'N/A'); ?></p>
+            <!-- Add other user details as needed -->
+        </div>
+    <?php else: ?>
+        <!-- Action Buttons for Login or Guest Checkout -->
+        <div class="action-buttons">
+            <a href="User/logIn.php" class="btn">Log in or create an account</a>
+            <a class="btn modal-trigger" data-target="guestModal">Continue as Guest</a>
+        </div>
+    <?php endif; ?>
 
     <!-- Order Summary -->
     <div class="order-summary">
@@ -101,37 +83,56 @@ $cinemaHall = $cinemaHallQuery->fetchColumn();
         <p id="ticket-count">Total Tickets: </p>
         <p id="total-price">Total Price: </p>
     </div>
+</div>
 
-    <!-- Options to Login or Continue as Guest -->
-    <a href="login.php" class="btn">Log in or create an account</a>
-    <a href="guest_checkout.php" class="btn">Continue as Guest</a>
+<!-- Guest Checkout Modal -->
+<div id="guestModal" class="modal">
+    <div class="modal-content">
+        <h5>Guest Checkout</h5>
+        <form method="POST" action="User/guest_checkout.php">
+            <div class="row">
+                <div class="input-field col s6">
+                    <input id="firstname" type="text" name="firstname" required>
+                    <label for="firstname">First Name</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="lastname" type="text" name="lastname" required>
+                    <label for="lastname">Surname</label>
+                </div>
+            </div>
+            <div class="input-field">
+                <input id="email" type="email" name="email" required>
+                <label for="email">E-mail</label>
+            </div>
+            <div class="input-field">
+                <input id="confirm_email" type="email" name="confirm_email" required>
+                <label for="confirm_email">Confirm Email</label>
+            </div>
+            <div class="input-field">
+                <input id="phone" type="text" name="phone" required>
+                <label for="phone">Telephone</label>
+            </div>
+            <button class="btn blue" type="submit">Further</button>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close btn-flat">Close</a>
+    </div>
 </div>
 
 <!-- Materialize JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script>
-// Retrieve selected seats from sessionStorage
-const selectedSeats = JSON.parse(sessionStorage.getItem('selectedSeats')) || [];
-const ticketPrice = 135;
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.modal');
+        M.Modal.init(elems);
+    });
 
-// Display seat icons and update order summary
-const seatIconsContainer = document.getElementById('seat-icons');
-const ticketCount = document.getElementById('ticket-count');
-const totalPrice = document.getElementById('total-price');
-
-// Display selected seats
-selectedSeats.forEach(seat => {
-    const [row, seatNumber] = seat.split('-');
-    const seatIcon = document.createElement('div');
-    seatIcon.classList.add('ticket-icon');
-    seatIcon.innerHTML = `Row ${row.padStart(2, '0')}<br>Seat ${seatNumber.padStart(2, '0')}`;
-    seatIconsContainer.appendChild(seatIcon);
-});
-
-// Update ticket count and total price
-ticketCount.textContent = `Total Tickets: ${selectedSeats.length}`;
-totalPrice.textContent = `Total Price: DKK ${selectedSeats.length * ticketPrice}`;
-
+    // Calculate and display total tickets and price
+    const selectedSeats = JSON.parse(sessionStorage.getItem('selectedSeats')) || [];
+    const ticketPrice = 135;
+    document.getElementById('ticket-count').textContent = `Total Tickets: ${selectedSeats.length}`;
+    document.getElementById('total-price').textContent = `Total Price: DKK ${selectedSeats.length * ticketPrice}`;
 </script>
 </body>
 </html>
