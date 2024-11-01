@@ -272,6 +272,7 @@ if (isset($_SESSION['message'])) {
         .edit-button {
             background-color: black;
             margin-right: 8px;
+            disp
         }
 
         .edit-button:hover {
