@@ -161,7 +161,6 @@ if (isset($_SESSION['message'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Movies</title>
-    <link rel="stylesheet" href="styles.css">
     <style>
          * {
             margin: 0;
