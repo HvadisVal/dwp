@@ -1,12 +1,23 @@
 <?php
+session_start(); // Start the session at the beginning
+
 // Connect to the database
 require_once("dbcon.php");
 $dbCon = dbCon($user, $pass);
+
+
 
 // Get movie, time, and cinema hall from query parameters
 $movie_id = isset($_GET['movie_id']) ? $_GET['movie_id'] : 0;
 $time = isset($_GET['time']) ? $_GET['time'] : '';
 $cinemaHallID = isset($_GET['cinema_hall_id']) ? $_GET['cinema_hall_id'] : 0;
+
+
+
+// Store movie, time, and cinema hall in the session for later use
+$_SESSION['movie_id'] = $movie_id;
+$_SESSION['time'] = $time;
+$_SESSION['cinema_hall_id'] = $cinemaHallID;
 
 // Fetch cinema hall information
 $hallQuery = $dbCon->prepare("SELECT * FROM CinemaHall WHERE CinemaHall_ID = :cinema_hall_id");
@@ -164,13 +175,8 @@ if (!$seats) {
     }
 </style>
 
-
-
-
 </head>
 <body>
-
-
 
 <div class="container">
     <h4><?= htmlspecialchars($hall['Name']); ?> - Seat Selection</h4>
@@ -362,14 +368,18 @@ function placeSeats(row, startSeat) {
     updateTicketSummary();
 }
 
-// Event listener for Continue button
 document.getElementById('continue-button').addEventListener('click', () => {
-    if (selectedSeats.length === 0) {
-        alert("Please select at least one seat.");
-        return;
-    }
-    alert("Proceeding to next step..."); // Replace this with actual redirection logic
-});
+        if (selectedSeats.length === 0) {
+            alert("Please select at least one seat.");
+            return;
+        }
+
+        // Save selected seats to sessionStorage for next page
+        sessionStorage.setItem('selectedSeats', JSON.stringify(selectedSeats));
+
+        // Redirect to overview page
+        window.location.href = 'overview.php';
+    });
 
 </script>
 
