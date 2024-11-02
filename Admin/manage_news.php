@@ -126,6 +126,8 @@ if (isset($_SESSION['message'])) {
     <title>Manage News</title>
     <style>
         /* General Styling */
+
+        
         body {
             margin: 0;
             padding: 0;
@@ -250,6 +252,72 @@ if (isset($_SESSION['message'])) {
             transform: translateY(-1px);
         }
 
+
+        /* Updated file input styling to match the black theme */
+        input[type="file"] {
+            opacity: 0;
+            width: 0.1px;
+            height: 0.1px;
+            position: absolute;
+        }
+
+        input[type="file"] + label {
+            background: black;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            display: inline-block;
+            transition: all 0.2s ease;
+            margin: 15px 0;
+            cursor: pointer;
+        }
+
+        input[type="file"] + label:hover {
+            background: #1a252d;
+            transform: translateY(-1px);
+        }
+
+        /* File name display */
+        .file-name {
+            margin-top: 8px;
+            font-size: 0.875rem;
+            color: #666;
+        }
+        
+
+        .file-input-container input[type="file"] {
+            opacity: 0;
+            width: 0.1px;
+            height: 0.1px;
+            position: absolute;
+        }
+
+        .file-input-container label.file-label {
+            background: black;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            display: inline-block;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .file-input-container label.file-label:hover {
+            background: #1a252d;
+            transform: translateY(-1px);
+        }
+
+        .file-name {
+            margin-top: 8px;
+            font-size: 0.875rem;
+            color: #666;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             #newsContainer {
@@ -288,8 +356,12 @@ if (isset($_SESSION['message'])) {
     <label for="dateposted">Date Posted:</label>
     <input type="date" name="dateposted" required>
 
-    <label for="image">Upload Image:</label>
-    <input type="file" name="image" accept="image/png, image/jpeg" required>
+    <div class="file-input-container">
+    <label for="image">Upload New Image:</label>
+    <input type="file" id="image" name="image" accept="image/png, image/jpeg">
+    <label for="image">Choose Image</label>
+    <div class="file-name"></div>
+    </div>
 
     <button type="submit" name="add_news" class="add-button">Add News</button>
 </form>
@@ -318,9 +390,14 @@ if (isset($_SESSION['message'])) {
                 <?php else: ?>
                     <p>No image uploaded for this article.</p>
                 <?php endif; ?>
-
-                <label for="image">Upload New Image:</label>
-                <input type="file" name="image" accept="image/png, image/jpeg">
+                
+                
+                <div class="file-input-container">
+                    <label for="image-<?php echo $news['News_ID']; ?>">Upload New Image:</label>
+                    <input type="file" id="image-<?php echo $news['News_ID']; ?>" name="image" accept="image/png, image/jpeg">
+                    <label for="image-<?php echo $news['News_ID']; ?>" class="file-label">Choose Image</label>
+                    <div class="file-name"></div>
+                </div>
 
                 <button type="submit" name="edit_news" class="edit-button">Save Changes</button>
                 <button type="submit" name="delete_news" class="delete-button">Delete News</button>

@@ -202,7 +202,7 @@ if (isset($_SESSION['message'])) {
         }
 
         .header{
-            margin: 20px 0;
+            margin: 10px 0;
             padding: 10px; 
             display: flex;
             justify-content: center;  
@@ -256,7 +256,7 @@ if (isset($_SESSION['message'])) {
     display: block;
     color: #374151;
     font-size: 0.875rem;
-    text-transform: uppercase;
+    
     letter-spacing: 0.025em;
 }
 
@@ -363,6 +363,34 @@ if (isset($_SESSION['message'])) {
     transform: translateY(-1px);
 }
 
+/* Hide default file inputs */
+input[type="file"] {
+    opacity: 0;
+    width: 0.1px;
+    height: 0.1px;
+    position: absolute;
+}
+
+/* Style the labels as buttons */
+input[type="file"] + label {
+    background: black;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.875rem;
+    display: inline-block;
+    transition: all 0.2s ease;
+    margin: 15px 0;
+}
+
+input[type="file"] + label:hover {
+    background: #1a252d;
+    transform: translateY(-1px);
+}
+
+
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .form-grid {
@@ -452,11 +480,17 @@ if (isset($_SESSION['message'])) {
     </select>
     <input type="text" id="other_version" name="other_version" placeholder="Enter new version" style="display: none;">
 
-    <label for="poster">Upload Poster Image:</label>
-    <input type="file" name="poster" accept="image/*" required>
+        <!-- Poster upload -->
+        <label for="image-<?php echo $movie['Movie_ID']; ?>">Upload New Movie Image (optional):</label>     
+    <input type="file" name="poster" accept="image/*" required id="poster-upload">
+    <label for="poster-upload">Choose Poster Image</label>
 
-    <label for="gallery">Upload Gallery Images (up to 5):</label>
-    <input type="file" name="gallery[]" accept="image/*" multiple id="galleryInput" onchange="validateFileCount(this)">
+    <!-- Gallery upload (multiple files) -->
+    <label for="gallery-<?php echo $movie['Movie_ID']; ?>">Upload Additional Gallery Images (up to 5 total):</label>
+    <input type="file" name="gallery[]" accept="image/*" multiple id="gallery-upload" onchange="validateFileCount(this)">
+    <label for="gallery-upload">Choose Gallery Images</label>
+
+    <br>
 
     <button type="submit" name="add_movie" class="add-button">Add Movie</button>
 </form>
@@ -518,8 +552,9 @@ if (isset($_SESSION['message'])) {
                     <?php endforeach; ?>
                 </select>
 
-                <label for="image">Upload New Movie Image (optional):</label>
-                <input type="file" name="image" accept="image/*"> 
+                <label for="image-<?php echo $movie['Movie_ID']; ?>">Upload New Movie Image (optional):</label>
+                <input type="file" name="image" accept="image/*" id="image-<?php echo $movie['Movie_ID']; ?>"> 
+                <label for="image-<?php echo $movie['Movie_ID']; ?>" class="file-label">Choose New Poster</label>
 
                 <!-- Display uploaded poster image -->
                 <?php if (!empty($movie['ImageFileName'])): ?>
@@ -552,11 +587,13 @@ if (isset($_SESSION['message'])) {
     <?php $galleryImages = []; ?>
 <?php endif; ?>
 
-                <label for="gallery">Upload Additional Gallery Images (up to 5 total):</label>
+                <label for="gallery-<?php echo $movie['Movie_ID']; ?>">Upload Additional Gallery Images (up to 5 total):</label>
                 <input type="file" name="gallery[]" accept="image/*" multiple 
-       id="galleryInput" 
-       data-existing-files-count="<?php echo count($galleryImages); ?>" 
-       onchange="validateExistingFileCount(this)">
+                    id="gallery-<?php echo $movie['Movie_ID']; ?>" 
+                    data-existing-files-count="<?php echo count($galleryImages); ?>" 
+                    onchange="validateExistingFileCount(this)">
+                <label for="gallery-<?php echo $movie['Movie_ID']; ?>" class="file-label">Choose Gallery Images</label>
+                <br>
                 <button type="submit" name="edit_movie" class="edit-button">Edit Movie</button>
                 <button type="submit" name="delete_movie" class="delete-button">Delete Movie</button>
             </form>
