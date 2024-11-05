@@ -32,6 +32,9 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
         .action-buttons { margin-top: 20px; }
         .order-summary, .movie-details, .user-info { padding: 15px; margin-top: 20px; background: #333; color: white; border-radius: 8px; }
         .login-info { display: flex; align-items: center; justify-content: space-between; }
+        .login-links { display: flex; justify-content: space-between; margin-top: 15px; }
+        .login-links a { color: #3B82F6; text-decoration: none; }
+        .login-links a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -94,6 +97,12 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
             <button class="btn blue" type="submit">Login</button>
         </form>
         <p class="error-message" style="color: red; display: none;"></p>
+
+        <!-- Additional links for "Forgot Password" and "Create New User" -->
+        <div class="login-links">
+            <a href="User/forgot_password.php">Forgot Password?</a>
+            <a class="modal-trigger" data-target="newUserModal" style="cursor:pointer;">Create New User</a>
+        </div>
     </div>
 </div>
 
@@ -117,6 +126,33 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
                 <label for="email">E-mail</label>
             </div>
             <button class="btn blue" type="submit">Further</button>
+        </form>
+        <p class="error-message" style="color: red; display: none;"></p>
+    </div>
+</div>
+
+<!-- Create New User Modal -->
+<div id="newUserModal" class="modal">
+    <div class="modal-content">
+        <h5>Create New User</h5>
+        <form id="newUserForm">
+            <div class="input-field">
+                <input id="new_username" type="text" name="user" required>
+                <label for="new_username">Username</label>
+            </div>
+            <div class="input-field">
+                <input id="new_email" type="email" name="email" required>
+                <label for="new_email">Email</label>
+            </div>
+            <div class="input-field">
+                <input id="new_phone" type="text" name="phone" required>
+                <label for="new_phone">Telephone Number</label>
+            </div>
+            <div class="input-field">
+                <input id="new_password" type="password" name="pass" required>
+                <label for="new_password">Password</label>
+            </div>
+            <button class="btn blue" type="submit">Create Account</button>
         </form>
         <p class="error-message" style="color: red; display: none;"></p>
     </div>
@@ -158,6 +194,24 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
             success: function(response) {
                 if (response.success) {
                     location.reload();
+                } else {
+                    $('.error-message').text(response.message).show();
+                }
+            }
+        });
+    });
+
+    // New User Form Submission
+    $('#newUserForm').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: 'User/ajax_new_user.php',
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                if (response.success) {
+                    $('#newUserModal').modal('close'); // Close the modal after success
+                    M.toast({html: 'User account created successfully! Please login.'});
                 } else {
                     $('.error-message').text(response.message).show();
                 }
