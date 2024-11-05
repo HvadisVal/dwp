@@ -172,7 +172,7 @@
                         <p>View, edit, or remove coupons in the system.</p>
                     </div>
                     <div class="card-action">
-                        <a href="manage_users.php" class="btn waves-effect waves-light">Manage Coupons</a>
+                        <a href="coupon.php" class="btn waves-effect waves-light">Manage Coupons</a>
                     </div>
                 </div>
             </div>
