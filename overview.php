@@ -2,31 +2,22 @@
 session_start();
 require_once("includes/connection.php");
 
+// Check if the user or guest is logged in
+$isLoggedIn = isset($_SESSION['user_id']);
+$isGuest = isset($_SESSION['guest_user_id']);
+
+// Get movie, screening, and seat details from session
 $movie_id = $_SESSION['movie_id'] ?? null;
 $cinema_hall_id = $_SESSION['cinema_hall_id'] ?? null;
 $showtime = $_SESSION['time'] ?? null;
-$guest_user_id = $_SESSION['guest_user_id'] ?? null;
-$user_id = $_SESSION['user_id'] ?? null;
-
-if (!$movie_id || !$cinema_hall_id || !$showtime) {
-    // Reset to initial state if movie data is missing (e.g., user goes back after guest checkout)
-    unset($_SESSION['guest_user_id'], $_SESSION['user_id']);
-    header("Location: overview.php"); // Refresh the page to reset the session
-    exit();
-}
+$selectedSeats = json_decode($_SESSION['selectedSeats'] ?? '[]', true);
+$ticketPrice = 135;
 
 // Fetch movie details
 $movieQuery = $connection->prepare("SELECT * FROM Movie WHERE Movie_ID = :movie_id");
 $movieQuery->bindParam(':movie_id', $movie_id);
 $movieQuery->execute();
 $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
-
-// Determine if invoice was sent
-$invoiceSent = $_SESSION['guest_invoice_sent'] ?? false;
-if ($invoiceSent) {
-    // Clear session data related to guest after confirmation is displayed
-    unset($_SESSION['guest_user_id'], $_SESSION['guest_invoice_sent']);
-}
 ?>
 
 <!DOCTYPE html>
@@ -40,6 +31,7 @@ if ($invoiceSent) {
         .modal { max-width: 600px; }
         .action-buttons { margin-top: 20px; }
         .order-summary, .movie-details, .user-info { padding: 15px; margin-top: 20px; background: #333; color: white; border-radius: 8px; }
+        .login-info { display: flex; align-items: center; justify-content: space-between; }
     </style>
 </head>
 <body>
@@ -56,32 +48,52 @@ if ($invoiceSent) {
         <p><strong>Showtime:</strong> <?= htmlspecialchars($showtime); ?></p>
     </div>
 
-    <?php if ($invoiceSent): ?>
-        <!-- Invoice Sent Confirmation -->
-        <div class="order-summary">
-            <h5>Confirmation</h5>
-            <p>Your invoice has been sent to your email.</p>
+    <!-- Login, Guest Checkout, or User/Guest Information Display -->
+    <?php if ($isLoggedIn): ?>
+        <!-- Logged-in User Information and Logout Button -->
+        <div id="userInfo" class="user-info login-info">
+            <span>Welcome, <?= htmlspecialchars($_SESSION['user']); ?></span>
+            <button id="logoutButton" class="btn red">Logout</button>
         </div>
-    <?php elseif ($user_id): ?>
-        <!-- Logged-in User Information -->
-        <div class="order-summary">
-            <h5>User Information</h5>
-            <p><strong>Name:</strong> <?= htmlspecialchars($_SESSION['user'] ?? 'N/A'); ?></p>
-            <!-- Add other user details as needed -->
+    <?php elseif ($isGuest && isset($_SESSION['guest_firstname'], $_SESSION['guest_lastname'], $_SESSION['guest_email'])): ?>
+        <!-- Guest Information -->
+        <div class="user-info">
+            <h5>Guest Information</h5>
+            <p><strong>Name:</strong> <?= htmlspecialchars($_SESSION['guest_firstname'] . " " . $_SESSION['guest_lastname']); ?></p>
+            <p><strong>Email:</strong> <?= htmlspecialchars($_SESSION['guest_email']); ?></p>
         </div>
     <?php else: ?>
         <!-- Action Buttons for Login or Guest Checkout -->
         <div class="action-buttons">
-            <a href="User/logIn.php" class="btn">Log in or create an account</a>
-            <a class="btn modal-trigger" data-target="guestModal">Continue as Guest</a>
+            <button class="btn modal-trigger" data-target="loginModal">Login</button>
+            <button class="btn modal-trigger" data-target="guestModal">Continue as Guest</button>
         </div>
     <?php endif; ?>
 
     <!-- Order Summary -->
     <div class="order-summary">
         <h5>Order Summary</h5>
-        <p id="ticket-count">Total Tickets: </p>
-        <p id="total-price">Total Price: </p>
+        <p>Total Tickets: <?= count($selectedSeats); ?></p>
+        <p>Total Price: DKK <?= count($selectedSeats) * $ticketPrice; ?></p>
+    </div>
+</div>
+
+<!-- Login Modal -->
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <h5>Login</h5>
+        <form id="loginForm">
+            <div class="input-field">
+                <input id="username" type="text" name="user" required>
+                <label for="username">Username</label>
+            </div>
+            <div class="input-field">
+                <input id="password" type="password" name="pass" required>
+                <label for="password">Password</label>
+            </div>
+            <button class="btn blue" type="submit">Login</button>
+        </form>
+        <p class="error-message" style="color: red; display: none;"></p>
     </div>
 </div>
 
@@ -89,7 +101,7 @@ if ($invoiceSent) {
 <div id="guestModal" class="modal">
     <div class="modal-content">
         <h5>Guest Checkout</h5>
-        <form method="POST" action="User/guest_checkout.php">
+        <form id="guestForm">
             <div class="row">
                 <div class="input-field col s6">
                     <input id="firstname" type="text" name="firstname" required>
@@ -104,35 +116,73 @@ if ($invoiceSent) {
                 <input id="email" type="email" name="email" required>
                 <label for="email">E-mail</label>
             </div>
-            <div class="input-field">
-                <input id="confirm_email" type="email" name="confirm_email" required>
-                <label for="confirm_email">Confirm Email</label>
-            </div>
-            <div class="input-field">
-                <input id="phone" type="text" name="phone" required>
-                <label for="phone">Telephone</label>
-            </div>
             <button class="btn blue" type="submit">Further</button>
         </form>
-    </div>
-    <div class="modal-footer">
-        <a href="#!" class="modal-close btn-flat">Close</a>
+        <p class="error-message" style="color: red; display: none;"></p>
     </div>
 </div>
 
-<!-- Materialize JS -->
+<!-- Materialize JS and jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        var elems = document.querySelectorAll('.modal');
-        M.Modal.init(elems);
+        var modals = document.querySelectorAll('.modal');
+        M.Modal.init(modals);
     });
 
-    // Calculate and display total tickets and price
-    const selectedSeats = JSON.parse(sessionStorage.getItem('selectedSeats')) || [];
-    const ticketPrice = 135;
-    document.getElementById('ticket-count').textContent = `Total Tickets: ${selectedSeats.length}`;
-    document.getElementById('total-price').textContent = `Total Price: DKK ${selectedSeats.length * ticketPrice}`;
+    // Login Form Submission
+    $('#loginForm').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: 'User/ajax_login.php',
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                if (response.success) {
+                    location.reload();
+                } else {
+                    $('.error-message').text(response.message).show();
+                }
+            }
+        });
+    });
+
+    // Guest Checkout Form Submission
+    $('#guestForm').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: 'User/ajax_guest.php',
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                if (response.success) {
+                    location.reload();
+                } else {
+                    $('.error-message').text(response.message).show();
+                }
+            }
+        });
+    });
+
+    // Logout AJAX request
+    $('#logoutButton').on('click', function() {
+        $.ajax({
+            type: 'POST',
+            url: 'User/ajax_logout.php',
+            success: function(response) {
+                const data = JSON.parse(response);
+                if (data.success) {
+                    location.reload();
+                } else {
+                    console.error("Logout failed");
+                }
+            },
+            error: function() {
+                console.error("An error occurred during logout");
+            }
+        });
+    });
 </script>
 </body>
 </html>
