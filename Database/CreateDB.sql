@@ -213,8 +213,25 @@ CREATE TABLE Invoice (
 CREATE TABLE Coupon (
     Coupon_ID INT PRIMARY KEY AUTO_INCREMENT,
     CouponCode VARCHAR(50),
-    DiscountAmount DECIMAL(10, 2)
+    DiscountAmount DECIMAL(10, 2),
+    ExpireDate DATE
 );
+
+INSERT INTO Coupon (Coupon_ID, CouponCode, DiscountAmount, ExpireDate)
+VALUES (1, 'SUMMER2024', 20.00, '2024-08-15');
+
+INSERT INTO Coupon (Coupon_ID, CouponCode, DiscountAmount, ExpireDate)
+VALUES (2, 'WINTER2024', 25.00, '2024-12-31');
+
+INSERT INTO Coupon (Coupon_ID, CouponCode, DiscountAmount, ExpireDate)
+VALUES (3, 'SPRING2025', 30.00, '2025-04-10');
+
+INSERT INTO Coupon (Coupon_ID, CouponCode, DiscountAmount, ExpireDate)
+VALUES (4, 'FALL2025', 50.00, '2025-09-30');
+
+INSERT INTO Coupon (Coupon_ID, CouponCode, DiscountAmount, ExpireDate)
+VALUES (5, 'HOLIDAY2025', 35.00, '2025-12-25');
+
 
 -- CinemaHall Table
 CREATE TABLE CinemaHall (
