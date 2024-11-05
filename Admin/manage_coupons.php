@@ -91,13 +91,12 @@ if (isset($_SESSION['message'])) {
     <style>
         /* General and form styling similar to your example */
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f9;
+            box-sizing: border-box;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
         .container {
-            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
             background-color: #fff;
@@ -113,10 +112,13 @@ if (isset($_SESSION['message'])) {
         }
         input[type="text"], input[type="number"], input[type="date"] {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 4px;
+            padding: 10px;
+            font-size: 16px;
+            color: #555;
+            box-sizing: border-box;
+            margin-top: 8px;
         }
         button {
             padding: 10px 20px;
@@ -126,9 +128,105 @@ if (isset($_SESSION['message'])) {
             cursor: pointer;
             font-weight: bold;
         }
-        .add-button { background-color: #4CAF50; color: white; }
-        .edit-button { background-color: #2196F3; color: white; }
-        .delete-button { background-color: #f44336; color: white; }
+        .add-button, .edit-button, .delete-button {
+            background: black;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .add-button:hover {
+            background: #1a252d; 
+            color: white;
+            transition:  0.3s ease, color 0.3s ease; 
+            transform: translateY(-1px);
+        }
+
+        .edit-button {
+            background-color: black;
+            margin-right: 8px;
+            disp
+        }
+
+        .edit-button:hover {
+            background: #1a252d; 
+            color: white;
+            transition:  0.3s ease, color 0.3s ease; 
+            transform: translateY(-1px);
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+        }
+
+        .delete-button:hover {
+            background-color: #c82333;
+            color: white;
+            transition:  0.3s ease, color 0.3s ease; 
+            transform: translateY(-1px);
+        }
+
+        
+        .coupons-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+            
+        }
+
+        .coupon-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .coupon-card input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            
+            
+        }
+
+        .coupon-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        /* Responsive grid */
+        @media (max-width: 1024px) {
+            .coupons-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .coupons-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -155,25 +253,28 @@ if (isset($_SESSION['message'])) {
 
     <!-- Existing Coupons -->
     <h2>Existing Coupons</h2>
-    <?php foreach ($coupons as $coupon): ?>
-        <form method="POST" class="coupon-card">
-            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-            <input type="hidden" name="coupon_id" value="<?php echo $coupon['Coupon_ID']; ?>">
+    <div class="coupons-grid">
+        <?php foreach ($coupons as $coupon): ?>
+            <form method="POST" class="coupon-card">
+                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                <input type="hidden" name="coupon_id" value="<?php echo $coupon['Coupon_ID']; ?>">
 
-            <label for="coupon_code">Coupon Code:</label>
-            <input type="text" name="coupon_code" value="<?php echo htmlspecialchars($coupon['CouponCode']); ?>" required>
+                <label for="coupon_code">Coupon Code:</label>
+                <input type="text" name="coupon_code" value="<?php echo htmlspecialchars($coupon['CouponCode']); ?>" required>
 
-            <label for="discount_amount">Discount Amount:</label>
-            <input type="number" name="discount_amount" value="<?php echo $coupon['DiscountAmount']; ?>" step="0.01" required>
+                <label for="discount_amount">Discount Amount:</label>
+                <input type="number" name="discount_amount" value="<?php echo $coupon['DiscountAmount']; ?>" step="0.01" required>
 
-            <label for="expire_date">Expire Date:</label>
-            <input type="date" name="expire_date" value="<?php echo $coupon['ExpireDate']; ?>" required>
+                <label for="expire_date">Expire Date:</label>
+                <input type="date" name="expire_date" value="<?php echo $coupon['ExpireDate']; ?>" required>
 
-            <button type="submit" name="edit_coupon" class="edit-button">Save Changes</button>
-            <button type="submit" name="delete_coupon" class="delete-button">Delete Coupon</button>
-        </form>
-        <hr>
-    <?php endforeach; ?>
+                <div class="button-group">
+                    <button type="submit" name="edit_coupon" class="edit-button">Save Changes</button>
+                    <button type="submit" name="delete_coupon" class="delete-button">Delete Coupon</button>
+                </div>
+            </form>
+        <?php endforeach; ?>
+    </div>
 </div>
 
 </body>
