@@ -40,6 +40,9 @@ $seats = $seatsQuery->fetchAll(PDO::FETCH_ASSOC);
 if (!$seats) {
     die("No seats available for this cinema hall.");
 }
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -181,6 +184,21 @@ if (!$seats) {
 <div class="container">
     <h4><?= htmlspecialchars($hall['Name']); ?> - Seat Selection</h4>
     <p>Movie: <?= htmlspecialchars($movie_id); ?> | Time: <?= htmlspecialchars($time); ?></p>
+
+<!-- Ticket Type Selection -->
+<div class="ticket-selection">
+    <h5>Select Ticket Type</h5>
+    <div class="input-field">
+        <select id="ticket-type">
+            <?php foreach ($ticketPricesMap as $type => $price): ?>
+                <option value="<?= htmlspecialchars($type); ?>" data-price="<?= htmlspecialchars($price); ?>">
+                    <?= htmlspecialchars($type); ?> - DKK <?= number_format($price, 2); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+
 
     <!-- Seat Quantity Controls -->
     <div class="ticket-selection">
