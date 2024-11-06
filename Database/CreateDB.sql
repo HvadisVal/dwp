@@ -248,64 +248,149 @@ INSERT INTO CinemaHall (CinemaHall_ID, Name, TotalSeats) VALUES (6, 'Hall 6', 22
 INSERT INTO CinemaHall (CinemaHall_ID, Name, TotalSeats) VALUES (7, 'Hall 7', 140);
 
 
--- Screening Table ? 100 
+-- Screening Table ? 35
 CREATE TABLE Screening (
     Screening_ID INT PRIMARY KEY AUTO_INCREMENT,
+    ShowDate DATE,  
     ShowTime TIME,
-    CinemaHall_ID INT,
-    Movie_ID INT,
-    FOREIGN KEY (CinemaHall_ID) REFERENCES CinemaHall(CinemaHall_ID),
-    FOREIGN KEY (Movie_ID) REFERENCES Movie(Movie_ID)
+    CinemaHall_ID INT,  
+    Movie_ID INT,  
+    FOREIGN KEY (CinemaHall_ID) REFERENCES CinemaHall(CinemaHall_ID) ON DELETE CASCADE,
+    FOREIGN KEY (Movie_ID) REFERENCES Movie(Movie_ID) ON DELETE CASCADE
 );
 
--- Screenings for Hall 1
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('10:00:00', 1, 1);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('12:30:00', 1, 2);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('15:00:00', 1, 3);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('17:30:00', 1, 4);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('20:00:00', 1, 5);
 
--- Screenings for Hall 2
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('11:00:00', 2, 6);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('13:30:00', 2, 7);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('16:00:00', 2, 8);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('18:30:00', 2, 9);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('21:00:00', 2, 10);
+-- Cinema Hall 1 screenings for 3 days
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '10:00:00', 1, 1);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '13:00:00', 1, 2);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '15:45:00', 1, 3);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '18:00:00', 1, 4);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-11', '11:00:00', 1, 5);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-11', '16:30:00', 1, 6);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-12', '09:30:00', 1, 7);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-12', '14:00:00', 1, 8);
 
--- Screenings for Hall 3
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('10:30:00', 3, 11);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('13:00:00', 3, 12);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('15:30:00', 3, 13);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('18:00:00', 3, 14);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('20:30:00', 3, 15);
+-- Cinema Hall 2 screenings for 3 days
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '10:15:00', 2, 9);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '14:00:00', 2, 10);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '16:45:00', 2, 11);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-11', '11:15:00', 2, 12);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-11', '15:45:00', 2, 13);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-12', '10:00:00', 2, 14);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-12', '13:30:00', 2, 15);
 
--- Screenings for Hall 4
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('11:15:00', 4, 16);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('13:45:00', 4, 17);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('16:15:00', 4, 18);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('18:45:00', 4, 19);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('21:15:00', 4, 20);
+-- Cinema Hall 3 screenings for 3 days
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '10:30:00', 3, 16);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '14:00:00', 3, 17);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-11', '10:15:00', 3, 18);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-11', '12:45:00', 3, 19);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-11', '16:15:00', 3, 20);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-12', '09:30:00', 3, 21);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-12', '15:00:00', 3, 22);
 
--- Screenings for Hall 5
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('10:45:00', 5, 21);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('13:15:00', 5, 22);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('15:45:00', 5, 23);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('18:15:00', 5, 24);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('20:45:00', 5, 25);
+-- Cinema Hall 4 screenings for 3 days
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '10:00:00', 4, 1);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '13:15:00', 4, 2);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '15:45:00', 4, 3);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '18:00:00', 4, 4);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-11', '11:00:00', 4, 5);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-11', '15:00:00', 4, 6);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-12', '09:00:00', 4, 7);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-12', '12:30:00', 4, 8);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-12', '16:00:00', 4, 9);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-12', '21:30:00', 4, 10);
 
--- Screenings for Hall 6
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('12:00:00', 6, 26);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('14:30:00', 6, 27);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('17:00:00', 6, 28);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('19:30:00', 6, 29);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('22:00:00', 6, 30);
+-- Cinema Hall 5 screenings for 3 days
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '10:15:00', 5, 11);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '16:45:00', 5, 12);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-11', '09:15:00', 5, 13);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-11', '13:30:00', 5, 14);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-11', '16:00:00', 5, 15);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-11', '18:30:00', 5, 16);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-12', '09:00:00', 5, 17);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-12', '12:00:00', 5, 18);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-12', '14:15:00', 5, 19);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-12', '17:45:00', 5, 20);
 
--- Screenings for Hall 7
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('11:30:00', 7, 31);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('14:00:00', 7, 32);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('16:30:00', 7, 33);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('19:00:00', 7, 34);
-INSERT INTO Screening (ShowTime, CinemaHall_ID, Movie_ID) VALUES ('21:30:00', 7, 35);
+-- Cinema Hall 6 screenings for 3 days
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '10:00:00', 6, 21);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '13:15:00', 6, 22);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '16:00:00', 6, 23);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-11', '11:15:00', 6, 24);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-11', '14:30:00', 6, 25);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-12', '18:00:00', 6, 26);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-12', '11:00:00', 6, 27);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-12', '18:00:00', 6, 28);
+
+-- Cinema Hall 7 screenings for 3 days
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '10:30:00', 7, 29);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '14:00:00', 7, 30);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '16:15:00', 7, 31);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-10', '18:45:00', 7, 32);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-11', '11:00:00', 7, 33);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-11', '13:30:00', 7, 34);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-11', '16:45:00', 7, 35);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-12', '10:15:00', 7, 1);
+INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+('2024-11-12', '17:00:00', 7, 2);
 
 
 -- Seat Table ? 100 each
