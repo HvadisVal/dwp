@@ -15,6 +15,9 @@ $ticketPrice = 135;
 $totalTickets = count($selectedSeats);
 $totalPrice = $totalTickets * $ticketPrice;
 
+// Store total price in the session for reference during checkout
+$_SESSION['totalPrice'] = $totalPrice;
+
 // Fetch movie details
 $movieQuery = $connection->prepare("SELECT * FROM Movie WHERE Movie_ID = :movie_id");
 $movieQuery->bindParam(':movie_id', $movie_id);
@@ -164,6 +167,45 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
     </div>
 </div>
 
+  <!-- Payment Button to Open Modal, shown only if logged in as user or guest -->
+  <?php if ($isLoggedIn || $isGuest): ?>
+        <button class="btn blue modal-trigger" data-target="checkoutModal">Proceed to Checkout</button>
+    <?php endif; ?>
+</div>
+
+<!-- Checkout Modal -->
+<div id="checkoutModal" class="modal">
+    <div class="modal-content">
+        <h5>Checkout</h5>
+        
+        <!-- Coupon Code Section -->
+      <!--  <div class="input-field">
+            <input type="text" id="couponCode" name="couponCode" placeholder="Enter Coupon Code">
+            <button id="applyCoupon" class="btn">Apply Coupon</button>
+            <p id="couponMessage" style="color: red; display: none;"></p>
+        </div>
+  -->
+         <!-- Updated Total Price -->
+         <div class="payment-method">
+            <h5>Total Price: <span id="modalTotalPrice">DKK <?= number_format($totalPrice, 2); ?></span></h5>
+            <h6>Select Payment Method</h6>
+            <label>
+                <input name="paymentMethod" type="radio" value="Credit Card" checked/>
+                <span>Credit Card</span>
+            </label>
+            <label>
+                <input name="paymentMethod" type="radio" value="MobilePay"/>
+                <span>MobilePay</span>
+            </label>
+            <button id="payButton" class="btn blue">Proceed to Pay</button>
+            <p id="paymentMessage" style="color: red; display: none;"></p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close btn-flat">Close</a>
+    </div>
+</div>
+
 <!-- Materialize JS and jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -186,6 +228,13 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
 
     // Call the updateOrderSummary function on page load
     updateOrderSummary();
+
+
+      // Update the total price in the modal when opening it
+      $('.modal-trigger').on('click', function() {
+        const totalPrice = $('#total-price').text(); // Get the total price from the order summary
+        $('#modal-total-price').text(totalPrice); // Set the total price in the modal
+    });
 
     // Login Form Submission
     $('#loginForm').on('submit', function(e) {
@@ -277,6 +326,48 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
             }
         });
     });
+
+     // Apply Coupon AJAX
+     $('#applyCoupon').click(function() {
+        const couponCode = $('#couponCode').val();
+        if (couponCode) {
+            $.ajax({
+                url: 'User/ajax_apply_coupon.php',
+                type: 'POST',
+                data: { couponCode: couponCode },
+                success: function(response) {
+                    response = JSON.parse(response);
+                    if (response.success) {
+                        $('#couponMessage').hide();
+                        $('#totalPriceDisplay').text('DKK ' + response.newTotalPrice);
+                        $('#modalTotalPrice').text('DKK ' + response.newTotalPrice);
+                    } else {
+                        $('#couponMessage').text(response.message).show();
+                    }
+                }
+            });
+        }
+    });
+
+    // Payment AJAX
+    $('#payButton').click(function() {
+        const paymentMethod = $('input[name="paymentMethod"]:checked').val();
+        $.ajax({
+            url: 'User/ajax_process_payment.php',
+            type: 'POST',
+            data: { paymentMethod: paymentMethod, totalPrice: <?= $totalPrice; ?> },
+            success: function(response) {
+                response = JSON.parse(response);
+                if (response.success) {
+                    M.toast({html: 'Payment successful! Redirecting to confirmation page...'});
+                    setTimeout(() => window.location.href = 'confirmation.php', 1500);
+                } else {
+                    $('#paymentMessage').text(response.message).show();
+                }
+            }
+        });
+    });
+
 </script>
 </body>
 </html>
