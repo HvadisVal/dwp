@@ -80,20 +80,19 @@ if (isset($_SESSION['message'])) {
 
         h2 {
             font-size: 1.5em;
-            margin-bottom: 24px;
+            margin: 25px 0;
         }
 
         /* Form and Container */
         .company-card {
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
+            margin: 0 auto;
             padding: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .company-form {
-            max-width: 800px;
+            max-width: 100%;
             margin: 0 auto;
         }
 
