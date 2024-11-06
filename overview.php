@@ -10,8 +10,10 @@ $isGuest = isset($_SESSION['guest_user_id']);
 $movie_id = $_SESSION['movie_id'] ?? null;
 $cinema_hall_id = $_SESSION['cinema_hall_id'] ?? null;
 $showtime = $_SESSION['time'] ?? null;
-$selectedSeats = json_decode($_SESSION['selectedSeats'] ?? '[]', true);
+$selectedSeats = json_decode($_SESSION['selectedSeats'] ?? '[]', true); // Decode the selected seats JSON
 $ticketPrice = 135;
+$totalTickets = count($selectedSeats);
+$totalPrice = $totalTickets * $ticketPrice;
 
 // Fetch movie details
 $movieQuery = $connection->prepare("SELECT * FROM Movie WHERE Movie_ID = :movie_id");
@@ -53,33 +55,25 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
 
     <!-- Login, Guest Checkout, or User/Guest Information Display -->
     <?php if ($isLoggedIn): ?>
-        <!-- Logged-in User Information and Logout Button -->
         <div id="userInfo" class="user-info login-info">
             <span>Welcome, <?= htmlspecialchars($_SESSION['user']); ?></span>
             <button id="logoutButton" class="btn red">Logout</button>
         </div>
     <?php elseif ($isGuest && isset($_SESSION['guest_firstname'], $_SESSION['guest_lastname'], $_SESSION['guest_email'])): ?>
-        <!-- Guest Information -->
         <div class="user-info">
             <h5>Guest Information</h5>
             <p><strong>Name:</strong> <?= htmlspecialchars($_SESSION['guest_firstname'] . " " . $_SESSION['guest_lastname']); ?></p>
             <p><strong>Email:</strong> <?= htmlspecialchars($_SESSION['guest_email']); ?></p>
+            <button id="switchUserButton" class="btn grey">Switch User</button>
         </div>
     <?php else: ?>
-        <!-- Action Buttons for Login or Guest Checkout -->
         <div class="action-buttons">
             <button class="btn modal-trigger" data-target="loginModal">Login</button>
             <button class="btn modal-trigger" data-target="guestModal">Continue as Guest</button>
         </div>
     <?php endif; ?>
 
-    <!-- Order Summary -->
-    <div class="order-summary">
-        <h5>Order Summary</h5>
-        <p>Total Tickets: <?= count($selectedSeats); ?></p>
-        <p>Total Price: DKK <?= count($selectedSeats) * $ticketPrice; ?></p>
-    </div>
-</div>
+ 
 
 <!-- Login Modal -->
 <div id="loginModal" class="modal">
@@ -98,7 +92,7 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
         </form>
         <p class="error-message" style="color: red; display: none;"></p>
 
-        <!-- Additional links for "Forgot Password" and "Create New User" -->
+        <!-- Links for "Forgot Password" and "Create New User" -->
         <div class="login-links">
             <a href="User/forgot_password.php">Forgot Password?</a>
             <a class="modal-trigger" data-target="newUserModal" style="cursor:pointer;">Create New User</a>
@@ -118,12 +112,16 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
                 </div>
                 <div class="input-field col s6">
                     <input id="lastname" type="text" name="lastname" required>
-                    <label for="lastname">Surname</label>
+                    <label for="lastname">Last Name</label>
                 </div>
             </div>
             <div class="input-field">
                 <input id="email" type="email" name="email" required>
                 <label for="email">E-mail</label>
+            </div>
+            <div class="input-field">
+                <input id="phone" type="text" name="phone" required>
+                <label for="phone">Telephone Number</label>
             </div>
             <button class="btn blue" type="submit">Further</button>
         </form>
@@ -158,6 +156,14 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
     </div>
 </div>
 
+  <!-- Order Summary -->
+  <div class="order-summary">
+        <h5>Order Summary</h5>
+        <p>Total Tickets: <span id="total-tickets"><?= $totalTickets; ?></span></p>
+        <p>Total Price: DKK <span id="total-price"><?= $totalPrice; ?></span></p>
+    </div>
+</div>
+
 <!-- Materialize JS and jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -166,6 +172,20 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
         var modals = document.querySelectorAll('.modal');
         M.Modal.init(modals);
     });
+
+     // Update order summary dynamically based on sessionStorage data
+     function updateOrderSummary() {
+        const selectedSeats = JSON.parse(sessionStorage.getItem('selectedSeats') || '[]');
+        const ticketPrice = 135;
+        const totalTickets = selectedSeats.length;
+        const totalPrice = totalTickets * ticketPrice;
+
+        document.getElementById('total-tickets').textContent = totalTickets;
+        document.getElementById('total-price').textContent = totalPrice;
+    }
+
+    // Call the updateOrderSummary function on page load
+    updateOrderSummary();
 
     // Login Form Submission
     $('#loginForm').on('submit', function(e) {
@@ -192,8 +212,9 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
             type: 'POST',
             data: $(this).serialize(),
             success: function(response) {
+                response = JSON.parse(response);
                 if (response.success) {
-                    location.reload();
+                    location.reload(); // Reload page to display guest info
                 } else {
                     $('.error-message').text(response.message).show();
                 }
@@ -234,6 +255,25 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
             },
             error: function() {
                 console.error("An error occurred during logout");
+            }
+        });
+    });
+
+    // Switch User AJAX request
+    $('#switchUserButton').on('click', function() {
+        $.ajax({
+            type: 'POST',
+            url: 'User/ajax_switch_user.php',
+            success: function(response) {
+                const data = JSON.parse(response);
+                if (data.success) {
+                    location.reload(); // Reload page to reset to the initial state
+                } else {
+                    console.error("Failed to switch user");
+                }
+            },
+            error: function() {
+                console.error("An error occurred while switching user");
             }
         });
     });
