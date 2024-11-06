@@ -150,7 +150,7 @@
                         <p>View, edit, or remove screenings in the system.</p>
                     </div>
                     <div class="card-action">
-                        <a href="manage_users.php" class="btn waves-effect waves-light">Manage Screenings</a>
+                        <a href="manage_screening.php" class="btn waves-effect waves-light">Manage Screenings</a>
                     </div>
                 </div>
             </div>
@@ -172,7 +172,7 @@
                         <p>View, edit, or remove coupons in the system.</p>
                     </div>
                     <div class="card-action">
-                        <a href="coupon.php" class="btn waves-effect waves-light">Manage Coupons</a>
+                        <a href="manage_coupons.php" class="btn waves-effect waves-light">Manage Coupons</a>
                     </div>
                 </div>
             </div>
