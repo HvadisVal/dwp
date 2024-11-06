@@ -1,7 +1,8 @@
 <?php
 session_start();
-$_SESSION = [];
-session_unset();
-session_destroy();
-echo json_encode(['success' => true]);
-exit;
+
+// Clear only user-related session data, not movie selection data
+unset($_SESSION['user_id']);
+unset($_SESSION['user']);
+
+echo json_encode(["success" => true]);

@@ -1,38 +1,33 @@
 <?php
-session_start();
 require_once("../includes/connection.php");
 
-header('Content-Type: application/json');
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $firstname = $_POST['firstname'] ?? '';
-    $lastname = $_POST['lastname'] ?? '';
-    $email = $_POST['email'] ?? '';
+    $firstname = $_POST['firstname'] ?? null;
+    $lastname = $_POST['lastname'] ?? null;
+    $email = $_POST['email'] ?? null;
+    $phone = $_POST['phone'] ?? null;
 
-    if ($firstname && $lastname && $email) {
+    if ($firstname && $lastname && $email && $phone) {
         try {
-            // Insert guest information into the database
-            $query = "INSERT INTO GuestUser (Firstname, Lastname, Email) VALUES (:firstname, :lastname, :email)";
-            $stmt = $connection->prepare($query);
+            $stmt = $connection->prepare("INSERT INTO GuestUser (Firstname, Lastname, Email, TelephoneNumber) VALUES (:firstname, :lastname, :email, :phone)");
             $stmt->bindParam(':firstname', $firstname);
             $stmt->bindParam(':lastname', $lastname);
             $stmt->bindParam(':email', $email);
-            $stmt->execute();
+            $stmt->bindParam(':phone', $phone);
 
-            // Get the last inserted ID for the guest
-            $guest_user_id = $connection->lastInsertId();
+            if ($stmt->execute()) {
+                session_start();
+                $_SESSION['guest_user_id'] = $connection->lastInsertId();
+                $_SESSION['guest_firstname'] = $firstname;
+                $_SESSION['guest_lastname'] = $lastname;
+                $_SESSION['guest_email'] = $email;
 
-            // Set guest information in the session
-            $_SESSION['guest_info'] = [
-                'firstname' => $firstname,
-                'lastname' => $lastname,
-                'email' => $email
-            ];
-            $_SESSION['guest_user_id'] = $guest_user_id;
-
-            echo json_encode(['success' => true]);
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'message' => 'Failed to create guest user.']);
+            }
         } catch (PDOException $e) {
-            echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
+            echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
         }
     } else {
         echo json_encode(['success' => false, 'message' => 'All fields are required.']);
