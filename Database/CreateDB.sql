@@ -1173,19 +1173,38 @@ INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (699, 19, 5, 7
 INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (700, 20, 5, 7);
 
 
+-- Ticket Price Table
+CREATE TABLE TicketPrice (
+    Price_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Type VARCHAR(50),  
+    Price DECIMAL(10, 2),
+    ValidFrom DATE,
+    ValidTo DATE
+);
 
--- Ticket Table
+INSERT INTO TicketPrice (Type, Price, ValidFrom, ValidTo)
+VALUES
+('Standard', 135.00, NULL, NULL),
+('Child', 100.00, NULL, NULL),
+('Senior', 110.00, NULL, NULL),
+('VIP', 200.00, NULL, NULL),
+('Weekend Special', 120.00, '2024-12-01', '2024-12-31');  
+
+
+
+-- Modified Ticket Table
 CREATE TABLE Ticket (
     Ticket_ID INT PRIMARY KEY AUTO_INCREMENT,
-    TotalPrice DECIMAL(10, 2),
-    Type VARCHAR(50),
     Screening_ID INT,
     Seat_ID INT,
+    Price_ID INT,
     Coupon_ID INT,
     FOREIGN KEY (Screening_ID) REFERENCES Screening(Screening_ID),
     FOREIGN KEY (Seat_ID) REFERENCES Seat(Seat_ID),
+    FOREIGN KEY (Price_ID) REFERENCES TicketPrice(Price_ID),
     FOREIGN KEY (Coupon_ID) REFERENCES Coupon(Coupon_ID)
 );
+
 
 -- User Table
 CREATE TABLE User (
