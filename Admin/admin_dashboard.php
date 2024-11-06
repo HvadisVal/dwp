@@ -161,7 +161,7 @@
                         <p>View, edit, or remove companies in the system.</p>
                     </div>
                     <div class="card-action">
-                        <a href="manage_users.php" class="btn waves-effect waves-light">Manage companies</a>
+                        <a href="manage_company.php" class="btn waves-effect waves-light">Manage companies</a>
                     </div>
                 </div>
             </div>
