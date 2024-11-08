@@ -38,6 +38,7 @@
             border-radius: 25px;
             font-size: 1.5rem;
         }
+        
     </style>
 </head>
 <body>
