@@ -9,9 +9,6 @@ $_SESSION = array();
 session_destroy();
 
 // Redirect to login page.
-header("Location: adminLogin.php");
+header("Location: admin_login.php");
 exit;
-?>
 
-
-//not sure we need logout for both user and admin

@@ -482,14 +482,16 @@ input[type="file"] + label:hover {
 
         <!-- Poster upload -->
         <label for="image-<?php echo $movie['Movie_ID']; ?>">Upload New Movie Image (optional):</label>     
-    <input type="file" name="poster" accept="image/*" required id="poster-upload">
+    <input type="file" name="poster" accept="image/*" required id="poster-upload" onchange="displayFileName(event)">
     <label for="poster-upload">Choose Poster Image</label>
+    <div class="file-name" id="fileNameContainer"></div> <!-- Display file name here -->
 
-    <!-- Gallery upload (multiple files) -->
-    <label for="gallery-<?php echo $movie['Movie_ID']; ?>">Upload Additional Gallery Images (up to 5 total):</label>
-    <input type="file" name="gallery[]" accept="image/*" multiple id="gallery-upload" onchange="validateFileCount(this)">
-    <label for="gallery-upload">Choose Gallery Images</label>
 
+   <!-- Gallery upload (multiple files) -->
+<label for="gallery-<?php echo $movie['Movie_ID']; ?>">Upload Additional Gallery Images (up to 5 total):</label>
+<input type="file" name="gallery[]" accept="image/*" multiple id="gallery-upload" onchange="displayGalleryFileNames(event); validateFileCount(this);">
+<label for="gallery-upload">Choose Gallery Images</label>
+<div class="file-name" id="galleryFileNamesContainer"></div> <!-- Display gallery file names here -->
     <br>
 
     <button type="submit" name="add_movie" class="add-button">Add Movie</button>
@@ -553,8 +555,10 @@ input[type="file"] + label:hover {
                 </select>
 
                 <label for="image-<?php echo $movie['Movie_ID']; ?>">Upload New Movie Image (optional):</label>
-                <input type="file" name="image" accept="image/*" id="image-<?php echo $movie['Movie_ID']; ?>"> 
-                <label for="image-<?php echo $movie['Movie_ID']; ?>" class="file-label">Choose New Poster</label>
+<input type="file" name="image" accept="image/*" id="image-<?php echo $movie['Movie_ID']; ?>" onchange="displayFileName(event, <?php echo $movie['Movie_ID']; ?>)"> 
+<label for="image-<?php echo $movie['Movie_ID']; ?>" class="file-label">Choose New Poster</label>
+<div class="file-name" id="fileNameContainer-<?php echo $movie['Movie_ID']; ?>"></div>
+
 
                 <!-- Display uploaded poster image -->
                 <?php if (!empty($movie['ImageFileName'])): ?>
@@ -588,11 +592,13 @@ input[type="file"] + label:hover {
 <?php endif; ?>
 
                 <label for="gallery-<?php echo $movie['Movie_ID']; ?>">Upload Additional Gallery Images (up to 5 total):</label>
-                <input type="file" name="gallery[]" accept="image/*" multiple 
-                    id="gallery-<?php echo $movie['Movie_ID']; ?>" 
-                    data-existing-files-count="<?php echo count($galleryImages); ?>" 
-                    onchange="validateExistingFileCount(this)">
-                <label for="gallery-<?php echo $movie['Movie_ID']; ?>" class="file-label">Choose Gallery Images</label>
+<input type="file" name="gallery[]" accept="image/*" multiple 
+    id="gallery-<?php echo $movie['Movie_ID']; ?>" 
+    data-existing-files-count="<?php echo count($galleryImages); ?>" 
+    onchange="validateExistingFileCount(this)">
+<label for="gallery-<?php echo $movie['Movie_ID']; ?>" class="file-label">Choose Gallery Images</label>
+<div id="gallery-file-names-<?php echo $movie['Movie_ID']; ?>" class="file-names"></div>
+
                 <br>
                 <button type="submit" name="edit_movie" class="edit-button">Edit Movie</button>
                 <button type="submit" name="delete_movie" class="delete-button">Delete Movie</button>
@@ -605,6 +611,43 @@ input[type="file"] + label:hover {
 
 
 <script>
+// Function to display the file name for any uploaded image
+    function displayFileName(event, movieId = null) {
+        var fileName = event.target.files[0].name; // Get the name of the selected file
+        var fileNameContainer;
+
+        if (movieId) {
+            // If newsId is provided, update the specific article's container
+            fileNameContainer = document.getElementById('fileNameContainer-' + movieId);
+        } else {
+            // Otherwise, update the default container for adding a new article
+            fileNameContainer = document.getElementById('fileNameContainer');
+        }
+
+        fileNameContainer.textContent = fileName; // Display the file name in the container
+    }
+    // Function to display file names for multiple uploaded images (gallery)
+// Function to display file names for multiple uploaded images (gallery) with a limit of 5 files
+function displayGalleryFileNames(event) {
+    var files = event.target.files; // Get the selected files
+    var fileNamesContainer = document.getElementById('galleryFileNamesContainer');
+    fileNamesContainer.innerHTML = ""; // Clear previous file names
+
+    // Check if the file count exceeds the limit
+    if (files.length > 5) {
+        alert("You can only upload up to 5 gallery images.");
+        event.target.value = ""; // Clear the file input
+        return;
+    }
+
+    // Loop through each selected file and display its name (up to 5 files)
+    for (var i = 0; i < files.length; i++) {
+        var fileName = document.createElement("div"); // Create a new div for each file name
+        fileName.textContent = files[i].name; // Set the text to the file name
+        fileNamesContainer.appendChild(fileName); // Add the file name to the container
+    }
+}
+
 function toggleOtherInput(selectId, inputId) {
     var selectElement = document.getElementById(selectId);
     var inputElement = document.getElementById(inputId);
@@ -619,10 +662,24 @@ function validateExistingFileCount(input) {
     const existingFilesCount = parseInt(input.getAttribute('data-existing-files-count')) || 0;
     const fileCount = input.files.length;
 
+    // Display the file names
+    displayFileNames(input);
+
+    // Check if total files exceed the maximum allowed
     if (fileCount + existingFilesCount > maxFiles) {
         alert(`You can only upload a maximum of ${maxFiles - existingFilesCount} additional images.`);
-        input.value = ''; // Clear the input
+        input.value = ''; // Clear the input if the limit is exceeded
+        document.getElementById(`gallery-file-names-${input.id.split('-')[1]}`).innerHTML = ''; // Clear file names
     }
 }
+
+function displayFileNames(input) {
+    const fileNamesContainer = document.getElementById(`gallery-file-names-${input.id.split('-')[1]}`);
+    const fileNames = Array.from(input.files).map(file => file.name).join(', ');
+
+    // Show file names
+    fileNamesContainer.textContent = fileNames;
+}
+
 
 </script>

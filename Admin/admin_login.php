@@ -1,8 +1,15 @@
-<?php require_once("../includes/connection.php"); ?>
-<?php require_once("../includes/session.php"); ?>
-<?php require_once("../includes/functions.php"); ?>
-<?php  
-   // if (logged_in()) { redirect_to("admin_dashboard.php"); } // Redirect to admin dashboard if logged in
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+require_once('../includes/admin_session.php');  // Admin session management
+require_once('../includes/connection.php');
+require_once('../includes/functions.php');
+
+// Ensure no output before header() functions
+ob_start();  // Start output buffering
+
 ?>
 
 <!DOCTYPE html>
@@ -57,6 +64,7 @@
             
             // Check if admin exists and verify the hashed password
             if ($found_admin && password_verify($password, $found_admin['Password'])) {
+                // Set session variables for admin login
                 $_SESSION['admin_id'] = $found_admin['Admin_ID'];
                 $_SESSION['admin_email'] = $found_admin['Email'];
                 redirect_to("admin_dashboard.php");
@@ -95,4 +103,5 @@
 
 <?php
 if (isset($connection)) { $connection = null; }
+ob_end_flush();  // Flush the output buffer
 ?>
