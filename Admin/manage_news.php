@@ -357,14 +357,15 @@ if (isset($_SESSION['message'])) {
     <input type="date" name="dateposted" required>
 
     <div class="file-input-container">
-    <label for="image">Upload New Image:</label>
-    <input type="file" id="image" name="image" accept="image/png, image/jpeg">
-    <label for="image">Choose Image</label>
-    <div class="file-name"></div>
+        <label for="image">Upload New Image:</label>
+        <input type="file" id="image" name="image" accept="image/png, image/jpeg" onchange="displayFileName(event)">
+        <label for="image">Choose Image</label>
+        <div class="file-name" id="fileNameContainer"></div> <!-- Display file name here -->
     </div>
 
     <button type="submit" name="add_news" class="add-button">Add News</button>
 </form>
+
 
 <!-- Existing News Section -->
 <h2>Existing Articles</h2>
@@ -390,13 +391,12 @@ if (isset($_SESSION['message'])) {
                 <?php else: ?>
                     <p>No image uploaded for this article.</p>
                 <?php endif; ?>
-                
-                
+
                 <div class="file-input-container">
                     <label for="image-<?php echo $news['News_ID']; ?>">Upload New Image:</label>
-                    <input type="file" id="image-<?php echo $news['News_ID']; ?>" name="image" accept="image/png, image/jpeg">
+                    <input type="file" id="image-<?php echo $news['News_ID']; ?>" name="image" accept="image/png, image/jpeg" onchange="displayFileName(event, <?php echo $news['News_ID']; ?>)">
                     <label for="image-<?php echo $news['News_ID']; ?>" class="file-label">Choose Image</label>
-                    <div class="file-name"></div>
+                    <div class="file-name" id="fileNameContainer-<?php echo $news['News_ID']; ?>"></div> <!-- Display file name here -->
                 </div>
 
                 <button type="submit" name="edit_news" class="edit-button">Save Changes</button>
@@ -406,5 +406,24 @@ if (isset($_SESSION['message'])) {
     <?php endforeach; ?>
 </div>
 
+
 </body>
 </html>
+<script>
+    // Function to display the file name for any uploaded image
+    function displayFileName(event, newsId = null) {
+        var fileName = event.target.files[0].name; // Get the name of the selected file
+        var fileNameContainer;
+
+        if (newsId) {
+            // If newsId is provided, update the specific article's container
+            fileNameContainer = document.getElementById('fileNameContainer-' + newsId);
+        } else {
+            // Otherwise, update the default container for adding a new article
+            fileNameContainer = document.getElementById('fileNameContainer');
+        }
+
+        fileNameContainer.textContent = fileName; // Display the file name in the container
+    }
+</script>
+

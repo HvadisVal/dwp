@@ -1,11 +1,14 @@
-<?php require_once("../includes/session.php"); ?>
-<?php require_once("../includes/connection.php"); ?>
-<?php require_once("../includes/functions.php"); ?>
+<?php
+require_once( '../includes/session.php');
+require_once( '../includes/connection.php');
+require_once('../includes/functions.php');
 
+
+?>
 <?php
 // Check if admin is logged in, otherwise redirect to login page
 // if (!isset($_SESSION['admin_id'])) {
-//    redirect_to("adminLogin.php"); // Redirect to the admin login page if not logged in
+//    redirect_to("admin_login.php"); // Redirect to the admin login page if not logged in
 //}
 ?>
 
@@ -161,7 +164,7 @@
                         <p>View, edit, or remove companies in the system.</p>
                     </div>
                     <div class="card-action">
-                        <a href="manage_users.php" class="btn waves-effect waves-light">Manage companies</a>
+                        <a href="manage_company.php" class="btn waves-effect waves-light">Manage companies</a>
                     </div>
                 </div>
             </div>
@@ -194,7 +197,7 @@
 
     <!-- Logout Button -->
     <div class="container">
-        <form action="logout.php" method="POST" style="text-align: center;">
+        <form action="admin_logout.php" method="POST" style="text-align: center;">
             <button class="btn-red" type="submit">LogOut</button>
         </form>
     </div>

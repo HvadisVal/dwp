@@ -18,147 +18,155 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Refresh CSRF token to avoid reuse
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
-    if (isset($_POST['add_screening'])) {
-        $movieId = (int)$_POST['movie_id'];
-        $cinemaHallId = (int)$_POST['cinemahall_id'];
-        $showTime = $_POST['showtime']; // Expected in 'Y-m-d H:i:s' format
-        
-        $showDate = date('Y-m-d', strtotime($showTime));
-        
-        // Get movie duration from the database
-        $sql = "SELECT Duration FROM Movie WHERE Movie_ID = ?";
-        $stmt = $connection->prepare($sql);
-        $stmt->execute([$movieId]);
-        $movie = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if ($movie) {
-            $duration = $movie['Duration'];
-            
-            list($hours, $minutes, $seconds) = explode(':', $duration);
-            $durationInSeconds = ($hours * 3600) + ($minutes * 60) + $seconds;
-            
-            // Calculate the end time and add 15-minute buffer
-            $showTimeTimestamp = strtotime($showTime);
-            $endTime = $showTimeTimestamp + $durationInSeconds;
-            $endTimePlus15 = $endTime + (15 * 60); // Add 15 minutes buffer
-            
-            $endTimeFormatted = date('Y-m-d H:i:s', $endTime);
-            $endTimePlus15Formatted = date('Y-m-d H:i:s', $endTimePlus15);
-            
-            // Check for existing screenings that overlap with the new screening time
-            $sql = "SELECT COUNT(*) FROM Screening s
-                    JOIN Movie m ON s.Movie_ID = m.Movie_ID
-                    WHERE s.CinemaHall_ID = ? 
-                    AND s.ShowDate = ? 
-                    AND (
-                        (s.ShowTime < ? AND DATE_ADD(s.ShowTime, INTERVAL TIME_TO_SEC(m.Duration) + 900 SECOND) > ?) 
-                        OR (s.ShowTime >= ? AND s.ShowTime < ?)
-                    )";
-    
+// Add Screening
+if (isset($_POST['add_screening'])) {
+    $movieId = (int)$_POST['movie_id'];
+    $cinemaHallId = (int)$_POST['cinemahall_id'];
+    $showTime = $_POST['showtime']; // Expected in 'Y-m-d H:i:s' format
+
+    $showDate = date('Y-m-d', strtotime($showTime));
+
+    // Get movie duration from the database
+    $sql = "SELECT Duration FROM Movie WHERE Movie_ID = ?";
+    $stmt = $connection->prepare($sql);
+    $stmt->execute([$movieId]);
+    $movie = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($movie) {
+       // Retrieve and calculate the movie duration in seconds
+$duration = $movie['Duration'];
+$durationParts = explode(':', $duration);
+$hours = isset($durationParts[0]) ? (int)$durationParts[0] : 0;
+$minutes = isset($durationParts[1]) ? (int)$durationParts[1] : 0;
+$seconds = isset($durationParts[2]) ? (int)$durationParts[2] : 0;
+$durationInSeconds = ($hours * 3600) + ($minutes * 60) + $seconds;
+
+// Calculate end time with 15-minute buffer
+$showTimeTimestamp = strtotime($showTime);
+$endTime = $showTimeTimestamp + $durationInSeconds;
+$endTimePlus15 = $endTime + (15 * 60); // Add 15 minutes buffer
+
+$endTimeFormatted = date('Y-m-d H:i:s', $endTime);
+$endTimePlus15Formatted = date('Y-m-d H:i:s', $endTimePlus15);
+
+// Check for existing screenings that overlap with the new screening time
+$sql = "SELECT COUNT(*) FROM Screening s
+        JOIN Movie m ON s.Movie_ID = m.Movie_ID
+        WHERE s.CinemaHall_ID = ?
+        AND (
+            (s.ShowDate = ? AND s.ShowTime < ? AND DATE_ADD(s.ShowTime, INTERVAL TIME_TO_SEC(m.Duration) + 900 SECOND) > ?)
+            OR (s.ShowDate = ? AND s.ShowTime >= ? AND s.ShowTime < ?)
+            OR (s.ShowDate = ? AND DATE_ADD(s.ShowTime, INTERVAL TIME_TO_SEC(m.Duration) + 900 SECOND) > ?)
+        )";
+
+$stmt = $connection->prepare($sql);
+$stmt->execute([
+    $cinemaHallId,              // Cinema Hall ID
+    $showDate,                  // Show Date, same date condition
+    $endTimePlus15Formatted,    // New end time with buffer
+    $showTime,                  // New start time
+    $showDate,                  // Start time condition date
+    $showTime,                  // Second condition start time
+    $endTimeFormatted,          // Second condition end time
+    $showDate,                  // Full day check if it spans into the next day
+    $showTime                   // Base show time
+]);
+
+$existingCount = $stmt->fetchColumn();
+
+if ($existingCount > 0) {
+    echo "Error: There is already a screening scheduled at this time.";
+} else {
+            $sql = "INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES (?, ?, ?, ?)";
             $stmt = $connection->prepare($sql);
-            $stmt->execute([
-                $cinemaHallId,        // Cinema Hall ID
-                $showDate,            // Show Date
-                $endTimePlus15Formatted, // End time with buffer of the new screening
-                $showTime,            // Start time of the new screening
-                $showTime,            // Start time for the second condition
-                $endTimeFormatted     // End time of the new screening
-            ]);
-    
-            $existingCount = $stmt->fetchColumn();
-    
-            if ($existingCount > 0) {
-                echo "Error: There is already a screening scheduled at this time.";
+            if ($stmt->execute([$showDate, $showTime, $cinemaHallId, $movieId])) {
+                $_SESSION['message'] = "Screening added successfully!";
+                header("Location: manage_screening.php");
+                exit();
             } else {
-                $sql = "INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES (?, ?, ?, ?)";
-                $stmt = $connection->prepare($sql);
-                if ($stmt->execute([$showDate, $showTime, $cinemaHallId, $movieId])) {
-                    $_SESSION['message'] = "Screening added successfully!";
-                    header("Location: manage_screening.php");
-                    exit();
-                } else {
-                    echo "Error adding screening.";
-                }
+                echo "Error adding screening.";
             }
-        } else {
-            echo "Error: Movie not found.";
         }
+    } else {
+        echo "Error: Movie not found.";
     }
-    
-    
-    if (isset($_POST['edit_screening'])) {
-        $screeningId = (int)$_POST['screening_id'];
-        $movieId = (int)$_POST['movie_id'];
-        $cinemaHallId = (int)$_POST['cinemahall_id'];
-        $showTime = $_POST['showtime']; // 'Y-m-d H:i:s' format
-        
-        $showDate = date('Y-m-d', strtotime($showTime));
-        
-        // Get the updated movie duration from the database
-        $sql = "SELECT Duration FROM Movie WHERE Movie_ID = ?";
+}
+
+if (isset($_POST['edit_screening'])) {
+    $screeningId = (int)$_POST['screening_id'];
+    $movieId = (int)$_POST['movie_id'];
+    $cinemaHallId = (int)$_POST['cinemahall_id'];
+    $showTime = $_POST['showtime']; // 'Y-m-d H:i:s' format
+
+    $showDate = date('Y-m-d', strtotime($showTime));
+
+    // Get movie duration from the database
+    $sql = "SELECT Duration FROM Movie WHERE Movie_ID = ?";
+    $stmt = $connection->prepare($sql);
+    $stmt->execute([$movieId]);
+    $movie = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($movie) {
+        // Retrieve and calculate the movie duration in seconds
+        $duration = $movie['Duration'];
+        $durationParts = explode(':', $duration);
+        $hours = isset($durationParts[0]) ? (int)$durationParts[0] : 0;
+        $minutes = isset($durationParts[1]) ? (int)$durationParts[1] : 0;
+        $seconds = isset($durationParts[2]) ? (int)$durationParts[2] : 0;
+        $durationInSeconds = ($hours * 3600) + ($minutes * 60) + $seconds;
+
+        // Calculate end time with 15-minute buffer
+        $showTimeTimestamp = strtotime($showTime);
+        $endTime = $showTimeTimestamp + $durationInSeconds;
+        $endTimePlus15 = $endTime + (15 * 60); // Add 15 minutes buffer
+
+        $endTimeFormatted = date('Y-m-d H:i:s', $endTime);
+        $endTimePlus15Formatted = date('Y-m-d H:i:s', $endTimePlus15);
+
+        // Check for existing screenings that overlap with the new screening time
+        $sql = "SELECT COUNT(*) FROM Screening s
+                JOIN Movie m ON s.Movie_ID = m.Movie_ID
+                WHERE s.CinemaHall_ID = ?
+                AND (
+                    (s.ShowDate = ? AND s.ShowTime < ? AND DATE_ADD(s.ShowTime, INTERVAL TIME_TO_SEC(m.Duration) + 900 SECOND) > ?)
+                    OR (s.ShowDate = ? AND s.ShowTime >= ? AND s.ShowTime < ?)
+                    OR (s.ShowDate = ? AND DATE_ADD(s.ShowTime, INTERVAL TIME_TO_SEC(m.Duration) + 900 SECOND) > ?)
+                )";
+
         $stmt = $connection->prepare($sql);
-        $stmt->execute([$movieId]);
-        $movie = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if ($movie) {
-            $duration = $movie['Duration'];
-            
-            list($hours, $minutes, $seconds) = explode(':', $duration);
-            $durationInSeconds = ($hours * 3600) + ($minutes * 60) + $seconds;
-            
-            // Calculate the end time of the screening with a 15-minute buffer
-            $showTimeTimestamp = strtotime($showTime);
-            $endTime = $showTimeTimestamp + $durationInSeconds;
-            $endTimePlus15 = $endTime + (15 * 60);
-            
-            $endTimeFormatted = date('Y-m-d H:i:s', $endTime);
-            $endTimePlus15Formatted = date('Y-m-d H:i:s', $endTimePlus15);
-            
-            // Check for overlapping screenings, excluding the current screening
-            $sql = "SELECT COUNT(*) FROM Screening s
-                    JOIN Movie m ON s.Movie_ID = m.Movie_ID
-                    WHERE s.CinemaHall_ID = ? 
-                    AND s.ShowDate = ? 
-                    AND s.Screening_ID != ? 
-                    AND (
-                        (s.ShowTime < ? AND DATE_ADD(s.ShowTime, INTERVAL TIME_TO_SEC(m.Duration) + 900 SECOND) > ?) 
-                        OR (s.ShowTime >= ? AND s.ShowTime < ?)
-                    )";
-            
-            $stmt = $connection->prepare($sql);
-            $stmt->execute([
-                $cinemaHallId,                // Cinema Hall ID
-                $showDate,                    // Show Date
-                $screeningId,                 // Exclude current screening
-                $endTimePlus15Formatted,      // New end time with buffer
-                $showTime,                    // Start time of the new screening
-                $showTime,                    // Start time for second condition
-                $endTimeFormatted             // End time of the new screening
-            ]);
-            
-            $existingCount = $stmt->fetchColumn();
-            
-            // If overlapping screenings exist, show error
-            if ($existingCount > 0) {
-                echo "Error: There is already a screening scheduled at this time.";
-            } else {
-                // Update screening in the database
-                $sql = "UPDATE Screening SET ShowDate = ?, ShowTime = ?, CinemaHall_ID = ?, Movie_ID = ? WHERE Screening_ID = ?";
-                $stmt = $connection->prepare($sql);
-                
-                if ($stmt->execute([$showDate, $showTime, $cinemaHallId, $movieId, $screeningId])) {
-                    $_SESSION['message'] = "Screening updated successfully!";
-                    header("Location: manage_screening.php");
-                    exit();
-                } else {
-                    echo "Error updating screening.";
-                }
-            }
+        $stmt->execute([
+            $cinemaHallId,              // Cinema Hall ID
+            $showDate,                  // Show Date, same date condition
+            $endTimePlus15Formatted,    // New end time with buffer
+            $showTime,                  // New start time
+            $showDate,                  // Start time condition date
+            $showTime,                  // Second condition start time
+            $endTimeFormatted,          // Second condition end time
+            $showDate,                  // Full day check if it spans into the next day
+            $showTime                   // Base show time
+        ]);
+
+        $existingCount = $stmt->fetchColumn();
+
+        if ($existingCount > 0) {
+            echo "Error: There is already a screening scheduled at this time.";
         } else {
-            echo "Error: Movie not found.";
+            // Update screening in the database
+            $sql = "UPDATE Screening SET ShowDate = ?, ShowTime = ?, CinemaHall_ID = ?, Movie_ID = ? WHERE Screening_ID = ?";
+            $stmt = $connection->prepare($sql);
+
+            if ($stmt->execute([$showDate, $showTime, $cinemaHallId, $movieId, $screeningId])) {
+                $_SESSION['message'] = "Screening updated successfully!";
+                header("Location: manage_screening.php");
+                exit();
+            } else {
+                echo "Error updating screening.";
+            }
         }
+    } else {
+        echo "Error: Movie not found.";
     }
-    
+}
 
     if (isset($_POST['delete_screening'])) {
         // Handle deleting a screening

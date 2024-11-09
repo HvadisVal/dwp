@@ -17,46 +17,7 @@
             color: white;
         }
 
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            background: linear-gradient(to right, #243642, #1a252d);
-        }
-
-        .logo {
-            color: black;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .nav-links {
-            display: flex;
-            width: 70%;
-            font-weight: bold;
-            gap: 5rem;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-        }
-
-        .cart-icon {
-            color: white;
-            background: white;
-            padding: 0.5rem 3rem;
-            border-radius: 25px;
-            font-size: 1.5rem;
-        }
-
-        .hero-content {
-        position: relative;
-        z-index: 01;
-        margin-left: 0; /* Add left margin for positioning */
-        align-self: start; /* Center vertically */
-    }
+        
 
     .hero {
             background-image: url("https://image.api.playstation.com/vulcan/img/rnd/202011/0714/Cu9fyu6DM41JPekXLf1neF9r.png");
@@ -259,64 +220,6 @@
         }
 
 
-
-        footer {
-            background: linear-gradient(to right, #243642, #1a252d);
-            padding: 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center; 
-            gap: 2rem;
-        }
-
-        .footer-links {
-            display: flex;
-            text-decoration: underline;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        footer a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .contact-info h3 {
-            font-size: 1.5rem;
-            color: white;
-            margin-bottom: 1rem;
-        }
-
-        .contact-info p {
-            color: white;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
-
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            gap: 1.5rem; /* Increase gap for more spacing */
-            align-items: center;
-            margin-top: 1rem;
-        }
-
-        .social-icons img {
-            padding: 8px;
-            transition: transform 0.3s ease, background-color 0.3s ease; 
-            cursor: pointer;
-        }
-
-        .social-icons img:hover {
-            transform: scale(1.1); 
-            background-color: #f09433; 
-        }
-
-
         @media (max-width: 768px) {
             .book-ticket {
                 width: 100%;
@@ -325,19 +228,8 @@
     </style>
 </head>
 <body>
-<nav>
-    
-        <div class="logo">
-            <img src="images/11.png" alt="Logotype" height="40px" width="145px">
-        </div>
-        <div class="nav-links">
-            <a href="#">NEWS</a>
-            <a href="#">FILMS</a>
-            <a href="#">TICKETS</a>
-            <a href="#">ABOUT US</a>
-        </div>
-        <div class="cart-icon">🛒</div>
-    </nav>
+<?php include 'navbar.php'; ?>
+
 
     <div class="hero">
         <div class="hero-content">
@@ -397,23 +289,7 @@
         </div>
     </div>
 
-    <footer>
-    <div class="footer-links">
-        <a href="#">News</a>
-        <a href="#">Films</a>
-        <a href="#">Tickets</a>
-        <a href="#">About Us</a>
-    </div>
-    <div class="contact-info">
-        <h3>Contact Us</h3>
-        <p><img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="email icon" style="width: 18px; margin-right: 8px;">esbjergcin@gmail.com</p>
-        <p><a href="https://www.google.com/maps/place/A+Place+To+Hotel/@55.4790321,8.4309662,16z/data=!4m9!3m8!1s0x464b215865b4798f:0xf395d7933406e938!5m2!4m1!1i2!8m2!3d55.4790317!4d8.4350756!16s%2Fg%2F11sg5pg5wp?entry=ttu&g_ep=EgoyMDI0MTAyMS4xIKXMDSoASAFQAw%3D%3D"><img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="location icon" style="width: 18px; margin-right: 8px;">Grådybet 73C 6700 Esbjerg</a></p>
-    </div>
-    <div class="social-icons">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram" style="width: 60px;">
-            <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c4/Snapchat_logo.svg/1024px-Snapchat_logo.svg.png" alt="Snapchat" style="width: 60px;">
-        </div>
-</footer>
+    <?php include 'footer.php'; ?>
 
 </body>
 </html>

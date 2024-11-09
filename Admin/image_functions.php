@@ -63,16 +63,14 @@ function uploadImage($id, $type, $connection) {
                         $mediaStmt = $connection->prepare($mediaSql);
                         $mediaStmt->execute([$newFileName, $fileType, $id, $isFeatured]);
                     }
-                    echo "Image $fileName uploaded successfully.";
+                    // echo "Image $fileName uploaded successfully.";
                 } else {
                     echo "Error moving the uploaded file $fileName.";
                 }
             } else {
                 echo "Invalid file type for $fileName. Only JPG and PNG are allowed.";
             }
-        } else {
-            echo "Upload error for $fileName.";
-        }
+        } 
     }
 }
 

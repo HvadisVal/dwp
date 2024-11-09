@@ -10,4 +10,3 @@
 			redirect_to("landing.php");
 		}
 	}
-?>
