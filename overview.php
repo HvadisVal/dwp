@@ -1,28 +1,61 @@
 <?php
 session_start();
 require_once("includes/connection.php");
+require_once("dbcon.php");
+
 
 // Check if the user or guest is logged in
 $isLoggedIn = isset($_SESSION['user_id']);
 $isGuest = isset($_SESSION['guest_user_id']);
 
-// Get movie, screening, and seat details from session
+// Fetch selected seats and ticket types from session (stored from seat selection page)
+$selectedSeats = $_SESSION['selectedSeats'] ?? [];
+$selectedTickets = $_SESSION['selectedTickets'] ?? [];
+
+// Check if any tickets were selected
+if (empty($selectedTickets) || empty($selectedSeats)) {
+    die("No tickets or seats selected. Please go back to select tickets.");
+}
+
+
+// Calculate the total price by retrieving prices from the TicketPrice table
+$totalPrice = 0;
+$ticketDetails = [];
+
+try {
+    // Prepare database query to fetch ticket prices for each selected type
+    $dbCon = dbCon($user, $pass);
+    foreach ($selectedTickets as $type => $quantity) {
+        $priceQuery = $dbCon->prepare("SELECT Price FROM TicketPrice WHERE Type = :type");
+        $priceQuery->bindParam(':type', $type);
+        $priceQuery->execute();
+        $priceResult = $priceQuery->fetch(PDO::FETCH_ASSOC);
+
+        if ($priceResult) {
+            $pricePerTicket = $priceResult['Price'];
+            $totalForType = $pricePerTicket * $quantity;
+            $totalPrice += $totalForType;
+            $ticketDetails[] = [
+                'type' => $type,
+                'price' => $pricePerTicket,
+                'quantity' => $quantity,
+                'total' => $totalForType
+            ];
+        }
+    }
+} catch (PDOException $e) {
+    die("Error retrieving ticket prices: " . $e->getMessage());
+}
+
+// Get movie details
 $movie_id = $_SESSION['movie_id'] ?? null;
 $cinema_hall_id = $_SESSION['cinema_hall_id'] ?? null;
 $showtime = $_SESSION['time'] ?? null;
-$selectedSeats = json_decode($_SESSION['selectedSeats'] ?? '[]', true); // Decode the selected seats JSON
-$ticketPrice = 135;
-$totalTickets = count($selectedSeats);
-$totalPrice = $totalTickets * $ticketPrice;
-
-// Store total price in the session for reference during checkout
-$_SESSION['totalPrice'] = $totalPrice;
-
-// Fetch movie details
-$movieQuery = $connection->prepare("SELECT * FROM Movie WHERE Movie_ID = :movie_id");
+$movieQuery = $dbCon->prepare("SELECT * FROM Movie WHERE Movie_ID = :movie_id");
 $movieQuery->bindParam(':movie_id', $movie_id);
 $movieQuery->execute();
 $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -37,9 +70,6 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
         .action-buttons { margin-top: 20px; }
         .order-summary, .movie-details, .user-info { padding: 15px; margin-top: 20px; background: #333; color: white; border-radius: 8px; }
         .login-info { display: flex; align-items: center; justify-content: space-between; }
-        .login-links { display: flex; justify-content: space-between; margin-top: 15px; }
-        .login-links a { color: #3B82F6; text-decoration: none; }
-        .login-links a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -47,8 +77,8 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
 <div class="container">
     <h4>Booking Overview</h4>
 
-    <!-- Movie Details Section -->
-    <div class="movie-details">
+   <!-- Movie Details Section -->
+   <div class="movie-details">
         <h5>Movie: <?= htmlspecialchars($movie['Title'] ?? 'N/A'); ?></h5>
         <p><strong>Duration:</strong> <?= htmlspecialchars($movie['Duration'] ?? 'N/A'); ?></p>
         <p><strong>Rating:</strong> <?= htmlspecialchars($movie['Rating'] ?? 'N/A'); ?> / 10</p>
@@ -56,8 +86,8 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
         <p><strong>Showtime:</strong> <?= htmlspecialchars($showtime); ?></p>
     </div>
 
-    <!-- Login, Guest Checkout, or User/Guest Information Display -->
-    <?php if ($isLoggedIn): ?>
+      <!-- Login, Guest Checkout, or User/Guest Information Display -->
+      <?php if ($isLoggedIn): ?>
         <div id="userInfo" class="user-info login-info">
             <span>Welcome, <?= htmlspecialchars($_SESSION['user']); ?></span>
             <button id="logoutButton" class="btn red">Logout</button>
@@ -76,9 +106,7 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
         </div>
     <?php endif; ?>
 
- 
-
-<!-- Login Modal -->
+    <!-- Login Modal -->
 <div id="loginModal" class="modal">
     <div class="modal-content">
         <h5>Login</h5>
@@ -159,16 +187,19 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
     </div>
 </div>
 
-  <!-- Order Summary -->
-  <div class="order-summary">
+    <!-- Order Summary -->
+    <div class="order-summary">
         <h5>Order Summary</h5>
-        <p>Total Tickets: <span id="total-tickets"><?= $totalTickets; ?></span></p>
-        <p>Total Price: DKK <span id="total-price"><?= $totalPrice; ?></span></p>
+        <?php foreach ($ticketDetails as $ticket): ?>
+            <p><?= htmlspecialchars($ticket['quantity']) ?> x <?= htmlspecialchars($ticket['type']) ?> </p>
+        <?php endforeach; ?>
+        <p><strong>Total Price: DKK <?= number_format($totalPrice, 2); ?></strong></p>
     </div>
-</div>
 
-  <!-- Payment Button to Open Modal, shown only if logged in as user or guest -->
-  <?php if ($isLoggedIn || $isGuest): ?>
+
+
+   <!-- Payment Button to Open Modal, shown only if logged in as user or guest -->
+   <?php if ($isLoggedIn || $isGuest): ?>
         <button class="btn blue modal-trigger" data-target="checkoutModal">Proceed to Checkout</button>
     <?php endif; ?>
 </div>
@@ -179,12 +210,12 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
         <h5>Checkout</h5>
         
         <!-- Coupon Code Section -->
-      <!--  <div class="input-field">
+       <div class="input-field">
             <input type="text" id="couponCode" name="couponCode" placeholder="Enter Coupon Code">
             <button id="applyCoupon" class="btn">Apply Coupon</button>
             <p id="couponMessage" style="color: red; display: none;"></p>
         </div>
-  -->
+  
          <!-- Updated Total Price -->
          <div class="payment-method">
             <h5>Total Price: <span id="modalTotalPrice">DKK <?= number_format($totalPrice, 2); ?></span></h5>
@@ -207,33 +238,12 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
 </div>
 
 <!-- Materialize JS and jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         var modals = document.querySelectorAll('.modal');
         M.Modal.init(modals);
-    });
-
-     // Update order summary dynamically based on sessionStorage data
-     function updateOrderSummary() {
-        const selectedSeats = JSON.parse(sessionStorage.getItem('selectedSeats') || '[]');
-        const ticketPrice = 135;
-        const totalTickets = selectedSeats.length;
-        const totalPrice = totalTickets * ticketPrice;
-
-        document.getElementById('total-tickets').textContent = totalTickets;
-        document.getElementById('total-price').textContent = totalPrice;
-    }
-
-    // Call the updateOrderSummary function on page load
-    updateOrderSummary();
-
-
-      // Update the total price in the modal when opening it
-      $('.modal-trigger').on('click', function() {
-        const totalPrice = $('#total-price').text(); // Get the total price from the order summary
-        $('#modal-total-price').text(totalPrice); // Set the total price in the modal
     });
 
     // Login Form Submission
@@ -327,46 +337,50 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
         });
     });
 
-     // Apply Coupon AJAX
-     $('#applyCoupon').click(function() {
-        const couponCode = $('#couponCode').val();
-        if (couponCode) {
-            $.ajax({
-                url: 'User/ajax_apply_coupon.php',
-                type: 'POST',
-                data: { couponCode: couponCode },
-                success: function(response) {
-                    response = JSON.parse(response);
-                    if (response.success) {
-                        $('#couponMessage').hide();
-                        $('#totalPriceDisplay').text('DKK ' + response.newTotalPrice);
-                        $('#modalTotalPrice').text('DKK ' + response.newTotalPrice);
-                    } else {
-                        $('#couponMessage').text(response.message).show();
-                    }
-                }
-            });
-        }
-    });
+    document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Materialize modals
+    var modals = document.querySelectorAll('.modal');
+    M.Modal.init(modals);
 
-    // Payment AJAX
-    $('#payButton').click(function() {
-        const paymentMethod = $('input[name="paymentMethod"]:checked').val();
-        $.ajax({
-            url: 'User/ajax_process_payment.php',
-            type: 'POST',
-            data: { paymentMethod: paymentMethod, totalPrice: <?= $totalPrice; ?> },
-            success: function(response) {
-                response = JSON.parse(response);
-                if (response.success) {
-                    M.toast({html: 'Payment successful! Redirecting to confirmation page...'});
-                    setTimeout(() => window.location.href = 'confirmation.php', 1500);
-                } else {
-                    $('#paymentMessage').text(response.message).show();
-                }
+    // Apply Coupon Code
+    document.getElementById('applyCoupon').addEventListener('click', function() {
+        const couponCode = document.getElementById('couponCode').value.trim();
+
+        if (!couponCode) {
+            const couponMessage = document.getElementById('couponMessage');
+            couponMessage.style.color = 'red';
+            couponMessage.textContent = "Please enter a coupon code.";
+            couponMessage.style.display = 'block';
+            return;
+        }
+
+        fetch('validate_coupon.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ couponCode })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const couponMessage = document.getElementById('couponMessage');
+            const modalTotalPrice = document.getElementById('modalTotalPrice');
+
+            if (data.valid) {
+                couponMessage.style.color = 'green';
+                couponMessage.textContent = `Coupon applied! You saved DKK ${data.discount}.`;
+                modalTotalPrice.textContent = `DKK ${data.newTotalPrice}`;
+            } else {
+                couponMessage.style.color = 'red';
+                couponMessage.textContent = data.message;
             }
+            couponMessage.style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error:', error);
         });
     });
+});
+
+
 
 </script>
 </body>

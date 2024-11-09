@@ -41,6 +41,10 @@ if (!$seats) {
 $ticketPricesQuery = $dbCon->prepare("SELECT * FROM TicketPrice");
 $ticketPricesQuery->execute();
 $ticketPrices = $ticketPricesQuery->fetchAll(PDO::FETCH_ASSOC);
+$ticketPricesMap = [];
+foreach ($ticketPrices as $ticketPrice) {
+    $ticketPricesMap[$ticketPrice['Type']] = $ticketPrice['Price'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -303,18 +307,48 @@ $ticketPrices = $ticketPricesQuery->fetchAll(PDO::FETCH_ASSOC);
     });
 
     document.getElementById('continue-button').addEventListener('click', () => {
-        const totalTickets = Object.values(selectedTickets).reduce((acc, count) => acc + count, 0);
-        if (totalTickets === 0) {
-            alert("Please select at least one seat.");
-            return;
+    const totalTickets = Object.values(selectedTickets).reduce((acc, count) => acc + count, 0);
+    if (totalTickets === 0 || selectedSeats.length === 0) {
+        alert("Please select at least one seat and ticket type.");
+        return;
+    }
+
+    // Save selected tickets and seats to session via AJAX
+    fetch('save_selection.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ selectedTickets, selectedSeats })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Redirect to overview page if save was successful
+            window.location.href = 'overview.php';
+        } else {
+            alert("Failed to save selection. Please try again.");
         }
+    })
+    .catch(error => console.error("Error:", error));
+});
 
-        sessionStorage.setItem('selectedTickets', JSON.stringify(selectedTickets));
-        sessionStorage.setItem('selectedSeats', JSON.stringify(selectedSeats));
-        sessionStorage.setItem('totalPrice', document.getElementById("total-price").textContent);
-
-        window.location.href = 'overview.php';
+// After seats are selected, store row, seat number, and seat ID in sessionStorage
+document.getElementById('continue-button').addEventListener('click', () => {
+    const formattedSeats = selectedSeats.map(seatPos => {
+        const [row, seatNumber] = seatPos.split('-');
+        const seatElement = document.querySelector(`.seat[data-row='${row}'][data-seat-number='${seatNumber}']`);
+        return {
+            row: row,
+            seatNumber: seatNumber,
+            seatId: seatElement.dataset.seatId // get the Seat_ID
+        };
     });
+
+    sessionStorage.setItem('selectedSeats', JSON.stringify(formattedSeats));
+    window.location.href = 'overview.php';
+});
+
+
+
 </script>
 </body>
 </html>
