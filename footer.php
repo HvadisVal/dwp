@@ -1,6 +1,6 @@
 <?php
 // Include the database connection file
-require_once 'DBcon.php';
+require_once 'dbcon.php';
 
 // Connect to the database
 $conn = dbCon($user, $pass);

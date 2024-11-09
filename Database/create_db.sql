@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS dwp;
-CREATE DATABASE dwp;
-USE dwp;
+DROP DATABASE IF EXISTS c5di1yb93_dwp;
+CREATE DATABASE c5di1yb93_dwp;
+USE c5di1yb93_dwp;
 
 -- Genre Table
 CREATE TABLE Genre (
