@@ -12,6 +12,7 @@ $isGuest = isset($_SESSION['guest_user_id']);
 $selectedSeats = $_SESSION['selectedSeats'] ?? [];
 $selectedTickets = $_SESSION['selectedTickets'] ?? [];
 
+
 // Check if any tickets were selected
 if (empty($selectedTickets) || empty($selectedSeats)) {
     die("No tickets or seats selected. Please go back to select tickets.");
