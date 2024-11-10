@@ -1,45 +1,37 @@
 <?php
 session_start();
+header('Content-Type: application/json');
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require_once("dbcon.php");
 
-$data = json_decode(file_get_contents("php://input"), true);
-$couponCode = $data['couponCode'] ?? '';
-
-if (empty($couponCode)) {
-    echo json_encode(['valid' => false, 'message' => 'Please enter a coupon code.']);
+try {
+    $dbCon = dbCon($user, $pass);
+} catch (Exception $e) {
+    echo json_encode(["valid" => false, "message" => "Connection failed: " . $e->getMessage()]);
     exit;
 }
 
-$dbCon = dbCon('root', ''); // Pass the correct arguments here
+// Get posted coupon code
+$data = json_decode(file_get_contents('php://input'), true);
+$couponCode = $data['couponCode'] ?? '';
 
-try {
-    // Retrieve coupon from database
-    $couponQuery = $dbCon->prepare("SELECT DiscountAmount, ExpireDate FROM Coupon WHERE CouponCode = :couponCode");
-    $couponQuery->bindParam(':couponCode', $couponCode);
-    $couponQuery->execute();
-    $coupon = $couponQuery->fetch(PDO::FETCH_ASSOC);
+// Check if coupon code is valid
+if ($couponCode) {
+    $stmt = $dbCon->prepare("SELECT * FROM Coupon WHERE CouponCode = :couponCode AND ExpireDate >= CURDATE()");
+    $stmt->bindParam(':couponCode', $couponCode);
+    $stmt->execute();
+    $coupon = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Check if coupon exists and is not expired
-    if ($coupon && strtotime($coupon['ExpireDate']) >= time()) {
-        $discountAmount = (float)$coupon['DiscountAmount'];
-        $totalPrice = isset($_SESSION['totalPrice']) ? (float)$_SESSION['totalPrice'] : 0;
-
-        // Calculate new total price
-        $newTotalPrice = max(0, $totalPrice - $discountAmount); // Ensure price doesn't go below 0
-
-        // Update session with new total price for consistency
-        $_SESSION['totalPrice'] = $newTotalPrice;
-
-        echo json_encode([
-            'valid' => true,
-            'discount' => number_format($discountAmount, 2),
-            'newTotalPrice' => number_format($newTotalPrice, 2),
-            'message' => "Coupon applied! You saved DKK $discountAmount."
-        ]);
+    if ($coupon) {
+        $discount = $coupon['DiscountAmount'];
+        $newTotalPrice = $_SESSION['totalPrice'] - $discount;
+        echo json_encode(["valid" => true, "discount" => $discount, "newTotalPrice" => $newTotalPrice]);
     } else {
-        echo json_encode(['valid' => false, 'message' => 'Invalid or expired coupon code.']);
+        echo json_encode(["valid" => false, "message" => "Invalid or expired coupon code."]);
     }
-} catch (PDOException $e) {
-    echo json_encode(['valid' => false, 'message' => 'Database error.']);
+} else {
+    echo json_encode(["valid" => false, "message" => "An unexpected error occurred. Please try again."]);
+    exit;
 }
 ?>

@@ -420,14 +420,34 @@ foreach ($ticketPrices as $ticketPrice) {
     });
 
 
-    continueButton.addEventListener('click', () => {
-    if (Object.values(selectedTickets).reduce((acc, count) => acc + count, 0) === 0) {
+  // Continue Button: Separate Logic for Final Selection Check and AJAX Call
+document.getElementById('continue-button').addEventListener('click', () => {
+    const totalTickets = Object.values(selectedTickets).reduce((acc, count) => acc + count, 0);
+
+    if (totalTickets === 0) {
         alert("Please select at least one ticket.");
+        return;
     } else if (selectedSeats.length === 0) {
         alert("Please select at least one seat.");
+        return;
     } else {
-        // Redirect to overview.php after validation
-        window.location.href = 'overview.php';
+        // AJAX call to save the selected tickets and seats
+        fetch('save_selection.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ selectedTickets, selectedSeats })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Redirect to overview.php if saving was successful
+                window.location.href = 'overview.php';
+            } else {
+                // Show error if something went wrong
+                alert(data.message || "Failed to save selection. Please try again.");
+            }
+        })
+        .catch(error => console.error("Error:", error));
     }
 });
 </script>
