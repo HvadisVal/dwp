@@ -3,21 +3,54 @@
 require_once("dbcon.php");
 $dbCon = dbCon($user, $pass);
 
-// Fetch all movies and their showtimes from the database with CinemaHall_ID
+// Fetch all movies and their showtimes from the database
 $moviesQuery = $dbCon->prepare("
-    SELECT m.*, s.CinemaHall_ID, s.ShowTime 
-    FROM Movie m 
-    JOIN Screening s ON m.Movie_ID = s.Movie_ID");
-    
-$moviesQuery->execute();
-$movies = $moviesQuery->fetchAll(PDO::FETCH_ASSOC);
+SELECT m.*, s.CinemaHall_ID, s.ShowTime, s.ShowDate, c.Name as CinemaHall_Name, v.Format as Version
+FROM Movie m
+JOIN Screening s ON m.Movie_ID = s.Movie_ID
+JOIN CinemaHall c ON s.CinemaHall_ID = c.CinemaHall_ID
+LEFT JOIN Version v ON m.Version_ID = v.Version_ID
+ORDER BY m.Movie_ID, s.ShowDate, s.ShowTime
+");
 
-// Mock data for showtimes and availability for demonstration
-$showtimes = [
-    "Tuesday" => ["11:30 AM", "1:30 PM", "3:30 PM"],
-    "Wednesday" => ["12:30 PM", "4:00 PM"],
-    "Thursday" => ["11:00 AM", "2:00 PM", "5:00 PM"],
-];
+$moviesQuery->execute();
+$moviesData = $moviesQuery->fetchAll(PDO::FETCH_ASSOC);
+
+// Organize the data by movie and date
+$moviesById = [];
+foreach ($moviesData as $data) {
+    $movieId = $data['Movie_ID'];
+    $date = $data['ShowDate'];
+    
+    if (!isset($moviesById[$movieId])) {
+        $moviesById[$movieId] = [
+            'details' => [
+                'Title' => $data['Title'],
+                'Duration' => $data['Duration'],
+                'Rating' => $data['Rating'],
+                'Description' => $data['Description'],
+                'PosterPath' => "path-to-movie-poster.jpg", // Adjust the poster path here if dynamic
+            ],
+            'showtimes' => []
+        ];
+    }
+    
+    if (!isset($moviesById[$movieId]['showtimes'][$date])) {
+        $moviesById[$movieId]['showtimes'][$date] = [];
+    }
+
+    $moviesById[$movieId]['showtimes'][$date][] = $data;
+}
+
+// Set the range of days (e.g., 7 days from today)
+$daysToShow = 7;
+$startDate = new DateTime();
+$allDates = [];
+
+for ($i = 0; $i < $daysToShow; $i++) {
+    $allDates[] = $startDate->format('Y-m-d');
+    $startDate->modify('+1 day');
+}
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +62,7 @@ $showtimes = [
     <!-- Materialize CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <style>
-        body {
+          body {
             background-color: #111;
             color: white;
         }
@@ -37,86 +70,113 @@ $showtimes = [
             margin-top: 30px;
             display: flex;
             padding: 20px;
+            border-bottom: 1px solid #444;
         }
         .movie-info {
-            width: 30%;
-            padding-right: 30px;
+            width: 25%;
+            padding-right: 20px;
+        }
+        .movie-details {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .poster {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-bottom: 10px;
         }
         .schedule {
-            width: 70%;
+            width: 75%;
+            display: flex;
         }
-        .showtime-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+        .date-column {
+            flex: 1;
+            padding: 0 10px;
         }
-        .showtime {
+        .date-header {
+            width: 120px; /* Adjust based on desired width */
+    white-space: nowrap;
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+    color: #ccc;
+        }
+        .showtime-card {
             background-color: green;
-            padding: 15px 0;
-            margin: 10px 0;
-            border-radius: 8px;
-            text-align: center;
-            color: white;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            transition: transform 0.2s;
-            display: block;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 8px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 100px; /* Set a minimum width to prevent narrow display */
         }
-        .showtime:hover {
+        .showtime-card:hover {
             transform: scale(1.05);
         }
-        .legend {
-            margin-top: 20px;
-            display: flex;
-            justify-content: space-between;
+        .showtime-card h6 {
+            margin: 5px 0;
+    font-size: 1em;
+    font-weight: normal;
         }
-        .legend span {
+        .showtime-card .version {
+            font-size: 0.85em;
+    color: #ddd;
+    margin-top: 5px;
+        }
+        .no-showtimes {
+            color: #888;
+            font-size: 1em;
+            font-style: italic;
+            text-align: center;
             padding: 10px;
-            border-radius: 5px;
         }
-        .legend .available {
-            background-color: green;
-            color: white;
-        }
+    </style>
     </style>
 </head>
 <body>
 
 <div class="container">
-    <?php foreach ($movies as $movie): ?>
-    <div class="movie-container">
-        <!-- Movie Information -->
-        <div class="movie-info">
-            <img src="path-to-movie-poster.jpg" alt="<?= htmlspecialchars($movie['Title']); ?>" class="responsive-img">
-            <h4><?= htmlspecialchars($movie['Title']); ?></h4>
-            <p><strong>Duration:</strong> <?= htmlspecialchars($movie['Duration']); ?></p>
-            <p><strong>Rating:</strong> <?= htmlspecialchars($movie['Rating']); ?> / 10</p>
-        </div>
+    <?php foreach ($moviesById as $movieId => $movieData): ?>
+        <div class="movie-container">
+            <!-- Movie Information -->
+            <div class="movie-info">
+                <img src="<?= htmlspecialchars($movieData['details']['PosterPath']); ?>" alt="<?= htmlspecialchars($movieData['details']['Title']); ?>" class="poster">
+                <div class="movie-details">
+                    <h4><?= htmlspecialchars($movieData['details']['Title']); ?></h4>
+                    <p>Duration: <?= htmlspecialchars($movieData['details']['Duration']); ?></p>
+                    <p>Age Limit: Allowed for children over <?= htmlspecialchars($movieData['details']['Rating']); ?> years</p>
+                </div>
+            </div>
 
-        <!-- Movie Showtimes -->
-        <div class="schedule">
-            <h5>Showtimes</h5>
-            <div class="showtime-grid">
-                <?php foreach ($showtimes as $day => $times): ?>
-                    <div>
-                        <h6><?= $day; ?></h6>
-                        <?php foreach ($times as $time): ?>
-                            <a href="Seat.php?movie_id=<?= htmlspecialchars($movie['Movie_ID']); ?>&cinema_hall_id=<?= htmlspecialchars($movie['CinemaHall_ID']); ?>&time=<?= urlencode($time); ?>&day=<?= urlencode($day); ?>" class="showtime">
-                                <?= htmlspecialchars($time); ?>
-                            </a>
-                        <?php endforeach; ?>
+             <!-- Movie Showtimes by Date (Vertically) -->
+             <div class="schedule">
+                <?php foreach ($allDates as $date): ?>
+                    <div class="date-column">
+                        <div class="date-header">
+                            <?= date("D, d/m", strtotime($date)); ?>
+                        </div>
+                        <?php if (isset($movieData['showtimes'][$date])): ?>
+                            <?php foreach ($movieData['showtimes'][$date] as $showtime): ?>
+                                <a href="Seat.php?movie_id=<?= htmlspecialchars($showtime['Movie_ID']); ?>&cinema_hall_id=<?= htmlspecialchars($showtime['CinemaHall_ID']); ?>&time=<?= urlencode($showtime['ShowTime']); ?>&date=<?= urlencode($showtime['ShowDate']); ?>" class="showtime-card">
+                                    <h6><?= htmlspecialchars($showtime['CinemaHall_Name']); ?></h6>
+                                    <h6><?= date("g:i a", strtotime($showtime['ShowTime'])); ?></h6>
+                                    <div class="version"><?= htmlspecialchars($showtime['Version'] ?? 'Standard'); ?></div>
+                                </a>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="no-showtimes"></div>
+                        <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             </div>
-
-            <!-- Legend -->
-            <div class="legend">
-                <span class="available">Available seats 20-100%</span>
-            </div>
         </div>
-    </div>
-    <hr>
     <?php endforeach; ?>
 </div>
 
