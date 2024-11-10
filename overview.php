@@ -22,6 +22,7 @@ if (empty($selectedTickets) || empty($selectedSeats)) {
 $totalPrice = 0;
 $ticketDetails = [];
 
+
 try {
     // Prepare database query to fetch ticket prices for each selected type
     $dbCon = dbCon($user, $pass);
@@ -43,6 +44,8 @@ try {
             ];
         }
     }
+     // Store the total price in the session for later use (e.g., in the coupon discount)
+     $_SESSION['totalPrice'] = $totalPrice;
 } catch (PDOException $e) {
     die("Error retrieving ticket prices: " . $e->getMessage());
 }
@@ -124,7 +127,7 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
         <p class="error-message" style="color: red; display: none;"></p>
 
         <!-- Links for "Forgot Password" and "Create New User" -->
-        <div class="login-links">
+        <div class="login-links" style="display:flex; justify-content:space-between; padding-top:20px;">
             <a href="User/forgot_password.php">Forgot Password?</a>
             <a class="modal-trigger" data-target="newUserModal" style="cursor:pointer;">Create New User</a>
         </div>
@@ -237,6 +240,18 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
     </div>
 </div>
 
+<!-- Payment Confirmation Modal -->
+<div id="paymentConfirmationModal" class="modal">
+    <div class="modal-content">
+        <h5>Payment Status</h5>
+        <p>Payment method will be installed soon.</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close btn blue">Close</a>
+    </div>
+</div>
+
+
 <!-- Materialize JS and jQuery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -281,23 +296,30 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
         });
     });
 
-    // New User Form Submission
-    $('#newUserForm').on('submit', function(e) {
-        e.preventDefault();
-        $.ajax({
-            url: 'User/ajax_new_user.php',
-            type: 'POST',
-            data: $(this).serialize(),
-            success: function(response) {
-                if (response.success) {
-                    $('#newUserModal').modal('close'); // Close the modal after success
-                    M.toast({html: 'User account created successfully! Please login.'});
-                } else {
-                    $('.error-message').text(response.message).show();
-                }
+   // New User Form Submission
+$('#newUserForm').on('submit', function(e) {
+    e.preventDefault();
+    $.ajax({
+        url: 'User/ajax_new_user.php',
+        type: 'POST',
+        data: $(this).serialize(),
+        dataType: 'json',  // Ensure response is expected as JSON
+        success: function(response) {
+            if (response.success) {
+                const modalInstance = M.Modal.getInstance(document.getElementById('newUserModal'));
+                modalInstance.close(); // Close the modal after success
+                M.toast({html: 'User account created successfully! Please login.'});
+            } else {
+                $('.error-message').text(response.message).show();
             }
-        });
+        },
+        error: function(xhr, status, error) {
+            console.error("An error occurred:", status, error);
+            $('.error-message').text("An error occurred while creating the account. Please try again.").show();
+        }
     });
+});
+
 
     // Logout AJAX request
     $('#logoutButton').on('click', function() {
@@ -377,6 +399,22 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
         .catch(error => {
             console.error('Error:', error);
         });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Materialize modals
+    var modals = document.querySelectorAll('.modal');
+    M.Modal.init(modals);
+
+    // Payment Button Click Event
+    document.getElementById('payButton').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent any form submission
+
+        // Show the payment confirmation modal
+        const paymentConfirmationModal = document.getElementById('paymentConfirmationModal');
+        const modalInstance = M.Modal.getInstance(paymentConfirmationModal);
+        modalInstance.open();
     });
 });
 
