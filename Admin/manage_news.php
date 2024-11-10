@@ -36,6 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                 uploadImage($newsId, 'news', $connection); // Include 'news' as type
             }
+            else {
+                $_SESSION['message'] = "Error: An image is required to add news.";
+                header("Location: manage_news.php"); 
+                exit();
+            }
             
             $_SESSION['message'] = "News added successfully!";
             header("Location: manage_news.php"); 
@@ -362,6 +367,10 @@ if (isset($_SESSION['message'])) {
         <label for="image">Choose Image</label>
         <div class="file-name" id="fileNameContainer"></div> <!-- Display file name here -->
     </div>
+    <?php if (isset($_SESSION['message'])): ?>
+        <p style="color: red;"><?php echo $_SESSION['message']; ?></p>
+        <?php unset($_SESSION['message']); ?>
+    <?php endif; ?>
 
     <button type="submit" name="add_news" class="add-button">Add News</button>
 </form>

@@ -50,9 +50,8 @@
         </div>
         <div class="nav-links">
             <a href="#">NEWS</a>
-            <a href="#">FILMS</a>
-            <a href="#">TICKETS</a>
-            <a href="#">ABOUT US</a>
+            <a href="./movies.php">MOVIES</a>
+            <a href="./about_us.php">ABOUT US</a>
         </div>
         <div class="cart-icon">🛒</div>
     </nav>
