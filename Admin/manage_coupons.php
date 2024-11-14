@@ -1,7 +1,7 @@
 <?php 
-require_once("../includes/session.php"); 
-require_once("../includes/connection.php"); 
-require_once("../includes/functions.php"); 
+require_once("./includes/admin_session.php"); 
+require_once("./includes/connection.php"); 
+require_once("./includes/functions.php"); 
 
 // CSRF Protection: Generate token
 if (empty($_SESSION['csrf_token'])) {
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $connection->prepare($sql);
         if ($stmt->execute([$couponCode, $discountAmount, $expireDate])) {
             $_SESSION['message'] = "Coupon added successfully!";
-            header("Location: manage_coupons.php");
+            header("Location: /dwp/admin/manage-coupons");
             exit();
         } else {
             echo "Error adding coupon.";
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $connection->prepare($sql);
         if ($stmt->execute([$couponCode, $discountAmount, $expireDate, $couponId])) {
             $_SESSION['message'] = "Coupon updated successfully!";
-            header("Location: manage_coupons.php");
+            header("Location: /dwp/admin/manage-coupons");
             exit();
         } else {
             echo "Error updating coupon.";
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $connection->prepare($sql);
         if ($stmt->execute([$couponId])) {
             $_SESSION['message'] = "Coupon deleted successfully!";
-            header("Location: manage_coupons.php");
+            header("Location: /dwp/admin/manage-coupons");
             exit();
         } else {
             echo "Error deleting coupon.";

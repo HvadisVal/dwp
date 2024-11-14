@@ -1,7 +1,7 @@
 <?php 
-require_once("../includes/session.php"); 
-require_once("../includes/connection.php"); 
-require_once("../includes/functions.php"); 
+require_once("./includes/admin_session.php"); 
+require_once("./includes/connection.php"); 
+require_once("./includes/functions.php"); 
 
 // CSRF Protection: Generate token
 if (empty($_SESSION['csrf_token'])) {
@@ -81,7 +81,7 @@ if ($existingCount > 0) {
             $stmt = $connection->prepare($sql);
             if ($stmt->execute([$showDate, $showTime, $cinemaHallId, $movieId])) {
                 $_SESSION['message'] = "Screening added successfully!";
-                header("Location: manage_screening.php");
+                header("Location: /dwp/admin/manage-screenings");
                 exit();
             } else {
                 echo "Error adding screening.";
@@ -157,7 +157,7 @@ if (isset($_POST['edit_screening'])) {
 
             if ($stmt->execute([$showDate, $showTime, $cinemaHallId, $movieId, $screeningId])) {
                 $_SESSION['message'] = "Screening updated successfully!";
-                header("Location: manage_screening.php");
+                header("Location: /dwp/admin/manage-screenings");
                 exit();
             } else {
                 echo "Error updating screening.";
@@ -182,7 +182,7 @@ if (isset($_POST['edit_screening'])) {
             echo "Error deleting screening.";
         }
 
-        header("Location: manage_screening.php");
+        header("Location: /dwp/admin/manage-screenings");
         exit();
     }
 }

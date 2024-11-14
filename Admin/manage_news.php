@@ -1,8 +1,8 @@
 <?php 
-require_once("../includes/session.php"); 
-require_once("../includes/connection.php"); 
-require_once("../includes/functions.php"); 
-require_once("./image_functions.php"); // Include the new file
+require_once("./includes/admin_session.php"); 
+require_once("./includes/connection.php"); 
+require_once("./includes/functions.php"); 
+require_once("image_functions.php"); // Include the new file
 
 // CSRF Protection: Generate token
 if (empty($_SESSION['csrf_token'])) {
@@ -38,12 +38,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             else {
                 $_SESSION['message'] = "Error: An image is required to add news.";
-                header("Location: manage_news.php"); 
+                header("Location: /dwp/admin/manage-news"); 
                 exit();
             }
             
             $_SESSION['message'] = "News added successfully!";
-            header("Location: manage_news.php"); 
+            header("Location: /dwp/admin/manage-news"); 
             exit();
         } else {
             echo "Error adding news.";
@@ -70,7 +70,7 @@ if (isset($_POST['edit_news'])) {
         }
 
         $_SESSION['message'] = "News article updated successfully!";
-        header("Location: manage_news.php"); 
+        header("Location: /dwp/admin/manage-news"); 
         exit();
     } else {
         echo "Error updating news article.";
@@ -94,7 +94,7 @@ if (isset($_POST['edit_news'])) {
             echo "Error deleting news.";
         }
     
-        header("Location: manage_news.php");
+        header("Location: /dwp/admin/manage-news");
         exit();
     }
     

@@ -1,7 +1,7 @@
 <?php 
-require_once("../includes/session.php"); 
-require_once("../includes/connection.php"); 
-require_once("../includes/functions.php");
+require_once("./includes/admin_session.php"); 
+require_once("./includes/connection.php"); 
+require_once("./includes/functions.php");
 
 // CSRF Protection: Generate token
 if (empty($_SESSION['csrf_token'])) {
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt->execute([$name, $description, $openingHours, $email, $location, $companyId])) {
             $_SESSION['message'] = "Company information updated successfully!";
-            header("Location: manage_company.php"); 
+            header("Location: /dwp/admin/manage-company"); 
             exit();
         } else {
             echo "Error updating company information.";

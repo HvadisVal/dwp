@@ -5,15 +5,15 @@
 function uploadImage($id, $type, $connection) {
     // Define the directory based on type
     if ($type === 'news') {
-        $uploadFileDir = '../uploads/news_images/';
+        $uploadFileDir = './uploads/news_images/';
         $fileLimit = 1;
         $foreignKeyColumn = 'News_ID'; // Use News_ID for news articles
     } elseif ($type === 'movie') {
-        $uploadFileDir = '../uploads/poster/';
+        $uploadFileDir = './uploads/poster/';
         $fileLimit = 1;
         $foreignKeyColumn = 'Movie_ID'; // Use Movie_ID for movies
     } elseif ($type === 'gallery') {
-        $uploadFileDir = '../uploads/gallery/';
+        $uploadFileDir = './uploads/gallery/';
         $fileLimit = 5;
     } else {
         echo "Invalid image type.";
@@ -88,9 +88,9 @@ function deleteImage($id, $type, $connection) {
 
         // Determine the correct directory based on the type and whether it's featured
         if ($type === 'news') {
-            $uploadFileDir = '../uploads/news_images/';
+            $uploadFileDir = './uploads/news_images/';
         } elseif ($type === 'movie') {
-            $uploadFileDir = ($isFeatured == 1) ? '../uploads/poster/' : '../uploads/gallery/';
+            $uploadFileDir = ($isFeatured == 1) ? './uploads/poster/' : './uploads/gallery/';
         } else {
             return "Invalid image type.";
         }
@@ -111,7 +111,7 @@ function deleteImage($id, $type, $connection) {
 }
 function deleteGalleryImage($fileName, $movieId, $connection) {
     // Delete the file from the server
-    $filePath = '../uploads/gallery/' . $fileName;
+    $filePath = './uploads/gallery/' . $fileName;
     if (file_exists($filePath)) {
         unlink($filePath);
     }
@@ -130,7 +130,7 @@ function deletePosterImage($movieId, $connection) {
 
     if ($mediaRecord) {
         $fileName = $mediaRecord['FileName'];
-        $uploadFileDir = '../uploads/poster/';
+        $uploadFileDir = './uploads/poster/';
         $filePath = $uploadFileDir . $fileName;
 
         // Delete the file if it exists

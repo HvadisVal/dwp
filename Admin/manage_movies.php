@@ -1,8 +1,8 @@
 <?php 
-require_once("../includes/session.php"); 
-require_once("../includes/connection.php"); 
-require_once("../includes/functions.php"); 
-require_once("./image_functions.php"); // Include the new file
+require_once("./includes/admin_session.php"); 
+require_once("./includes/connection.php"); 
+require_once("./includes/functions.php"); 
+require_once("image_functions.php"); // Include the new file
 
 // CSRF Protection: Generate token
 if (empty($_SESSION['csrf_token'])) {
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $_SESSION['message'] = "Movie added successfully!";
-            header("Location: manage_movies.php"); 
+            header("Location: /dwp/admin/manage-movies"); 
             exit();
         } else {
             echo "Error adding movie.";
@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
     
             $_SESSION['message'] = "Movie updated successfully!";
-            header("Location: manage_movies.php"); 
+            header("Location: /dwp/admin/manage-movies"); 
             exit();
         } else {
             echo "Error updating movie.";
@@ -154,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Redirect after deletion
-        header("Location: manage_movies.php");
+        header("Location: /dwp/admin/manage-movies");
         exit();
     }
 }
