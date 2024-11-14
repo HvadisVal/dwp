@@ -3,9 +3,9 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require_once('../includes/admin_session.php');  // Admin session management
-require_once('../includes/connection.php');
-require_once('../includes/functions.php');
+require_once('./includes/admin_session.php'); 
+require_once('./includes/connection.php');
+require_once('./includes/functions.php');
 
 // Ensure no output before header() functions
 ob_start();  // Start output buffering
@@ -67,7 +67,7 @@ ob_start();  // Start output buffering
                 // Set session variables for admin login
                 $_SESSION['admin_id'] = $found_admin['Admin_ID'];
                 $_SESSION['admin_email'] = $found_admin['Email'];
-                redirect_to("admin_dashboard.php");
+                redirect_to("/dwp/admin/dashboard");
             } else {
                 $message = "Incorrect email or password.";
             }

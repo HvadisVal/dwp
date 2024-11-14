@@ -1,7 +1,7 @@
 <?php
-require_once( '../includes/session.php');
-require_once( '../includes/connection.php');
-require_once('../includes/functions.php');
+require_once('./includes/admin_session.php'); 
+require_once( './includes/connection.php');
+require_once('./includes/functions.php');
 
 
 ?>
@@ -120,7 +120,7 @@ require_once('../includes/functions.php');
                         <p>View, edit, or add movies to the database.</p>
                     </div>
                     <div class="card-action">
-                        <a href="manage_movies.php" class="btn waves-effect waves-light">Manage Movies</a>
+                        <a href="/dwp/admin/manage-movies" class="btn waves-effect waves-light">Manage Movies</a>
                     </div>
                 </div>
             </div>
@@ -142,7 +142,7 @@ require_once('../includes/functions.php');
                         <p>View, edit, or remove news in the system.</p>
                     </div>
                     <div class="card-action">
-                        <a href="manage_news.php" class="btn waves-effect waves-light">Manage News</a>
+                        <a href="/dwp/admin/manage-news" class="btn waves-effect waves-light">Manage News</a>
                     </div>
                 </div>
             </div>
@@ -153,18 +153,18 @@ require_once('../includes/functions.php');
                         <p>View, edit, or remove screenings in the system.</p>
                     </div>
                     <div class="card-action">
-                        <a href="manage_screening.php" class="btn waves-effect waves-light">Manage Screenings</a>
+                        <a href="/dwp/admin/manage-screenings" class="btn waves-effect waves-light">Manage Screenings</a>
                     </div>
                 </div>
             </div>
             <div class="col s12 m6">
                 <div class="card">
                     <div class="card-content">
-                        <span class="card-title">Manage Companies</span>
+                        <span class="card-title">Manage Company</span>
                         <p>View, edit, or remove companies in the system.</p>
                     </div>
                     <div class="card-action">
-                        <a href="manage_company.php" class="btn waves-effect waves-light">Manage companies</a>
+                        <a href="/dwp/admin/manage-company" class="btn waves-effect waves-light">Manage companies</a>
                     </div>
                 </div>
             </div>
@@ -175,7 +175,7 @@ require_once('../includes/functions.php');
                         <p>View, edit, or remove coupons in the system.</p>
                     </div>
                     <div class="card-action">
-                        <a href="manage_coupons.php" class="btn waves-effect waves-light">Manage Coupons</a>
+                        <a href="/dwp/admin/manage-coupons" class="btn waves-effect waves-light">Manage Coupons</a>
                     </div>
                 </div>
             </div>
@@ -197,7 +197,7 @@ require_once('../includes/functions.php');
 
     <!-- Logout Button -->
     <div class="container">
-        <form action="admin_logout.php" method="POST" style="text-align: center;">
+        <form action="/dwp/admin/logout" method="POST" style="text-align: center;">
             <button class="btn-red" type="submit">LogOut</button>
         </form>
     </div>
