@@ -14,27 +14,28 @@ $routes = [
     'admin/manage-news' => 'admin/manage_news.php',
     'admin/manage-screenings' => 'admin/manage_screenings.php',
 
-    // Payment pages
-    'payment/apply-coupon' => 'Payment/ajax_apply_coupon.php',
-    'payment/process-payment' => 'Payment/ajax_process_payment.php',
-    'payment/checkout' => 'Payment/checkout.php',
-    'payment/confirmation' => 'Payment/confirmation.php',
+    // payment pages
+    'payment/apply-coupon' => 'frontend/payment/apply_coupon.php',
+    'payment/process-payment' => 'frontend/payment/process_payment.php',
+    'payment/checkout' => 'frontend/payment/checkout.php',
+    'payment/confirmation' => 'frontend/payment/confirmation.php',
 
-    // User actions
-    'user/guest' => 'User/ajax_guest.php',
-    'user/login' => 'User/ajax_login.php',
-    'user/logout' => 'User/ajax_logout.php',
-    'user/new' => 'User/ajax_new_user.php',
-    'user/switch' => 'User/ajax_switch_user.php',
+    // user actions
+    'user/guest' => 'frontend/user/guest.php',
+    'user/login' => 'frontend/user/login.php',
+    'user/logout' => 'frontend/user/logout.php',
+    'user/new_user' => 'frontend/user/new_user.php',
+    'user/switch' => 'frontend/user/switch_user.php',
+    'user/forgot-password' => 'frontend/user/forget_password.php',
 
     // Main pages
-    'about' => 'about_us.php',
-    'landing' => 'landing.php', // default path if no path specified
-    'movies' => 'movies.php',
-    'overview' => 'overview.php',
-    'save-selection' => 'save_selection.php',
-    'seat' => 'Seat.php',
-    'validate-coupon' => 'validate_coupon.php',
+    'about' => 'frontend/about_us.php',
+    'landing' => 'frontend/landing.php', // default path if no path specified
+    'movies' => 'frontend/movies.php',
+    'overview' => 'frontend/overview.php',
+    'save-selection' => 'frontend/save_selection.php',
+    'seat' => 'frontend/seat.php',
+    'validate-coupon' => 'frontend/validate_coupon.php',
 ];
 
 // Check if the requested path exists in the routes array

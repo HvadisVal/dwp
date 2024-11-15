@@ -4,7 +4,7 @@ require_once("includes/connection.php");
 
 // Check if user or guest is logged in
 if (!isset($_SESSION['user_id']) && !isset($_SESSION['guest_user_id'])) {
-    header("Location: overview.php"); // Redirect to overview if not logged in
+    header("Location: /dwp/overview"); // Redirect to overview if not logged in
     exit();
 }
 
@@ -68,7 +68,7 @@ $(document).ready(function() {
         const couponCode = $('#couponCode').val();
         if (couponCode) {
             $.ajax({
-                url: 'User/ajax_apply_coupon.php',
+                url: '/dwp/payment/apply-coupon',
                 type: 'POST',
                 data: { couponCode: couponCode },
                 success: function(response) {
@@ -88,13 +88,13 @@ $(document).ready(function() {
     $('#payButton').click(function() {
         const paymentMethod = $('input[name="paymentMethod"]:checked').val();
         $.ajax({
-            url: 'User/ajax_process_payment.php',
+            url: '/dwp/payment/process-payment',
             type: 'POST',
             data: { paymentMethod: paymentMethod, totalPrice: <?= $totalPrice; ?> },
             success: function(response) {
                 response = JSON.parse(response);
                 if (response.success) {
-                    window.location.href = 'confirmation.php';
+                    window.location.href = '/dwp/payment/confirmation';
                 } else {
                     $('#paymentMessage').text(response.message).show();
                 }

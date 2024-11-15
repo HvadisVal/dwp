@@ -12,7 +12,7 @@
 <div class="container">
     <h4>Payment Successful</h4>
     <p>Thank you for your purchase! Your tickets have been reserved.</p>
-    <a href="overview.php" class="btn blue">Back to Overview</a>
+    <a href="/dwp/overview" class="btn blue">Back to Overview</a>
 </div>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <?php
-$user = "c5di1yb93_dwp";
+/* $user = "c5di1yb93_dwp";
 $pass = "123456";
 
 function dbCon ($user, $pass) {
@@ -9,9 +9,9 @@ function dbCon ($user, $pass) {
     } catch (PDOException $err) {
         echo 'Connection failed: ' . $err->getMessage() . '<br>';
         die();
-    }}
+    }} */
     
-/*     $user = "root";
+    $user = "root";
     $pass = "";
     
     function dbCon ($user, $pass) {
@@ -21,4 +21,4 @@ function dbCon ($user, $pass) {
         } catch (PDOException $err) {
             echo 'Connection failed: ' . $err->getMessage() . '<br>';
             die();
-        }} */
+        }}
