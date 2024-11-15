@@ -1274,7 +1274,7 @@ CREATE TABLE Company (
     Company_ID INT PRIMARY KEY AUTO_INCREMENT,
     Name VARCHAR(255),
     Description TEXT,
-    OpeningHours VARCHAR(10),
+    OpeningHours VARCHAR(100),
     Email VARCHAR(255),
     Location VARCHAR(255)
 ); 
