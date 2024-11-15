@@ -129,7 +129,7 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
 
         <!-- Links for "Forgot Password" and "Create New User" -->
         <div class="login-links" style="display:flex; justify-content:space-between; padding-top:20px;">
-            <a href="User/forgot_password.php">Forgot Password?</a>
+            <a href="/dwp/user/forgot-password">Forgot Password?</a>
             <a class="modal-trigger" data-target="newUserModal" style="cursor:pointer;">Create New User</a>
         </div>
     </div>
@@ -266,7 +266,7 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
     $('#loginForm').on('submit', function(e) {
         e.preventDefault();
         $.ajax({
-            url: 'User/ajax_login.php',
+            url: '/dwp/user/login',
             type: 'POST',
             data: $(this).serialize(),
             success: function(response) {
@@ -283,7 +283,7 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
     $('#guestForm').on('submit', function(e) {
         e.preventDefault();
         $.ajax({
-            url: 'User/ajax_guest.php',
+            url: '/dwp/user/guest',
             type: 'POST',
             data: $(this).serialize(),
             success: function(response) {
@@ -301,7 +301,7 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
 $('#newUserForm').on('submit', function(e) {
     e.preventDefault();
     $.ajax({
-        url: 'User/ajax_new_user.php',
+        url: '/dwp/user/new_user',
         type: 'POST',
         data: $(this).serialize(),
         dataType: 'json',  // Ensure response is expected as JSON
@@ -326,7 +326,7 @@ $('#newUserForm').on('submit', function(e) {
     $('#logoutButton').on('click', function() {
         $.ajax({
             type: 'POST',
-            url: 'User/ajax_logout.php',
+            url: '/dwp/user/logout',
             success: function(response) {
                 const data = JSON.parse(response);
                 if (data.success) {
@@ -345,7 +345,7 @@ $('#newUserForm').on('submit', function(e) {
     $('#switchUserButton').on('click', function() {
         $.ajax({
             type: 'POST',
-            url: 'User/ajax_switch_user.php',
+            url: '/dwp/user/switch',
             success: function(response) {
                 const data = JSON.parse(response);
                 if (data.success) {
@@ -377,7 +377,7 @@ $('#newUserForm').on('submit', function(e) {
             return;
         }
 
-        fetch('validate_coupon.php', {
+        fetch('/dwp/validate-coupon', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ couponCode })

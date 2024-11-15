@@ -234,7 +234,7 @@
     <div class="hero">
         <div class="hero-content">
             <h1>MARVEL<br>SPIDER-MAN<br>REMASTERED</h1>
-            <a href="./movies.php" class="book-ticket">Book a ticket</a>
+            <a href="/dwp/movies" class="book-ticket">Book a ticket</a>
         </div>
     </div>
 

@@ -432,7 +432,7 @@ document.getElementById('continue-button').addEventListener('click', () => {
         return;
     } else {
         // AJAX call to save the selected tickets and seats
-        fetch('save_selection.php', {
+        fetch('/dwp/save-selection', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ selectedTickets, selectedSeats })
@@ -440,8 +440,8 @@ document.getElementById('continue-button').addEventListener('click', () => {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Redirect to overview.php if saving was successful
-                window.location.href = 'overview.php';
+                // Redirect to overview if saving was successful
+                window.location.href = '/dwp/overview';
             } else {
                 // Show error if something went wrong
                 alert(data.message || "Failed to save selection. Please try again.");
