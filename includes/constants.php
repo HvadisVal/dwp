@@ -8,5 +8,5 @@ define("DB_NAME", "c5di1yb93_dwp"); */
 define("DB_SERVER", "localhost");
 define("DB_USER", "root");
 define("DB_PASS", "");
-define("DB_NAME", "dwp");
+define("DB_NAME", "c5di1yb93_dwp");
 ?>
