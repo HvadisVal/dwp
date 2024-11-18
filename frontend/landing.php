@@ -124,63 +124,116 @@
             padding: 1rem;
             min-height: 200px;
         }
+        
+    /* Basic styles for the news slider */
+.news-slider {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 10px; /* Optional: rounded corners for a polished look */
+}
 
-        .film-description {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 2rem;
-            background: #474747;
-            margin: 4rem 0 4rem auto;
-            width: 80%;
-            border-radius: 32px 0 0 32px;
-            overflow: hidden;
-        }
+.news-slider h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: 'Arial', sans-serif;
+    color: white;
+}
 
-        .film-description img {
-            width: 400px;
-            height: 500px;
-            object-fit: cover;
-            border-radius: 32px 0 0 32px;
-        }
+/* Slider container */
+.slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
 
-        .film-description-content {
-            padding: 4rem;
-            color: white;
-        }
+/* Each slider item (news article) */
+.slider-item {
+    min-width: 100%;
+    padding: 60px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    text-align: center;
+    background: linear-gradient(to right, #243642, #1a252d);
+}
 
-        .film-description-content h2 {
-            font-size: 2.5rem;
-            
-            margin-bottom: 1.5rem;
-            font-weight: 500;
-        }
+.slider-item img {
+    width: 100%;  
+    height: 400px;
+    object-fit: cover;
+    border-radius: 8px; 
+    margin-bottom: 15px;
+}
 
-        .film-description-content p {
-            line-height: 1.6;
-           
-            opacity: 0.9;
-            margin-bottom: 1rem;
-        }
+.slider-item h3 {
+    font-size: 1.5rem;
+    color: white;
+    margin: 10px 0;
+    font-weight: bold;
+}
 
-        @media (max-width: 1200px) {
-            .film-description {
-                width: 80%;
-            }
-        }
+.slider-item p {
+    font-size: 1rem;
+    color: white;
+    line-height: 1.5;
+    margin-top: 20px;
+}
 
-        @media (max-width: 768px) {
-            .film-description {
-            width: 100%;
-            grid-template-columns: 1fr;
-            border-radius: 32px;
-            margin: 4rem 0;
-        }
+/* Buttons for sliding */
+button.prev, button.next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 2rem;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 10;
+}
 
-            .film-description img {
-                width: 100%;
-                height: 300px;
-            }
-        }
+button.prev {
+    left: 10px;
+}
+
+button.next {
+    right: 10px;
+}
+
+button.prev:hover, button.next:hover {
+    background-color: black;
+    
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .slider-item {
+        padding: 10px;
+    }
+
+    .slider-item h3 {
+        font-size: 1.2rem;
+    }
+
+    .slider-item p {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .slider-item h3 {
+        font-size: 1rem;
+    }
+
+    .slider-item p {
+        font-size: 0.8rem;
+    }
+}
+
+
         .coming-soon {
             padding: 2rem;
         }
@@ -255,14 +308,91 @@
         </div>
     </div>
 
-    <div class="film-description">
-        <img src="https://upload.wikimedia.org/wikipedia/en/2/21/Web_of_Spider-Man_Vol_1_129-1.png" alt="Spider-Man">
-        <div class="film-description-content">
-            <h2>Film Description/News</h2>
-            <p>is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-            <p>is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-        </div>
+    <div class="news-slider">
+    <h2>Film News</h2>
+    <div class="slider">
+        <?php
+        // Database connection
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "c5di1yb93_dwp"; // Replace with your actual database name
+
+        // Create connection
+        $conn = new mysqli($servername, $username, $password, $dbname);
+
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+
+        // SQL query to fetch news along with the image from the Media table
+        $sql = "SELECT n.Title, n.Content, n.DatePosted, m.FileName, m.Format
+                FROM News n
+                LEFT JOIN Media m ON n.News_ID = m.News_ID 
+                ORDER BY n.DatePosted DESC";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            // Loop through each news item and display it
+            while ($row = $result->fetch_assoc()) {
+                echo '<div class="slider-item">';
+
+                
+                // Assuming $imagePath is the correct path for your images
+                if ($row['FileName']) {
+                    // Construct the path
+                    $imagePath = 'uploads/news_images/' . htmlspecialchars($row['FileName']);
+                    echo '<img src="' . $imagePath . '" alt="' . htmlspecialchars($row['Title']) . '" />';
+                }
+
+
+                echo '<h3>' . htmlspecialchars($row['Title']) . '</h3>';
+                echo '<p>' . nl2br(htmlspecialchars($row['Content'])) . '</p>';
+                echo '</div>';
+            }
+        } else {
+            echo "<p>No news found.</p>";
+        }
+
+        // Close the connection
+        $conn->close();
+        ?>
     </div>
+    <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
+    <button class="next" onclick="moveSlide(1)">&#10095;</button>
+</div>
+
+
+
+
+
+    <script>
+        let slideIndex = 0;
+
+function showSlides() {
+    let slides = document.querySelectorAll(".slider-item");
+    if (slideIndex >= slides.length) {
+        slideIndex = 0;
+    }
+    if (slideIndex < 0) {
+        slideIndex = slides.length - 1;
+    }
+    let slide = document.querySelector(".slider");
+    slide.style.transform = "translateX(" + (-slideIndex * 100) + "%)";
+}
+
+function moveSlide(step) {
+    slideIndex += step;
+    showSlides();
+}
+
+// Initialize the slider
+document.addEventListener("DOMContentLoaded", function() {
+    showSlides();
+});
+
+    </script>
 
 
     <div class="coming-soon">
