@@ -46,10 +46,10 @@
     <nav>
     
         <div class="logo">
-            <img src="images/11.png" alt="Logotype" height="40px" width="145px">
+            <a href="/dwp/"><img src="images/11.png" alt="Logotype" height="40px" width="145px"></a>
         </div>
         <div class="nav-links">
-            <a href="#">NEWS</a>
+            <a href="/dwp/news">NEWS</a>
             <a href="/dwp/movies">MOVIES</a>
             <a href="/dwp/about">ABOUT US</a>
         </div>
