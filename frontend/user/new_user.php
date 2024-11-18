@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once("../includes/connection.php");
-require_once("../includes/functions.php");
+require_once("./includes/connection.php");
+require_once("./includes/functions.php");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Handle AJAX form submission for user creation

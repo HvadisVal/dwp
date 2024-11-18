@@ -218,10 +218,10 @@ CREATE TABLE Coupon (
 );
 
 INSERT INTO Coupon (Coupon_ID, CouponCode, DiscountAmount, ExpireDate)
-VALUES (1, 'SUMMER2024', 20.00, '2024-08-15');
+VALUES (1, 'SUMMER2024', 20.00, '2025-08-15');
 
 INSERT INTO Coupon (Coupon_ID, CouponCode, DiscountAmount, ExpireDate)
-VALUES (2, 'WINTER2024', 25.00, '2024-12-31');
+VALUES (2, 'WINTER2024', 25.00, '2025-12-31');
 
 INSERT INTO Coupon (Coupon_ID, CouponCode, DiscountAmount, ExpireDate)
 VALUES (3, 'SPRING2025', 30.00, '2025-04-10');
@@ -243,9 +243,6 @@ INSERT INTO CinemaHall (CinemaHall_ID, Name, TotalSeats) VALUES (1, 'Hall 1', 12
 INSERT INTO CinemaHall (CinemaHall_ID, Name, TotalSeats) VALUES (2, 'Hall 2', 150);
 INSERT INTO CinemaHall (CinemaHall_ID, Name, TotalSeats) VALUES (3, 'Hall 3', 180);
 INSERT INTO CinemaHall (CinemaHall_ID, Name, TotalSeats) VALUES (4, 'Hall 4', 100);
-INSERT INTO CinemaHall (CinemaHall_ID, Name, TotalSeats) VALUES (5, 'Hall 5', 200);
-INSERT INTO CinemaHall (CinemaHall_ID, Name, TotalSeats) VALUES (6, 'Hall 6', 220);
-INSERT INTO CinemaHall (CinemaHall_ID, Name, TotalSeats) VALUES (7, 'Hall 7', 140);
 
 
 -- Screening Table ? 35
@@ -259,138 +256,116 @@ CREATE TABLE Screening (
     FOREIGN KEY (Movie_ID) REFERENCES Movie(Movie_ID) ON DELETE CASCADE
 );
 
+INSERT INTO Screening (Screening_ID, ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
+-- Week 1: 2024-11-18 to 2024-11-24
+(1, '2024-11-18', '10:00:00', 1, 1),
+(2, '2024-11-18', '13:00:00', 1, 2),
+(3, '2024-11-18', '16:00:00', 1, 3),
+(4, '2024-11-18', '19:00:00', 1, 4),
+(5, '2024-11-18', '10:15:00', 2, 5),
+(6, '2024-11-18', '13:45:00', 2, 6),
+(7, '2024-11-18', '16:30:00', 2, 7),
+(8, '2024-11-18', '19:00:00', 2, 1),
+(9, '2024-11-18', '11:00:00', 3, 2),
+(10, '2024-11-18', '14:00:00', 3, 3),
+(11, '2024-11-18', '17:30:00', 3, 4),
+(12, '2024-11-18', '20:30:00', 3, 5),
+(13, '2024-11-18', '10:30:00', 4, 6),
+(14, '2024-11-18', '13:30:00', 4, 7),
+(15, '2024-11-18', '16:30:00', 4, 1),
 
--- Cinema Hall 1 screenings for 3 days
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '10:00:00', 1, 1);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '13:00:00', 1, 2);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '15:45:00', 1, 3);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '18:00:00', 1, 4);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-11', '11:00:00', 1, 5);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-11', '16:30:00', 1, 6);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-12', '09:30:00', 1, 7);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-12', '14:00:00', 1, 8);
+(16, '2024-11-19', '10:00:00', 1, 2),
+(17, '2024-11-19', '13:00:00', 1, 3),
+(18, '2024-11-19', '16:00:00', 1, 4),
+(19, '2024-11-19', '19:00:00', 1, 5),
+(20, '2024-11-19', '10:15:00', 2, 6),
+(21, '2024-11-19', '13:45:00', 2, 7),
+(22, '2024-11-19', '16:30:00', 2, 1),
+(23, '2024-11-19', '19:00:00', 2, 2),
+(24, '2024-11-19', '11:00:00', 3, 3),
+(25, '2024-11-19', '14:00:00', 3, 4),
+(26, '2024-11-19', '17:30:00', 3, 5),
+(27, '2024-11-19', '20:30:00', 3, 6),
+(28, '2024-11-19', '10:30:00', 4, 7),
+(29, '2024-11-19', '13:30:00', 4, 1),
+(30, '2024-11-19', '16:30:00', 4, 2),
 
--- Cinema Hall 2 screenings for 3 days
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '10:15:00', 2, 9);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '14:00:00', 2, 10);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '16:45:00', 2, 11);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-11', '11:15:00', 2, 12);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-11', '15:45:00', 2, 13);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-12', '10:00:00', 2, 14);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-12', '13:30:00', 2, 15);
+(31, '2024-11-20', '10:00:00', 1, 3),
+(32, '2024-11-20', '13:00:00', 1, 4),
+(33, '2024-11-20', '16:00:00', 1, 5),
+(34, '2024-11-20', '19:00:00', 1, 6),
+(35, '2024-11-20', '10:15:00', 2, 7),
+(36, '2024-11-20', '13:45:00', 2, 1),
+(37, '2024-11-20', '16:30:00', 2, 2),
+(38, '2024-11-20', '19:00:00', 2, 3),
+(39, '2024-11-20', '11:00:00', 3, 4),
+(40, '2024-11-20', '14:00:00', 3, 5),
+(41, '2024-11-20', '17:30:00', 3, 6),
+(42, '2024-11-20', '20:30:00', 3, 7),
+(43, '2024-11-20', '10:30:00', 4, 1),
+(44, '2024-11-20', '13:30:00', 4, 2),
+(45, '2024-11-20', '16:30:00', 4, 3),
+(46, '2024-11-21', '10:00:00', 1, 4),
+(47, '2024-11-21', '13:00:00', 1, 5),
+(48, '2024-11-21', '16:00:00', 1, 6),
+(49, '2024-11-21', '19:00:00', 1, 7),
+(50, '2024-11-21', '10:15:00', 2, 1),
+(51, '2024-11-21', '13:45:00', 2, 2),
+(52, '2024-11-21', '16:30:00', 2, 3),
+(53, '2024-11-21', '19:00:00', 2, 4),
+(54, '2024-11-21', '11:00:00', 3, 5),
+(55, '2024-11-21', '14:00:00', 3, 6),
+(56, '2024-11-21', '17:30:00', 3, 7),
+(57, '2024-11-21', '20:30:00', 3, 1),
+(58, '2024-11-21', '10:30:00', 4, 2),
+(59, '2024-11-21', '13:30:00', 4, 3),
+(60, '2024-11-21', '16:30:00', 4, 4),
 
--- Cinema Hall 3 screenings for 3 days
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '10:30:00', 3, 16);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '14:00:00', 3, 17);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-11', '10:15:00', 3, 18);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-11', '12:45:00', 3, 19);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-11', '16:15:00', 3, 20);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-12', '09:30:00', 3, 21);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-12', '15:00:00', 3, 22);
-
--- Cinema Hall 4 screenings for 3 days
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '10:00:00', 4, 1);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '13:15:00', 4, 2);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '15:45:00', 4, 3);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '18:00:00', 4, 4);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-11', '11:00:00', 4, 5);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-11', '15:00:00', 4, 6);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-12', '09:00:00', 4, 7);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-12', '12:30:00', 4, 8);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-12', '16:00:00', 4, 9);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-12', '21:30:00', 4, 10);
-
--- Cinema Hall 5 screenings for 3 days
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '10:15:00', 5, 11);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '16:45:00', 5, 12);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-11', '09:15:00', 5, 13);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-11', '13:30:00', 5, 14);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-11', '16:00:00', 5, 15);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-11', '18:30:00', 5, 16);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-12', '09:00:00', 5, 17);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-12', '12:00:00', 5, 18);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-12', '14:15:00', 5, 19);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-12', '17:45:00', 5, 20);
-
--- Cinema Hall 6 screenings for 3 days
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '10:00:00', 6, 21);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '13:15:00', 6, 22);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '16:00:00', 6, 23);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-11', '11:15:00', 6, 24);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-11', '14:30:00', 6, 25);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-12', '18:00:00', 6, 26);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-12', '11:00:00', 6, 27);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-12', '18:00:00', 6, 28);
-
--- Cinema Hall 7 screenings for 3 days
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '10:30:00', 7, 29);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '14:00:00', 7, 30);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '16:15:00', 7, 31);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-10', '18:45:00', 7, 32);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-11', '11:00:00', 7, 33);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-11', '13:30:00', 7, 34);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-11', '16:45:00', 7, 35);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-12', '10:15:00', 7, 1);
-INSERT INTO Screening (ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
-('2024-11-12', '17:00:00', 7, 2);
+(61, '2024-11-22', '10:00:00', 1, 5),
+(62, '2024-11-22', '13:00:00', 1, 6),
+(63, '2024-11-22', '16:00:00', 1, 7),
+(64, '2024-11-22', '19:00:00', 1, 1),
+(65, '2024-11-22', '10:15:00', 2, 2),
+(66, '2024-11-22', '13:45:00', 2, 3),
+(67, '2024-11-22', '16:30:00', 2, 4),
+(68, '2024-11-22', '19:00:00', 2, 5),
+(69, '2024-11-22', '11:00:00', 3, 6),
+(70, '2024-11-22', '14:00:00', 3, 7),
+(71, '2024-11-22', '17:30:00', 3, 1),
+(72, '2024-11-22', '20:30:00', 3, 2),
+(73, '2024-11-22', '10:30:00', 4, 3),
+(74, '2024-11-22', '13:30:00', 4, 4),
+(75, '2024-11-22', '16:30:00', 4, 5),
+(76, '2024-11-23', '10:00:00', 1, 6),
+(77, '2024-11-23', '13:00:00', 1, 7),
+(78, '2024-11-23', '16:00:00', 1, 1),
+(79, '2024-11-23', '19:00:00', 1, 2),
+(80, '2024-11-23', '10:15:00', 2, 3),
+(81, '2024-11-23', '13:45:00', 2, 4),
+(82, '2024-11-23', '16:30:00', 2, 5),
+(83, '2024-11-23', '19:00:00', 2, 6),
+(84, '2024-11-23', '11:00:00', 3, 7),
+(85, '2024-11-23', '14:00:00', 3, 1),
+(86, '2024-11-23', '17:30:00', 3, 2),
+(87, '2024-11-23', '20:30:00', 3, 3),
+(88, '2024-11-23', '10:30:00', 4, 4),
+(89, '2024-11-23', '13:30:00', 4, 5),
+(90, '2024-11-23', '16:30:00', 4, 6),
+(91, '2024-11-24', '10:00:00', 1, 7),
+(92, '2024-11-24', '13:00:00', 1, 1),
+(93, '2024-11-24', '16:00:00', 1, 2),
+(94, '2024-11-24', '19:00:00', 1, 3),
+(95, '2024-11-24', '10:15:00', 2, 4),
+(96, '2024-11-24', '13:45:00', 2, 5),
+(97, '2024-11-24', '16:30:00', 2, 6),
+(98, '2024-11-24', '19:00:00', 2, 7),
+(99, '2024-11-24', '11:00:00', 3, 1),
+(100, '2024-11-24', '14:00:00', 3, 2),
+(101, '2024-11-24', '17:30:00', 3, 3),
+(102, '2024-11-24', '20:30:00', 3, 4),
+(103, '2024-11-24', '10:30:00', 4, 5),
+(104, '2024-11-24', '13:30:00', 4, 6),
+(105, '2024-11-24', '16:30:00', 4, 7);
 
 
 -- Seat Table ? 100 each
@@ -842,335 +817,6 @@ INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (398, 18, 5, 4
 INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (399, 19, 5, 4);
 INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (400, 20, 5, 4);
 
--- Row 1 for Hall 5
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (401, 1, 1, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (402, 2, 1, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (403, 3, 1, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (404, 4, 1, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (405, 5, 1, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (406, 6, 1, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (407, 7, 1, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (408, 8, 1, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (409, 9, 1, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (410, 10, 1, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (411, 11, 1, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (412, 12, 1, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (413, 13, 1, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (414, 14, 1, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (415, 15, 1, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (416, 16, 1, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (417, 17, 1, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (418, 18, 1, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (419, 19, 1, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (420, 20, 1, 5);
-
--- Row 2 for Hall 5
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (421, 1, 2, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (422, 2, 2, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (423, 3, 2, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (424, 4, 2, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (425, 5, 2, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (426, 6, 2, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (427, 7, 2, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (428, 8, 2, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (429, 9, 2, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (430, 10, 2, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (431, 11, 2, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (432, 12, 2, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (433, 13, 2, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (434, 14, 2, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (435, 15, 2, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (436, 16, 2, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (437, 17, 2, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (438, 18, 2, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (439, 19, 2, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (440, 20, 2, 5);
-
--- Row 3 for Hall 5
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (441, 1, 3, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (442, 2, 3, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (443, 3, 3, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (444, 4, 3, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (445, 5, 3, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (446, 6, 3, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (447, 7, 3, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (448, 8, 3, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (449, 9, 3, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (450, 10, 3, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (451, 11, 3, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (452, 12, 3, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (453, 13, 3, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (454, 14, 3, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (455, 15, 3, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (456, 16, 3, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (457, 17, 3, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (458, 18, 3, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (459, 19, 3, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (460, 20, 3, 5);
-
--- Row 4 for Hall 5 
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (461, 1, 4, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (462, 2, 4, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (463, 3, 4, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (464, 4, 4, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (465, 5, 4, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (466, 6, 4, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (467, 7, 4, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (468, 8, 4, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (469, 9, 4, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (470, 10, 4, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (471, 11, 4, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (472, 12, 4, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (473, 13, 4, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (474, 14, 4, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (475, 15, 4, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (476, 16, 4, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (477, 17, 4, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (478, 18, 4, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (479, 19, 4, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (480, 20, 4, 5);
-
--- Row 5 for Hall 5
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (481, 1, 5, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (482, 2, 5, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (483, 3, 5, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (484, 4, 5, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (485, 5, 5, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (486, 6, 5, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (487, 7, 5, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (488, 8, 5, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (489, 9, 5, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (490, 10, 5, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (491, 11, 5, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (492, 12, 5, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (493, 13, 5, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (494, 14, 5, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (495, 15, 5, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (496, 16, 5, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (497, 17, 5, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (498, 18, 5, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (499, 19, 5, 5);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (500, 20, 5, 5);
-
--- Row 1 for Hall 6
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (501, 1, 1, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (502, 2, 1, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (503, 3, 1, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (504, 4, 1, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (505, 5, 1, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (506, 6, 1, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (507, 7, 1, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (508, 8, 1, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (509, 9, 1, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (510, 10, 1, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (511, 11, 1, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (512, 12, 1, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (513, 13, 1, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (514, 14, 1, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (515, 15, 1, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (516, 16, 1, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (517, 17, 1, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (518, 18, 1, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (519, 19, 1, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (520, 20, 1, 6);
-
--- Row 2 for Hall 6
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (521, 1, 2, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (522, 2, 2, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (523, 3, 2, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (524, 4, 2, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (525, 5, 2, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (526, 6, 2, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (527, 7, 2, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (528, 8, 2, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (529, 9, 2, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (530, 10, 2, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (531, 11, 2, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (532, 12, 2, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (533, 13, 2, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (534, 14, 2, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (535, 15, 2, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (536, 16, 2, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (537, 17, 2, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (538, 18, 2, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (539, 19, 2, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (540, 20, 2, 6);
-
--- Row 3 for Hall 6
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (541, 1, 3, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (542, 2, 3, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (543, 3, 3, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (544, 4, 3, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (545, 5, 3, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (546, 6, 3, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (547, 7, 3, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (548, 8, 3, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (549, 9, 3, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (550, 10, 3, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (551, 11, 3, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (552, 12, 3, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (553, 13, 3, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (554, 14, 3, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (555, 15, 3, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (556, 16, 3, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (557, 17, 3, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (558, 18, 3, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (559, 19, 3, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (560, 20, 3, 6);
-
--- Row 4 for Hall 6 
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (561, 1, 4, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (562, 2, 4, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (563, 3, 4, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (564, 4, 4, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (565, 5, 4, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (566, 6, 4, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (567, 7, 4, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (568, 8, 4, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (569, 9, 4, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (570, 10, 4, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (571, 11, 4, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (572, 12, 4, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (573, 13, 4, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (574, 14, 4, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (575, 15, 4, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (576, 16, 4, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (577, 17, 4, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (578, 18, 4, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (579, 19, 4, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (580, 20, 4, 6);
-
--- Row 5 for Hall 6
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (581, 1, 5, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (582, 2, 5, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (583, 3, 5, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (584, 4, 5, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (585, 5, 5, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (586, 6, 5, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (587, 7, 5, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (588, 8, 5, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (589, 9, 5, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (590, 10, 5, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (591, 11, 5, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (592, 12, 5, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (593, 13, 5, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (594, 14, 5, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (595, 15, 5, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (596, 16, 5, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (597, 17, 5, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (598, 18, 5, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (599, 19, 5, 6);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (600, 20, 5, 6);
-
--- Row 1 for Hall 7
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (601, 1, 1, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (602, 2, 1, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (603, 3, 1, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (604, 4, 1, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (605, 5, 1, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (606, 6, 1, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (607, 7, 1, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (608, 8, 1, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (609, 9, 1, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (610, 10, 1, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (611, 11, 1, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (612, 12, 1, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (613, 13, 1, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (614, 14, 1, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (615, 15, 1, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (616, 16, 1, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (617, 17, 1, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (618, 18, 1, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (619, 19, 1, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (620, 20, 1, 7);
-
--- Row 2 for Hall 7
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (621, 1, 2, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (622, 2, 2, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (623, 3, 2, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (624, 4, 2, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (625, 5, 2, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (626, 6, 2, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (627, 7, 2, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (628, 8, 2, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (629, 9, 2, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (630, 10, 2, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (631, 11, 2, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (632, 12, 2, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (633, 13, 2, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (634, 14, 2, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (635, 15, 2, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (636, 16, 2, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (637, 17, 2, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (638, 18, 2, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (639, 19, 2, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (640, 20, 2, 7);
-
--- Row 3 for Hall 7
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (641, 1, 3, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (642, 2, 3, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (643, 3, 3, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (644, 4, 3, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (645, 5, 3, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (646, 6, 3, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (647, 7, 3, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (648, 8, 3, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (649, 9, 3, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (650, 10, 3, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (651, 11, 3, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (652, 12, 3, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (653, 13, 3, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (654, 14, 3, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (655, 15, 3, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (656, 16, 3, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (657, 17, 3, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (658, 18, 3, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (659, 19, 3, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (660, 20, 3, 7);
-
--- Row 4 for Hall 7
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (661, 1, 4, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (662, 2, 4, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (663, 3, 4, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (664, 4, 4, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (665, 5, 4, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (666, 6, 4, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (667, 7, 4, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (668, 8, 4, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (669, 9, 4, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (670, 10, 4, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (671, 11, 4, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (672, 12, 4, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (673, 13, 4, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (674, 14, 4, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (675, 15, 4, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (676, 16, 4, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (677, 17, 4, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (678, 18, 4, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (679, 19, 4, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (680, 20, 4, 7);
-
--- Row 5 for Hall 7
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (681, 1, 5, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (682, 2, 5, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (683, 3, 5, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (684, 4, 5, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (685, 5, 5, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (686, 6, 5, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (687, 7, 5, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (688, 8, 5, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (689, 9, 5, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (690, 10, 5, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (691, 11, 5, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (692, 12, 5, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (693, 13, 5, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (694, 14, 5, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (695, 15, 5, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (696, 16, 5, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (697, 17, 5, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (698, 18, 5, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (699, 19, 5, 7);
-INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (700, 20, 5, 7);
 
 
 -- Ticket Price Table

@@ -1,5 +1,5 @@
 <?php
-require_once("../includes/connection.php");
+require_once("./includes/connection.php");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $firstname = $_POST['firstname'] ?? null;
