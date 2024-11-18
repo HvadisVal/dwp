@@ -2,7 +2,7 @@
 session_start(); // Start the session at the beginning
 
 // Connect to the database
-require_once("dbcon.php");
+require_once("./dbcon.php");
 $dbCon = dbCon($user, $pass);
 
 // Get movie, time, and cinema hall from query parameters
