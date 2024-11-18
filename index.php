@@ -30,6 +30,7 @@ $routes = [
 
     // Main pages
     'about' => 'frontend/about_us.php',
+    'news' => 'frontend/news.php',
     'landing' => 'frontend/landing.php', // default path if no path specified
     'movies' => 'frontend/movies.php',
     'overview' => 'frontend/overview.php',

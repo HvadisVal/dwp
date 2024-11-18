@@ -33,7 +33,6 @@ $email = $result['Email'] ?? 'N/A';
 
         .footer-links {
             display: flex;
-            text-decoration: underline;
             flex-direction: column;
             gap: 1rem;
         }
@@ -49,6 +48,7 @@ $email = $result['Email'] ?? 'N/A';
             font-size: 1.5rem;
             color: white;
             margin-bottom: 1rem;
+            margin-top: 0;
         }
 
         .contact-info p {
@@ -82,10 +82,9 @@ $email = $result['Email'] ?? 'N/A';
 <body>
 <footer>
     <div class="footer-links">
-        <a href="#">News</a>
-        <a href="#">Films</a>
-        <a href="#">Tickets</a>
-        <a href="#">About Us</a>
+        <a href="/dwp/news">News</a>
+        <a href="/dwp/movies">Movies</a>
+        <a href="/dwp/about">About Us</a>
     </div>
     <div class="contact-info">
         <h3>Contact Us</h3>

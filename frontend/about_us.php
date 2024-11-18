@@ -78,10 +78,11 @@ $description = $result['Description'] ?? 'N/A';
             color: white;
         }
         .about p {
-            max-width: 800px;
+            max-width: 1100px;
             margin: 0 auto 20px auto;
             font-size: 18px;
             color: white;
+            
         }
 
         /* Contact Information */
