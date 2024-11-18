@@ -1309,3 +1309,12 @@ CREATE TABLE Media (
     FOREIGN KEY (News_ID) REFERENCES News(News_ID) ON DELETE CASCADE,
     CHECK ((Movie_ID IS NOT NULL AND News_ID IS NULL) OR (Movie_ID IS NULL AND News_ID IS NOT NULL))
 );
+
+
+-- Inserting data into Media Table
+INSERT INTO Media (Media_ID, FileName, UploadAt, IsFeatured, Format, Movie_ID, News_ID) VALUES
+(1, '979a6575f6a496682a0b69ff2a5993e4.jpg', '2024-11-15 14:00:14', 0, 'jpg', NULL, 1),
+(2, '44c64ccf7fdfdebe5be61b73a74371cb.jpg', '2024-11-15 14:07:16', 0, 'jpg', NULL, 2),
+(3, 'b0eb6fef1fdc205c5942a48911a6eb63.jpg', '2024-11-15 14:07:49', 0, 'jpg', NULL, 3),
+(4, '3d77bbf031df90963c843b47243bae8b.jpg', '2024-11-15 14:08:31', 0, 'jpg', NULL, 4),
+(5, '6dd7df067727d698f3eaac28e56847c2.png', '2024-11-15 14:10:42', 0, 'png', NULL, 5);
