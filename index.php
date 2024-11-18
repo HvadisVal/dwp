@@ -1,4 +1,7 @@
 <?php
+require_once("includes/admin_session.php"); 
+require_once("includes/functions.php");
+
 // Get the path from the URL, e.g., "admin/manage_movies"
 $path = isset($_GET['path']) ? $_GET['path'] : 'landing';
 
@@ -6,22 +9,22 @@ $path = isset($_GET['path']) ? $_GET['path'] : 'landing';
 $routes = [
     // Admin pages
     'admin/login' => 'admin/admin_login/admin_login.html',
-    'admin/processed-login'=> 'admin/admin_login/processed_login.php',
+    'admin/processed-login' => 'admin/admin_login/processed_login.php',
     'admin/logout' => 'admin/admin_logout.php',
-    'admin/dashboard' => 'admin/admin_dashboard.php',
+    'admin/dashboard' => 'admin/admin_dashboard/admin_dashboard.php',
     'admin/manage-company' => 'admin/manage_company.php',
     'admin/manage-coupons' => 'admin/manage_coupons.php',
     'admin/manage-movies' => 'admin/manage_movies.php',
     'admin/manage-news' => 'admin/manage_news.php',
     'admin/manage-screenings' => 'admin/manage_screenings.php',
 
-    // payment pages
+    // Payment pages
     'payment/apply-coupon' => 'frontend/payment/apply_coupon.php',
     'payment/process-payment' => 'frontend/payment/process_payment.php',
     'payment/checkout' => 'frontend/payment/checkout.php',
     'payment/confirmation' => 'frontend/payment/confirmation.php',
 
-    // user actions
+    // User actions
     'user/guest' => 'frontend/user/guest.php',
     'user/login' => 'frontend/user/login.php',
     'user/logout' => 'frontend/user/logout.php',
@@ -40,12 +43,26 @@ $routes = [
     'validate-coupon' => 'frontend/validate_coupon.php',
 ];
 
+// Admin-only paths
+$admin_paths = [
+    'admin/dashboard',
+    'admin/manage-company',
+    'admin/manage-coupons',
+    'admin/manage-movies',
+    'admin/manage-news',
+    'admin/manage-screenings',
+];
+
 // Check if the requested path exists in the routes array
 if (array_key_exists($path, $routes)) {
+    // Check if the path is an admin route and enforce login
+    if (in_array($path, $admin_paths) && !admin_logged_in()) {
+        redirect_to('/dwp/admin/login'); // Redirect to admin login if not logged in
+    }
+
     include $routes[$path];
 } else {
     // Display 404 page if route not found
     http_response_code(404);
     echo "404 - Page Not Found";
 }
-
