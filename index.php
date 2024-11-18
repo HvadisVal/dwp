@@ -5,7 +5,8 @@ $path = isset($_GET['path']) ? $_GET['path'] : 'landing';
 // Define routes - mapping URL paths to file locations
 $routes = [
     // Admin pages
-    'admin/login' => 'admin/admin_login.php',
+    'admin/login' => 'admin/admin_login/admin_login.html',
+    'admin/processed-login'=> 'admin/admin_login/processed_login.php',
     'admin/logout' => 'admin/admin_logout.php',
     'admin/dashboard' => 'admin/admin_dashboard.php',
     'admin/manage-company' => 'admin/manage_company.php',
@@ -30,8 +31,8 @@ $routes = [
 
     // Main pages
     'about' => 'frontend/about_us.php',
-    'news' => 'frontend/news.php',
     'landing' => 'frontend/landing.php', // default path if no path specified
+    'news' => 'frontend/news.php',
     'movies' => 'frontend/movies.php',
     'overview' => 'frontend/overview.php',
     'save-selection' => 'frontend/save_selection.php',
@@ -47,3 +48,4 @@ if (array_key_exists($path, $routes)) {
     http_response_code(404);
     echo "404 - Page Not Found";
 }
+
