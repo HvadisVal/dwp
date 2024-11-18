@@ -1,0 +1,21 @@
+body {
+  padding: 20px;
+}
+.container {
+  max-width: 600px !important;
+  margin: auto;
+}
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.input-field {
+  margin-bottom: 20px;
+}
+.btn {
+  width: 100%;
+}
+p {
+  text-align: center;
+  color: red;
+}
