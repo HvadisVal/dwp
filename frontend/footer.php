@@ -44,6 +44,10 @@ $email = $result['Email'] ?? 'N/A';
             margin-bottom: 0.5rem;
         }
 
+        footer a:hover {
+            text-decoration: underline;
+        }
+
         .contact-info h3 {
             font-size: 1.5rem;
             color: white;
@@ -75,7 +79,7 @@ $email = $result['Email'] ?? 'N/A';
 
         .social-icons img:hover {
             transform: scale(1.1); 
-            background-color: #f09433; 
+            background-color: grey; 
         }
     </style>
 </head>
@@ -89,7 +93,9 @@ $email = $result['Email'] ?? 'N/A';
     <div class="contact-info">
         <h3>Contact Us</h3>
         <p><img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="email icon" style="width: 18px; margin-right: 8px;">
-           <?php echo htmlspecialchars($email); ?></p>
+            <a href="mailto:<?php echo htmlspecialchars($email); ?>" style="color: white; text-decoration: underline;">
+                    <?php echo htmlspecialchars($email); ?>
+            </a>
         <p><a href="https://www.google.com/maps/search/<?php echo urlencode($location); ?>" target="_blank">
             <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="location icon" style="width: 18px; margin-right: 8px;">
             <?php echo htmlspecialchars($location); ?>

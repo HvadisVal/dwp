@@ -62,86 +62,137 @@ for ($i = 0; $i < $daysToShow; $i++) {
     <!-- Materialize CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <style>
-          body {
-            background-color: #111;
-            color: white;
-        }
-        .movie-container {
-            margin-top: 30px;
-            display: flex;
-            padding: 20px;
-            border-bottom: 1px solid #444;
-        }
-        .movie-info {
-            width: 25%;
-            padding-right: 20px;
-        }
-        .movie-details {
-            font-size: 1.2em;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .poster {
-            max-width: 100%;
-            border-radius: 8px;
-            margin-bottom: 10px;
-        }
-        .schedule {
-            width: 75%;
-            display: flex;
-        }
-        .date-column {
-            flex: 1;
-            padding: 0 10px;
-        }
-        .date-header {
-            width: 120px; /* Adjust based on desired width */
-    white-space: nowrap;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body {
+    background: #121212;
+    color: #ffffff;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.movie-container {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+    margin-bottom: 30px;
+    background: #1e1e1e;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.movie-info {
+    flex: 1 1 25%;
+    padding-right: 20px;
     text-align: center;
-    padding: 10px;
+}
+
+.poster {
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+.movie-details h4 {
+    font-size: 1.5em;
+    margin: 15px 0;
+    color: white;
     font-weight: bold;
+}
+
+.movie-details p {
+    font-size: 0.9em;
+    margin: 5px 0;
     color: #ccc;
-        }
-        .showtime-card {
-            background-color: green;
+}
+
+.schedule {
+    flex: 1 1 75%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.date-column {
+    flex: 1 1 150px;
+    background: #242424;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.date-header {
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #ffffff;
+}
+
+.showtime-card {
+    background: linear-gradient(to right, #243642, #1a252d);
     padding: 10px;
     margin: 5px 0;
     border-radius: 8px;
     text-align: center;
     color: white;
     font-weight: bold;
-    transition: transform 0.2s;
+    transition: transform 0.2s, background-color 0.2s;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-width: 100px; /* Set a minimum width to prevent narrow display */
-        }
-        .showtime-card:hover {
-            transform: scale(1.05);
-        }
-        .showtime-card h6 {
-            margin: 5px 0;
-    font-size: 1em;
+}
+
+.showtime-card:hover {
+    transform: translateY(-5px);
+    background: grey;
+}
+
+.showtime-card h6 {
+    margin: 5px 0;
+    font-size: 0.9em;
     font-weight: normal;
-        }
-        .showtime-card .version {
-            font-size: 0.85em;
-    color: #ddd;
+}
+
+.showtime-card .version {
+    font-size: 0.8em;
+    color: #ffebcc;
     margin-top: 5px;
-        }
-        .no-showtimes {
-            color: #888;
-            font-size: 1em;
-            font-style: italic;
-            text-align: center;
-            padding: 10px;
-        }
-    </style>
+}
+
+.no-showtimes {
+    color: #888;
+    font-size: 0.9em;
+    font-style: italic;
+    text-align: center;
+    padding: 10px;
+}
+
+@media (max-width: 768px) {
+    .movie-container {
+        flex-direction: column;
+    }
+
+    .movie-info, .schedule {
+        flex: 1 1 100%;
+    }
+}
+
     </style>
 </head>
 <body>
-
 <div class="container">
     <?php foreach ($moviesById as $movieId => $movieData): ?>
         <div class="movie-container">
@@ -180,8 +231,10 @@ for ($i = 0; $i < $daysToShow; $i++) {
     <?php endforeach; ?>
 </div>
 
+
 <!-- Materialize JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
+<?php include 'footer.php'; ?>
 </body>
 </html>
