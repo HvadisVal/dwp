@@ -42,8 +42,10 @@ $routes = [
     /* 'movies' => 'frontend/movies.php', */
     'movies' => 'frontend/movies/movies.php',
     'overview' => 'frontend/overview.php',
-    'save-selection' => 'frontend/save_selection.php',
-    'seat' => 'frontend/seat.php',
+    /* 'save-selection' => 'frontend/save_selection.php',
+    'seat' => 'frontend/seat.php', */
+    'save-selection' => 'frontend/seat/save_selection.php',
+    'seat' => 'frontend/seat/seat.php',
     'validate-coupon' => 'frontend/validate_coupon.php',
 ];
 
