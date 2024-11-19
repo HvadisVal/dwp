@@ -31,7 +31,7 @@ $routes = [
     'user/guest' => 'frontend/user/guest.php',
     'user/login' => 'frontend/user/login.php',
     'user/logout' => 'frontend/user/logout.php',
-    'user/new_user' => 'frontend/user/new_user.php',
+    'user/new_user' => 'frontend/user/new_user/new_user.php',
     'user/switch' => 'frontend/user/switch_user.php',
     'user/forgot-password' => 'frontend/user/forget_password.php',
 
