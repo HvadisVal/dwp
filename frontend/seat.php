@@ -97,11 +97,11 @@ foreach ($ticketPrices as $ticketPrice) {
         background-color: #FFD700;
     }
     .seat.preview {
-        background-color: #FFD700;
+        background-color: grey;
         opacity: 0.6;
     }
     .seat.selected {
-        background-color: yellow;
+        background-color: grey;
     }
     .seat.sold {
         background-color: red;
@@ -137,23 +137,24 @@ foreach ($ticketPrices as $ticketPrice) {
         padding: 10px 20px;
         background-color: #1a1a1a;
         color: white;
+        font-weight: bold;
         font-size: 16px;
-/*         position: fixed;
- */        bottom: 0;
+        bottom: 0;
         width: 100%;
         box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
     }
     .continue-button {
-        background-color: #3B82F6;
+        background: linear-gradient(to right, #243642, #1a252d);
         color: white;
         border: none;
         padding: 10px 20px;
         border-radius: 5px;
         cursor: pointer;
         font-size: 16px;
+        transition: transform 0.2s;
     }
     .continue-button:hover {
-        background-color: #2563EB;
+        transform: translateY(-2px);
     }
     .seat-selection-container {
         display: flex;
@@ -195,8 +196,9 @@ foreach ($ticketPrices as $ticketPrice) {
         margin: 0;
     }
     .ticket-price {
-        color: #ccc;
+        color: white;
         font-size: 0.9rem;
+        font-weight: bold;
         margin: 0;
     }
     .counter-controls {
@@ -206,7 +208,7 @@ foreach ($ticketPrices as $ticketPrice) {
     }
     .counter-controls button {
         background-color: #444;
-        color: #fff;
+        color: white;
         padding: 5px;
         border-radius: 4px;
         border: none;
@@ -214,9 +216,23 @@ foreach ($ticketPrices as $ticketPrice) {
     }
     .counter-controls span {
         font-size: 1rem;
-        color: #FFD700;
+        color: white;
         width: 20px;
         text-align: center;
+    }
+
+    .btn-small {
+        background-color: #444;
+        color: white;
+        padding: 5px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-small:hover {
+        background-color: white;
+        color:black;
     }
 
     /* Seat Layout Section */
@@ -262,13 +278,14 @@ foreach ($ticketPrices as $ticketPrice) {
 </style>
 </head>
 <body>
+<?php include 'navbar.php'; ?>
 
 <div class="container">
     <h4><?= htmlspecialchars($hall['Name']); ?> - Seat Selection</h4>
     <p>Movie: <?= htmlspecialchars($movie['Title']); ?> | Time: <?= htmlspecialchars($time); ?></p>
 
     <!-- Instructional Messages -->
-    <p id="selection-message" style="font-size: 18px; color: #FFD700;">Please select the ticket quantity and type.</p>
+    <p id="selection-message" style="font-size: 18px; color: white; text-decoration: underline; ">Please select the ticket quantity and type.</p>
 
     <div class="seat-selection-container">
     <!-- Left side: Ticket Type Selection -->

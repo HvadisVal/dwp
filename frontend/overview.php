@@ -69,15 +69,32 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
     <title>Booking Overview</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <style>
-        .container { margin-top: 20px; }
-        .modal { max-width: 600px; }
-        .action-buttons { margin-top: 20px; }
-        .order-summary, .movie-details, .user-info { padding: 15px; margin-top: 20px; background: #333; color: white; border-radius: 8px; }
+         * {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        body { background: black; }
+        .container { margin-top: 40px; color: white; font-weight: bold; }
+        .modal { max-width: 600px; background: linear-gradient(to right, #243642, #1a252d); }
+        .modal input { color: white; }
+        .action-buttons { margin-top: 20px;}
+        .action-buttons button { margin-right: 10px; background-color: #3498db; color: white; }
+        .action-buttons button:hover { background-color: white;  color:black}
+        .order-summary, .movie-details, .user-info { padding: 20px; margin-top: 20px; background: linear-gradient(to right, #243642, #1a252d); color: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
         .login-info { display: flex; align-items: center; justify-content: space-between; }
+        .modal-content { padding: 20px; }
+        .btn.blue { background-color: #3498db; }
+        .btn.red { background-color: #e74c3c; }
+        .error-message { color: red; margin-top: 10px; }
+        .input-field label { color: #34495e !important; }
+        #applyCoupon { margin-top: 10px; background-color: #3498db; color: white; }
+        #payButton { margin-left: 15px; background-color: #3498db; color: white; }
+        .modal-footer { background: linear-gradient(to right, #243642, #1a252d); }
+        .modal-footer a { color: white; }
     </style>
 </head>
 <body>
-
+<?php include 'navbar.php'; ?>
 <div class="container">
     <h4>Booking Overview</h4>
 
@@ -158,7 +175,7 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
                 <input id="phone" type="text" name="phone" required>
                 <label for="phone">Telephone Number</label>
             </div>
-            <button class="btn blue" type="submit">Further</button>
+            <button class="btn blue" type="submit">Continue</button>
         </form>
         <p class="error-message" style="color: red; display: none;"></p>
     </div>
@@ -204,13 +221,13 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
 
    <!-- Payment Button to Open Modal, shown only if logged in as user or guest -->
    <?php if ($isLoggedIn || $isGuest): ?>
-        <button class="btn blue modal-trigger" data-target="checkoutModal">Proceed to Checkout</button>
+        <button class="btn blue modal-trigger" style=" margin-top: 20px;" data-target="checkoutModal">Proceed to Checkout</button>
     <?php endif; ?>
 </div>
 
 <!-- Checkout Modal -->
 <div id="checkoutModal" class="modal">
-    <div class="modal-content">
+    <div class="modal-content" style="color: white;">
         <h5>Checkout</h5>
         
         <!-- Coupon Code Section -->

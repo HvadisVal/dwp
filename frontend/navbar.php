@@ -24,12 +24,18 @@
             width: 70%;
             font-weight: bold;
             gap: 5rem;
+           
         }
 
         .nav-links a {
             color: white;
             text-decoration: none;
+            transition: color 0.2s ease;
         }
+
+        .nav-links a:hover {
+            color: grey;
+    }
 
         .cart-icon {
             color: white;
