@@ -41,12 +41,13 @@ $routes = [
     'news' => 'frontend/news.php',
     /* 'movies' => 'frontend/movies.php', */
     'movies' => 'frontend/movies/movies.php',
-    'overview' => 'frontend/overview.php',
+    /* 'overview' => 'frontend/overview.php',*/
+    'overview' => 'frontend/overview/overview.php',
     /* 'save-selection' => 'frontend/save_selection.php',
     'seat' => 'frontend/seat.php', */
     'save-selection' => 'frontend/seat/save_selection.php',
     'seat' => 'frontend/seat/seat.php',
-    'validate-coupon' => 'frontend/validate_coupon.php',
+    'validate-coupon' => 'frontend/payment/validate_coupon.php',
 ];
 
 // Check if the requested path exists in the routes array

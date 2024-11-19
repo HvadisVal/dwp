@@ -1,0 +1,22 @@
+* {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body { background: black; }
+.container { margin-top: 40px; color: white; font-weight: bold; }
+.modal { max-width: 600px; background: linear-gradient(to right, #243642, #1a252d); }
+.modal input { color: white; }
+.action-buttons { margin-top: 20px;}
+.action-buttons button { margin-right: 10px; background-color: #3498db; color: white; }
+.action-buttons button:hover { background-color: white;  color:black}
+.order-summary, .movie-details, .user-info { padding: 20px; margin-top: 20px; background: linear-gradient(to right, #243642, #1a252d); color: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
+.login-info { display: flex; align-items: center; justify-content: space-between; }
+.modal-content { padding: 20px; }
+.btn.blue { background-color: #3498db; }
+.btn.red { background-color: #e74c3c; }
+.error-message { color: red; margin-top: 10px; }
+.input-field label { color: #34495e !important; }
+#applyCoupon { margin-top: 10px; background-color: #3498db; color: white; }
+#payButton { margin-left: 15px; background-color: #3498db; color: white; }
+.modal-footer { background: linear-gradient(to right, #243642, #1a252d); }
+.modal-footer a { color: white; }
