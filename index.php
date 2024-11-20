@@ -6,19 +6,14 @@ $path = isset($_GET['path']) ? $_GET['path'] : 'landing';
 $routes = [
     // Admin pages
     'admin/login' => 'admin/admin_login/admin_login.html',
-    'admin/processed-login'=> 'admin/admin_login/processed_login.php',
+    'admin/admin-login'=> 'admin/admin_login/admin_login.php',
     'admin/logout' => 'admin/admin_logout.php',
     'admin/dashboard' => 'admin/admin_dashboard/admin_dashboard.php',
-    'admin/manage-company' => 'admin/company/company_structure.php',
-    'admin/processed-company' => 'admin/company/manage_company.php',
-    'admin/manage-coupons' => 'admin/coupons/coupons_structure.php',
-    'admin/processed-coupons' => 'admin/coupons/manage_coupons.php',
-    'admin/manage-movies' => 'admin/movies/movies_structure.php',
-    'admin/processed-movies' => 'admin/movies/manage_movies.php',
-    'admin/manage-news' => 'admin/news/news_structure.php',
-    'admin/processed-news' => 'admin/news/manage_news.php',
-    'admin/manage-screenings' => 'admin/screenings/screenings_structure.php',
-    'admin/processed-screenings' => 'admin/screenings/manage_screenings.php',
+    'admin/manage-company' => 'admin/company/company.php',
+    'admin/manage-coupons' => 'admin/coupons/coupons.php',
+    'admin/manage-movies' => 'admin/movies/movies.php',
+    'admin/manage-news' => 'admin/news/news.php',
+    'admin/manage-screenings' => 'admin/screenings/screenings.php',
 
 
     // payment pages

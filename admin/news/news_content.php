@@ -1,13 +1,11 @@
-<?php 
-require_once("manage_news.php")
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage News</title>
-    <link rel="stylesheet" href="/dwp/admin/news/style.css" />
+    <link rel="stylesheet" href="/dwp/admin/news/news.css" />
 </head>
 <body>
 
@@ -81,7 +79,7 @@ require_once("manage_news.php")
     <?php endforeach; ?>
 </div>
 
-<script src="/dwp/includes/javascript.js" defer></script>
+<script src="/dwp/includes/functions.js" defer></script>
 
 </body>
 </html>

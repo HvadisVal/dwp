@@ -1,13 +1,11 @@
-<?php 
-require_once("manage_screenings.php")
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Screenings</title>
-    <link rel="stylesheet" href="/dwp/admin/screenings/style.css" />
+    <link rel="stylesheet" href="/dwp/admin/screenings/screenings.css" />
 </head>
 <body>
 
