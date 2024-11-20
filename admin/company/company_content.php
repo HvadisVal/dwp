@@ -1,13 +1,10 @@
-<?php 
-require_once("manage_company.php")
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Company</title>
-    <link rel="stylesheet" href="/dwp/admin/company/style.css" />
+    <link rel="stylesheet" href="/dwp/admin/company/company.css" />
 </head>
 <body>
 

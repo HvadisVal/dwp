@@ -1,14 +1,12 @@
 
-<?php 
-require_once("manage_movies.php")
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Movies</title>
-    <link rel="stylesheet" href="/dwp/admin/movies/style.css" />
+    <link rel="stylesheet" href="/dwp/admin/movies/movies.css" />
 </head>
 <body>
 
@@ -191,7 +189,7 @@ require_once("manage_movies.php")
     <?php endforeach; ?>
 </div>
 
-<script src="/dwp/admin/movies/javascript.js" defer></script>
-<script src="/dwp/includes/javascript.js" defer></script>
+<script src="/dwp/admin/movies/movies.js" defer></script>
+<script src="/dwp/includes/functions.js" defer></script>
 
 </body>
