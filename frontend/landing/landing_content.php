@@ -49,7 +49,7 @@
     <div class="movie-grid">
         <?php foreach ($movies as $movie): ?>
             <div class="movie-card">
-                <a href="/dwp/movies">
+                <a href="/dwp/movie?movie_id=<?php echo htmlspecialchars($movie['Movie_ID']); ?>">
                     <?php if (!empty($movie['FileName'])): ?>
                         <img src="uploads/poster/<?php echo htmlspecialchars($movie['FileName']); ?>" 
                              alt="<?php echo htmlspecialchars($movie['Title']); ?>" 

@@ -13,7 +13,8 @@ $result = $stmt->fetch(PDO::FETCH_ASSOC);
 $description = $result['Description'] ?? 'N/A';
 $shortDescription = substr($description, 0, 352); // Truncate for display
 
-$sql = "SELECT DISTINCT Movie.Title, 
+$sql = "SELECT DISTINCT Movie.Movie_ID, 
+               Movie.Title,
                (SELECT FileName 
                 FROM Media 
                 WHERE Media.Movie_ID = Movie.Movie_ID 
