@@ -43,6 +43,7 @@ $routes = [
     'save-selection' => 'frontend/seat/save_selection.php',
     'seat' => 'frontend/seat/seat.php',
     'validate-coupon' => 'frontend/payment/validate_coupon.php',
+    'movie'=> 'frontend/movie_profile/movie.php',
 ];
 
 // Check if the requested path exists in the routes array

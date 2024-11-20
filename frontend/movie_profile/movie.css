@@ -1,0 +1,222 @@
+/* General Styling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: black;
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  position: relative;
+  top: 100px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+/* Movie Container */
+.movie-container {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px;
+  margin-bottom: 30px;
+  background: rgba(
+    30,
+    30,
+    30,
+    0.8
+  ); /* Semi-transparent for better text readability */
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+.movie-info {
+  flex: 1 1 25%;
+  padding-right: 20px;
+  display: flex;
+}
+.movie-poster {
+  width: 15%;
+}
+.movie-poster img {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+}
+.movie-details {
+  width: 80%;
+  padding: 0 3%;
+}
+
+h4 {
+  font-size: 1.6em;
+  margin: 0 0 15px 0;
+  color: white;
+  font-weight: bold;
+}
+
+.movie-details p {
+  font-size: 1em;
+  margin: 5px 0;
+  color: #ccc;
+  line-height: 1.6;
+}
+/* Gallery and Trailer Section */
+.gallery-trailer-section {
+  margin-bottom: 40px;
+}
+
+.movie-gallery {
+  margin-bottom: 20px;
+}
+
+h5 {
+  font-size: 1.6em;
+  margin-bottom: 30px;
+}
+
+.gallery-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* Adds space between the images */
+}
+
+.gallery-images img {
+  width: calc(
+    (100% - 20px) / 3
+  ); /* 3 images in the first row with space between them */
+  object-fit: cover;
+  border-radius: 8px; /* Rounded corners */
+  transition: transform 0.3s ease;
+}
+
+.gallery-images img:hover {
+  transform: scale(1.05);
+}
+
+/* Adjust for the last two images */
+.gallery-images img:nth-child(4),
+.gallery-images img:nth-child(5) {
+  width: calc(
+    (100% - 10px) / 2
+  ); /* 2 images in the second row with space between them */
+}
+
+.movie-trailer iframe {
+  width: 100%;
+  height: 315px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+.schedule {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.date-column {
+  flex: 0 1 calc((100% - 4 * 15px) / 5); /* Five columns in a row */
+  background: #242424;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Adjust for the second line */
+.schedule .date-column:nth-child(n + 6) {
+  flex: 0 1 calc((100% - 15px) / 2); /* Two columns in the second line */
+}
+
+.date-header {
+  text-align: center;
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #ffffff;
+}
+
+.showtime-card {
+  background: linear-gradient(to right, #243642, #1a252d);
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 8px;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  transition: transform 0.2s, background-color 0.2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.showtime-card:hover {
+  transform: translateY(-5px);
+  background: grey;
+}
+
+.showtime-card h6 {
+  margin: 5px 0;
+  font-size: 0.9em;
+  font-weight: normal;
+}
+
+.showtime-card .version {
+  font-size: 0.8em;
+  color: #ffebcc;
+  margin-top: 5px;
+}
+
+.no-showtimes {
+  color: #888;
+  font-size: 0.9em;
+  font-style: italic;
+  text-align: center;
+  padding: 10px;
+}
+/* Responsive behavior */
+@media (max-width: 900px) {
+  .schedule {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for smaller screens */
+  }
+  .date-column:nth-last-child(2),
+  .date-column:last-child {
+    grid-column: span 2; /* Span both columns */
+  }
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+  .movie-container {
+    flex-direction: column;
+  }
+
+  .movie-info,
+  .schedule {
+    flex: 1 1 100%;
+  }
+
+  .gallery-images img {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+/* Buttons and Links */
+a {
+  text-decoration: none;
+}
+
+.showtime-card a {
+  color: inherit;
+}
