@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="/dwp/frontend/overview/overview.css">
 </head>
 <body>
-<?php include './frontend/navbar.php'; ?>
+    <div class="logo">
+        <a href="/dwp/"><img src="images/11.png" alt="Logotype" height="40px" width="145px"></a>
+    </div>
 
 <div class="container">
     <h4>Booking Overview</h4>
@@ -182,6 +184,8 @@
         <a href="#!" class="modal-close btn blue">Close</a>
     </div>
 </div>
+
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="/dwp/frontend/movies/movies.css">
 </head>
 <body>
+<?php include './frontend/navbar.php'; ?>
+
 <div class="container">
     <?php foreach ($moviesById as $movieId => $movieData): ?>
         <div class="movie-container">

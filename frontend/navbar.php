@@ -11,6 +11,10 @@
             align-items: center;
             padding: 1rem 2rem;
             background: linear-gradient(to right, #243642, #1a252d);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
         }
 
         .logo {

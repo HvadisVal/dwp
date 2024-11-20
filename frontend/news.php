@@ -30,6 +30,12 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>News Page</title>
     <style>
         /* General Body Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -38,6 +44,8 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             background-image: url('https://t4.ftcdn.net/jpg/04/61/47/03/360_F_461470323_6TMQSkCCs9XQoTtyer8VCsFypxwRiDGU.jpghttps://t4.ftcdn.net/jpg/04/61/47/03/360_F_461470323_6TMQSkCCs9XQoTtyer8VCsFypxwRiDGU.jpg');
             background-size: cover;
             color: #333;
+            top: 100px;
+            position: relative;
         }
 
         /* Container */
