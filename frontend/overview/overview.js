@@ -3,22 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     M.Modal.init(modals);
 });
 
-// Login Form Submission
-$('#loginForm').on('submit', function(e) {
-    e.preventDefault();
-    $.ajax({
-        url: '/dwp/user/login',
-        type: 'POST',
-        data: $(this).serialize(),
-        success: function(response) {
-            if (response.success) {
-                location.reload();
-            } else {
-                $('.error-message').text(response.message).show();
-            }
-        }
-    });
-});
+
 
 // Guest Checkout Form Submission
 $('#guestForm').on('submit', function(e) {

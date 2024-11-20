@@ -48,3 +48,4 @@ foreach ($newsItems as $news) {
     $newsHTML .= '</div>';
 }
 
+include 'landing_content.php';
