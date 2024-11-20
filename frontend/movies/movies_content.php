@@ -14,13 +14,24 @@
         <div class="movie-container">
             <!-- Movie Information -->
             <div class="movie-info">
-                <img src="<?= htmlspecialchars($movieData['details']['PosterPath']); ?>" alt="<?= htmlspecialchars($movieData['details']['Title']); ?>" class="poster">
-                <div class="movie-details">
-                    <h4><?= htmlspecialchars($movieData['details']['Title']); ?></h4>
-                    <p>Duration: <?= htmlspecialchars($movieData['details']['Duration']); ?></p>
-                    <p>Age Limit: Allowed for children over <?= htmlspecialchars($movieData['details']['Rating']); ?> years</p>
-                </div>
-            </div>
+    <!-- Display poster image -->
+    <?php if (!empty($movieData['details']['PosterPath'])): ?>
+        <div class="movie-poster">
+            <?php foreach ($movieData['details']['PosterPath'] as $imagePath): ?>
+                <img src="<?= htmlspecialchars($imagePath); ?>" alt="<?= htmlspecialchars($movieData['details']['Title']); ?>" class="poster">
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+    <div class="movie-details">
+        <h4><?= htmlspecialchars($movieData['details']['Title']); ?></h4>
+        <p>Duration: <?= htmlspecialchars($movieData['details']['Duration']); ?></p>
+        <p>Age Limit: Allowed for children over <?= htmlspecialchars($movieData['details']['Rating']); ?> years</p>
+    </div>
+</div>
+
+
+
 
              <!-- Movie Showtimes by Date (Vertically) -->
              <div class="schedule">

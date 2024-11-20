@@ -120,6 +120,19 @@ body {
   text-align: center;
   padding: 10px;
 }
+.movie-posters,
+.movie-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.movie-posters img,
+.movie-gallery img {
+  max-width: 150px;
+  height: auto;
+  border-radius: 8px;
+}
 
 @media (max-width: 768px) {
   .movie-container {
