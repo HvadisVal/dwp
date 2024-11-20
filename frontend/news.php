@@ -113,7 +113,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </style>
 </head>
 <body>
-<?php include 'navbar.php'; ?>
+<?php include 'frontend/navbar/navbar.php'; ?>
     <div class="container">
         <h1>Latest News</h1>
         <div class="news-grid">

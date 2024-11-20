@@ -1,7 +1,4 @@
-<?php
-// Include functionality file
-require_once 'landing.php';
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +8,8 @@ require_once 'landing.php';
     <link rel="stylesheet" href="/dwp/frontend/landing/style.css">
 </head>
 <body>
-<?php include './frontend/navbar.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/navbar/navbar_structure.php'; ?>
+
 
     <div class="hero">
         <div class="hero-content">
