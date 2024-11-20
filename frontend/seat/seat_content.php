@@ -57,13 +57,16 @@
     </div>
 </div>
 
-   <!-- Ticket Summary and Continue Button -->
-   <div class="ticket-summary">
+   
+</div>
+<!-- Ticket Summary and Continue Button -->
+<div class="ticket-summary">
         <p id="ticket-count">0 tickets</p>
         <p id="total-price">DKK 0</p>
         <button class="continue-button" id="continue-button" style="display: none;">Continue</button>
     </div>
-</div>
 <script src="/dwp/frontend/seat/seat.js"></script>
+
+
 </body>
 </html>
