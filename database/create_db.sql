@@ -80,115 +80,116 @@ CREATE TABLE Movie (
     Rating INT,
     Description TEXT,
     TrailerLink VARCHAR(255),
+    AgeLimit INT,
     Genre_ID INT,
     Version_ID INT,
     FOREIGN KEY (Genre_ID) REFERENCES Genre(Genre_ID),
     FOREIGN KEY (Version_ID) REFERENCES Version(Version_ID)
 );
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(1, 'The Dark Knight', 'Christopher Nolan', 'English', 2008, '02:32:00', 9, 'A crime drama about Batman taking on the Joker.', 'https://www.youtube.com/watch?v=EXeTwQWrcwY', 1, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(1, 'The Dark Knight', 'Christopher Nolan', 'English', 2008, '02:32:00', 9, 'A crime drama about Batman taking on the Joker.', 'https://www.youtube.com/embed/EXeTwQWrcwY?si=ZMBW7Y-W88cDaEGu', 1, 1, 13);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(2, 'Inception', 'Christopher Nolan', 'English', 2010, '02:28:00', 8, 'A thriller about entering dreams within dreams.', 'https://www.youtube.com/watch?v=YoHD9XEInc0', 12, 2);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(2, 'Inception', 'Christopher Nolan', 'English', 2010, '02:28:00', 8, 'A thriller about entering dreams within dreams.', 'https://www.youtube.com/embed/YoHD9XEInc0?si=WSR7T1zZsWyPUPBu', 12, 2, 13);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(3, 'Toy Story', 'John Lasseter', 'English', 1995, '01:21:00', 8, 'The story of toys that come to life.', 'https://www.youtube.com/watch?v=KYz2wyBy3kc', 10, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(3, 'Toy Story', 'John Lasseter', 'English', 1995, '01:21:00', 8, 'The story of toys that come to life.', 'https://www.youtube.com/embed/v-PjgYDrg70?si=kGVkuHosvV4Emsrs', 10, 1, 3);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(4, 'The Good, the Bad and the Ugly', 'Sergio Leone', 'Italian', 1966, '02:41:00', 9, 'A Western about three men in search of treasure.', 'https://www.youtube.com/watch?v=H-8AzDPe0g0', 2, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(4, 'The Good, the Bad and the Ugly', 'Sergio Leone', 'Italian', 1966, '02:41:00', 9, 'A Western about three men in search of treasure.', 'https://www.youtube.com/embed/J9EZGHcu3E8?si=8S4DEzoMjdqB2OZp', 2, 1, 16);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(5, 'Schindler''s List', 'Steven Spielberg', 'English', 1993, '03:15:00', 9, 'A historical drama about the Holocaust.', 'https://www.youtube.com/watch?v=JdQ8fB0C1gI', 5, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(5, 'Schindler''s List', 'Steven Spielberg', 'English', 1993, '03:15:00', 9, 'A historical drama about the Holocaust.', 'https://www.youtube.com/embed/gG22XNhtnoY?si=YlEUkr2-40yS8WcC', 5, 1, 15);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(6, 'Mad Max: Fury Road', 'George Miller', 'English', 2015, '02:00:00', 8, 'An action movie about survival in a dystopian wasteland.', 'https://www.youtube.com/watch?v=hEJnMQG9ev8', 1, 2);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(6, 'Mad Max: Fury Road', 'George Miller', 'English', 2015, '02:00:00', 8, 'An action movie about survival in a dystopian wasteland.', 'https://www.youtube.com/embed/hEJnMQG9ev8?si=2KRrId7NLVOJt3eb', 1, 2, 15);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(7, 'The Matrix', 'Lana Wachowski', 'English', 1999, '02:16:00', 9, 'A sci-fi thriller about an alternate reality.', 'https://www.youtube.com/watch?v=vKQi0Ph9zI8', 14, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(7, 'The Matrix', 'Lana Wachowski', 'English', 1999, '02:16:00', 9, 'A sci-fi thriller about an alternate reality.', 'https://www.youtube.com/embed/9ix7TUGVYIo?si=MWzDWLjo8XRVxyfz', 14, 1, 16);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(8, 'Avengers: Endgame', 'Anthony Russo', 'English', 2019, '03:01:00', 9, 'The epic conclusion of the Avengers saga.', 'https://www.youtube.com/watch?v=TcMBFSGVi1c', 1, 2);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(8, 'Avengers: Endgame', 'Anthony Russo', 'English', 2019, '03:01:00', 9, 'The epic conclusion of the Avengers saga.', 'https://www.youtube.com/embed/TcMBFSGVi1c?si=6JpGxZu26UfXZn8S', 1, 2, 12);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(9, 'The Godfather', 'Francis Ford Coppola', 'English', 1972, '02:55:00', 9, 'A crime drama about the mafia.', 'https://www.youtube.com/watch?v=sY1S34973zA', 8, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(9, 'The Godfather', 'Francis Ford Coppola', 'English', 1972, '02:55:00', 9, 'A crime drama about the mafia.', 'https://www.youtube.com/embed/UaVTIH8mujA?si=IB9j5e2k_kqSST7r', 8, 1, 18);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(10, 'The Exorcist', 'William Friedkin', 'English', 1973, '02:12:00', 8, 'A horror movie about a girl possessed by a demon.', 'https://www.youtube.com/watch?v=YDGw2lTEsU4', 13, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(10, 'The Exorcist', 'William Friedkin', 'English', 1973, '02:12:00', 8, 'A horror movie about a girl possessed by a demon.', 'https://www.youtube.com/embed/PIxpPMyGcpU?si=kOq6qwyAnpeLMf4M', 13, 1, 18);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(11, 'Finding Nemo', 'Andrew Stanton', 'English', 2003, '01:40:00', 8, 'A cartoon adventure about a lost fish.', 'https://www.youtube.com/watch?v=wZdpNglLbt8', 10, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(11, 'Finding Nemo', 'Andrew Stanton', 'English', 2003, '01:40:00', 8, 'A cartoon adventure about a lost fish.', 'https://www.youtube.com/embed/SPHfeNgogVs?si=RrWjOw0FPk5QjQIB', 10, 1, 3);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(12, 'Pulp Fiction', 'Quentin Tarantino', 'English', 1994, '02:34:00', 9, 'A crime drama about intersecting lives.', 'https://www.youtube.com/watch?v=wZ7qR1Y5yX0', 8, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(12, 'Pulp Fiction', 'Quentin Tarantino', 'English', 1994, '02:34:00', 9, 'A crime drama about intersecting lives.', 'https://www.youtube.com/embed/tGpTpVyI_OQ?si=zlZ1qOo9-Cys6qi0', 8, 1, 18);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(13, 'The Lord of the Rings: The Fellowship of the Ring', 'Peter Jackson', 'English', 2001, '03:48:00', 9, 'A fantasy adventure in Middle Earth.', 'https://www.youtube.com/watch?v=V75dMMIW2B4', 15, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(13, 'The Lord of the Rings: The Fellowship of the Ring', 'Peter Jackson', 'English', 2001, '03:48:00', 9, 'A fantasy adventure in Middle Earth.', 'https://www.youtube.com/embed/V75dMMIW2B4?si=qPq7zB3rAa-Pw7ob', 15, 1, 12);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(14, 'Star Wars: A New Hope', 'George Lucas', 'English', 1977, '02:01:00', 9, 'A sci-fi adventure about the rebellion against the Empire.', 'https://www.youtube.com/watch?v=1g3_CFmnU7I', 14, 2);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(14, 'Star Wars: A New Hope', 'George Lucas', 'English', 1977, '02:01:00', 9, 'A sci-fi adventure about the rebellion against the Empire.', 'https://www.youtube.com/embed/vZ734NWnAHA?si=yDwWg0vn3rUOs4HL', 14, 2, 8);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(15, 'Jurassic Park', 'Steven Spielberg', 'English', 1993, '02:07:00', 8, 'A sci-fi thriller about a park filled with cloned dinosaurs.', 'https://www.youtube.com/watch?v=lc0UehYemQA', 14, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(15, 'Jurassic Park', 'Steven Spielberg', 'English', 1993, '02:07:00', 8, 'A sci-fi thriller about a park filled with cloned dinosaurs.', 'https://www.youtube.com/embed/E8WaFvwtphY?si=HEz2xuHI2CnE_EzK', 14, 1, 10);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(16, 'Alien', 'Ridley Scott', 'English', 1979, '01:57:00', 8, 'A sci-fi horror movie about a deadly alien creature.', 'https://www.youtube.com/watch?v=LjLamj-b0I4', 13, 2);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(16, 'Alien', 'Ridley Scott', 'English', 1979, '01:57:00', 8, 'A sci-fi horror movie about a deadly alien creature.', 'https://www.youtube.com/embed/OzY2r2JXsDM?si=qZXziVTjlQNR_FuD', 13, 2, 18);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(17, 'Blade Runner', 'Ridley Scott', 'English', 1982, '01:57:00', 8, 'A sci-fi movie about a dystopian future.', 'https://www.youtube.com/watch?v=1jP1A7FbT3M', 14, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(17, 'Blade Runner', 'Ridley Scott', 'English', 1982, '01:57:00', 8, 'A sci-fi movie about a dystopian future.', 'https://www.youtube.com/embed/eogpIG53Cis?si=mlMkkhWiGbu-rL5i', 14, 1, 15);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(18, 'The Silence of the Lambs', 'Jonathan Demme', 'English', 1991, '01:58:00', 9, 'A thriller about a young FBI agent hunting a serial killer.', 'https://www.youtube.com/watch?v=R1zI3C8a6to', 12, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(18, 'The Silence of the Lambs', 'Jonathan Demme', 'English', 1991, '01:58:00', 9, 'A thriller about a young FBI agent hunting a serial killer.', 'https://www.youtube.com/embed/6iB21hsprAQ?si=0LiS7DnlrC4IFFUO', 12, 1, 18);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(19, 'Interstellar', 'Christopher Nolan', 'English', 2014, '02:49:00', 8, 'A sci-fi adventure about space exploration.', 'https://www.youtube.com/watch?v=zSWdZVtXT7E', 14, 2);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(19, 'Interstellar', 'Christopher Nolan', 'English', 2014, '02:49:00', 8, 'A sci-fi adventure about space exploration.', 'https://www.youtube.com/embed/UDVtMYqUAyw?si=ufJ7etrLXe_O1dhf', 14, 2, 12);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(20, 'Forrest Gump', 'Robert Zemeckis', 'English', 1994, '02:22:00', 8, 'A drama about a man who lives through historic events.', 'https://www.youtube.com/watch?v=bLvqoHBptjg', 5, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(20, 'Forrest Gump', 'Robert Zemeckis', 'English', 1994, '02:22:00', 8, 'A drama about a man who lives through historic events.', 'https://www.youtube.com/embed/bLvqoHBptjg?si=5DfxnijId-4P8spE', 5, 1, 12);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(21, 'Gladiator', 'Ridley Scott', 'English', 2000, '02:35:00', 8, 'A historical drama about a Roman general turned gladiator.', 'https://www.youtube.com/watch?v=owK1qxDselE', 5, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(21, 'Gladiator', 'Ridley Scott', 'English', 2000, '02:35:00', 8, 'A historical drama about a Roman general turned gladiator.', 'https://www.youtube.com/embed/P5ieIbInFpg?si=fqPn4Ci_xE-dsgqO', 5, 1, 15);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(22, 'The Shawshank Redemption', 'Frank Darabont', 'English', 1994, '02:22:00', 9, 'A drama about two men in prison.', 'https://www.youtube.com/watch?v=6hB0d_xzH8o', 5, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(22, 'The Shawshank Redemption', 'Frank Darabont', 'English', 1994, '02:22:00', 9, 'A drama about two men in prison.', 'https://www.youtube.com/embed/PLl99DlL6b4?si=u-OUlWSvQF-K0_rs', 5, 1, 15);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(23, 'Black Panther', 'Ryan Coogler', 'English', 2018, '02:14:00', 8, 'A superhero movie about the king of Wakanda.', 'https://www.youtube.com/watch?v=xjDjIWPwcPU', 1, 2);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(23, 'Black Panther', 'Ryan Coogler', 'English', 2018, '02:14:00', 8, 'A superhero movie about the king of Wakanda.', 'https://www.youtube.com/embed/_Z3QKkl1WyM?si=Z8zWeDluiRXT1IsV', 1, 2, 12);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(24, 'Fight Club', 'David Fincher', 'English', 1999, '02:19:00', 8, 'A drama about a secret fight club.', 'https://www.youtube.com/watch?v=SUXWAu6l1i8', 8, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(24, 'Fight Club', 'David Fincher', 'English', 1999, '02:19:00', 8, 'A drama about a secret fight club.', 'https://www.youtube.com/embed/qtRKdVHc-cE?si=95sWWb1pDWT5zCDr', 8, 1, 18);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(25, 'The Lion King', 'Roger Allers', 'English', 1994, '01:28:00', 8, 'An animated movie about a young lion prince.', 'https://www.youtube.com/watch?v=4sj1MT05l4I', 10, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(25, 'The Lion King', 'Roger Allers', 'English', 1994, '01:28:00', 8, 'An animated movie about a young lion prince.', 'https://www.youtube.com/embed/GibiNy4d4gc?si=kApUktxMi4FiuMvq', 10, 1, 3);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(26, 'The Departed', 'Martin Scorsese', 'English', 2006, '02:31:00', 8, 'A crime thriller about an undercover cop and a mole in the police.', 'https://www.youtube.com/watch?v=auq0C1n5rjA', 8, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(26, 'The Departed', 'Martin Scorsese', 'English', 2006, '02:31:00', 8, 'A crime thriller about an undercover cop and a mole in the police.', 'https://www.youtube.com/embed/iojhqm0JTW4?si=Er4FopuZb8bEqHek', 8, 1, 18);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(27, 'Harry Potter and the Sorcerer''s Stone', 'Chris Columbus', 'English', 2001, '02:32:00', 7, 'A fantasy movie about a young wizard.', 'https://www.youtube.com/watch?v=VyHV0BRtdxo', 15, 2);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(27, 'Harry Potter and the Sorcerer''s Stone', 'Chris Columbus', 'English', 2001, '02:32:00', 7, 'A fantasy movie about a young wizard.', 'https://www.youtube.com/embed/VyHV0BRtdxo?si=8JijmOOCcgeQr3hE', 15, 2, 8);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(28, '12 Angry Men', 'Sidney Lumet', 'English', 1957, '01:36:00', 9, 'A courtroom drama about a jury deliberating a murder trial.', 'https://www.youtube.com/watch?v=haP8dy4_3cA', 5, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(28, '12 Angry Men', 'Sidney Lumet', 'English', 1957, '01:36:00', 9, 'A courtroom drama about a jury deliberating a murder trial.', 'https://www.youtube.com/embed/TEN-2uTi2c0?si=HiuCscamrqeQPR-j', 5, 1, 12);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(29, 'Braveheart', 'Mel Gibson', 'English', 1995, '03:02:00', 8, 'A historical epic about William Wallace.', 'https://www.youtube.com/watch?v=IY0XIH8ZPzo', 5, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(29, 'Braveheart', 'Mel Gibson', 'English', 1995, '03:02:00', 8, 'A historical epic about William Wallace.', 'https://www.youtube.com/embed/1NJO0jxBtMo?si=_7f5H_MVOpWqqOjA', 5, 1, 15);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(30, 'The Terminator', 'James Cameron', 'English', 1984, '01:47:00', 8, 'A sci-fi movie about a killer robot from the future.', 'https://www.youtube.com/watch?v=k64pq2N9h4Q', 14, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(30, 'The Terminator', 'James Cameron', 'English', 1984, '01:47:00', 8, 'A sci-fi movie about a killer robot from the future.', 'https://www.youtube.com/embed/nGrW-OR2uDk?si=MAm8MSzqRjJDpCrk', 14, 1, 15);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(31, 'Rocky', 'John G. Avildsen', 'English', 1976, '02:00:00', 8, 'A drama about a boxer''s rise to fame.', 'https://www.youtube.com/watch?v=5M2n1qGZVfA', 12, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(31, 'Rocky', 'John G. Avildsen', 'English', 1976, '02:00:00', 8, 'A drama about a boxer''s rise to fame.', 'https://www.youtube.com/embed/-Hk-LYcavrw?si=9ruCB5pSnTqOENe7', 12, 1, 12);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(32, 'A Beautiful Mind', 'Ron Howard', 'English', 2001, '02:15:00', 8, 'A drama about the life of John Nash.', 'https://www.youtube.com/watch?v=1X5L_UF7-Ho', 5, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(32, 'A Beautiful Mind', 'Ron Howard', 'English', 2001, '02:15:00', 8, 'A drama about the life of John Nash.', 'https://www.youtube.com/embed/EajIlG_OCvw?si=ija2DZEbP5HoQdks', 5, 1, 15);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(33, 'Casablanca', 'Michael Curtiz', 'English', 1942, '01:42:00', 9, 'A drama about love and sacrifice during World War II.', 'https://www.youtube.com/watch?v=B38G2l3dclE', 5, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(33, 'Casablanca', 'Michael Curtiz', 'English', 1942, '01:42:00', 9, 'A drama about love and sacrifice during World War II.', 'https://www.youtube.com/embed/VHBcS0fYWfc?si=nx1HFkQP8tG0Ih28', 5, 1, 8);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(34, 'The Shining', 'Stanley Kubrick', 'English', 1980, '02:26:00', 8, 'A horror movie about a haunted hotel.', 'https://www.youtube.com/watch?v=5Cb3ik6zP2I', 13, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(34, 'The Shining', 'Stanley Kubrick', 'English', 1980, '02:26:00', 8, 'A horror movie about a haunted hotel.', 'https://www.youtube.com/embed/FZQvIJxG9Xs?si=HGbTMLGj0hz5QVKp', 13, 1, 18);
 
-INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID) VALUES 
-(35, 'Indiana Jones and the Last Crusade', 'Steven Spielberg', 'English', 1989, '02:07:00', 8, 'An adventure movie about the search for the Holy Grail.', 'https://www.youtube.com/watch?v=OeR2JbI-Lbo', 11, 1);
+INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
+(35, 'Indiana Jones and the Last Crusade', 'Steven Spielberg', 'English', 1989, '02:07:00', 8, 'An adventure movie about the search for the Holy Grail.', 'https://www.youtube.com/embed/DKg36LBVgfg?si=ycMV5NduMRSqwAfi', 11, 1, 12);
 
 
 

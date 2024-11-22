@@ -52,12 +52,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $rating = (float)trim($_POST['rating']);
         $description = htmlspecialchars(trim($_POST['description']));
         $trailerLink = htmlspecialchars(trim($_POST['trailerlink']));
+        $agelimit = htmlspecialchars(trim($_POST['agelimit']));
+
+
 
         // Insert movie
-        $sql = "INSERT INTO Movie (Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID, TrailerLink) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO Movie (Title, Director, Language, Year, Duration, Rating, Description, Genre_ID, Version_ID, TrailerLink, AgeLimit) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $connection->prepare($sql);
-        if ($stmt->execute([$title, $director, $language, $year, $duration, $rating, $description, $genreId, $versionId, $trailerLink])) {
+        if ($stmt->execute([$title, $director, $language, $year, $duration, $rating, $description, $genreId, $versionId, $trailerLink, $agelimit])) {
             $movieId = $connection->lastInsertId();
 
             // Handle image upload for poster
@@ -92,6 +95,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $genreId = (int)trim($_POST['genre_id']);
         $versionId = (int)trim($_POST['version_id']);
         $trailerLink = htmlspecialchars(trim($_POST['trailerlink']));
+        $agelimit = htmlspecialchars(trim($_POST['agelimit']));
+
     
         // Update movie
         $sql = "UPDATE Movie SET 
@@ -104,11 +109,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 Description = ?, 
                 Genre_ID = ?, 
                 Version_ID = ?, 
-                TrailerLink = ? 
+                TrailerLink = ?,
+                AgeLimit = ?
                 WHERE Movie_ID = ?";
         $stmt = $connection->prepare($sql);
     
-        if ($stmt->execute([$title, $director, $language, $year, $duration, $rating, $description, $genreId, $versionId, $trailerLink, $movieId])) {
+        if ($stmt->execute([$title, $director, $language, $year, $duration, $rating, $description, $genreId, $versionId, $trailerLink, $agelimit, $movieId])) {
             // Handle image upload if a new image is provided
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                 deletePosterImage($movieId, $connection); // Ensure this function is correct
@@ -160,7 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $sql = "SELECT m.Movie_ID, m.Title, m.Director, m.Language, m.Year, m.Duration, m.Rating, m.Description, 
-               m.TrailerLink, 
+               m.TrailerLink, m.AgeLimit, 
                MAX(CASE WHEN media.IsFeatured = 1 THEN media.FileName END) AS ImageFileName,
                GROUP_CONCAT(CASE WHEN media.IsFeatured = 0 THEN media.FileName END) AS GalleryImages,
                g.Genre_ID AS Genre_ID, g.Name AS GenreName,
