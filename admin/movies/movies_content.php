@@ -36,6 +36,9 @@
     <label for="rating">Rating:</label>
     <input type="number" name="rating" required min="0" max="10">
 
+    <label for="agelimit">Age Limit:</label>
+    <input type="number" name="agelimit" required>
+
     <label for="description">Description:</label>
     <textarea name="description" required></textarea>
 
@@ -107,6 +110,9 @@
 
                 <label for="rating">Rating:</label>
                 <input type="number" name="rating" value="<?php echo $movie['Rating']; ?>" required min="0" max="10">
+
+                <label for="agelimit">Age Limit:</label>
+                <input type="number" name="agelimit" value="<?php echo $movie['AgeLimit']; ?>" required min="0" max="18">
 
                 <label for="description">Description:</label>
                 <textarea name="description" required><?php echo htmlspecialchars($movie['Description']); ?></textarea>

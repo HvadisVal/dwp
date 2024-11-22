@@ -28,7 +28,7 @@
             <div class="movie-details">
                 <h4><?= htmlspecialchars($movieDetails['Title']); ?></h4>
                 <p><strong>Duration:</strong> <?= htmlspecialchars($movieDetails['Duration']); ?></p>
-                <p><strong>Allowed for children over</strong> <?= htmlspecialchars(string: $movieDetails['Rating']); ?> years</p>
+                <p><strong>Allowed for children over</strong> <?= htmlspecialchars(string: $movieDetails['AgeLimit']); ?> years</p>
                 <p><strong>Rating:</strong> <?= htmlspecialchars(string: $movieDetails['Rating']); ?> </p>
                 <p><strong>Director:</strong> <?= htmlspecialchars($movieDetails['Director']); ?></p>
                 <p><strong>Language:</strong> <?= htmlspecialchars($movieDetails['Language']); ?></p>

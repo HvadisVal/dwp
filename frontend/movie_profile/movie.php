@@ -67,6 +67,7 @@ foreach ($movieData as $data) {
     $movieDetails['TrailerLink'] = $data['TrailerLink'];
     $movieDetails['Genre_ID'] = $data['Genre_ID'];
     $movieDetails['Version'] = $data['Version'];
+    $movieDetails['AgeLimit'] = $data['AgeLimit'];
 
     // Add poster images (featured)
     $movieDetails['PosterFiles'] = explode(',', $data['PosterFiles']);
