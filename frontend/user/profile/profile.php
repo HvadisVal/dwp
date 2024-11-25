@@ -4,7 +4,7 @@ require_once("../../../includes/connection.php");
 
 // Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: /dwp/frontend/user/login.php");
+    header("Location: /dwp/frontend/landing/landing.php");
     exit();
 }
 
