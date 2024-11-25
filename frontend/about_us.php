@@ -140,8 +140,7 @@ $description = $result['Description'] ?? 'N/A';
 </head>
 <body>
 
-<?php include 'navbar.php'; ?>
-
+<?php include 'frontend/navbar/navbar_structure.php'; ?>
 
     <!-- Hero Section -->
     <section class="hero">
