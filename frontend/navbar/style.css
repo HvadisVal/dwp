@@ -1,6 +1,6 @@
 nav {
-    display: flex;
-    justify-content: space-between;
+    display: flex !important;
+    justify-content: space-between; /* Spread items evenly */
     align-items: center;
     padding: 1rem 2rem;
     background: linear-gradient(to right, #243642, #1a252d);
@@ -8,25 +8,29 @@ nav {
     width: 100%;
     top: 0;
     z-index: 100;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-.logo {
-    color: black;
-    font-weight: bold;
+.logo img {
+    height: 40px;
+    width: auto;
     cursor: pointer;
+    display: flex;
 }
 
 .nav-links {
     display: flex;
-    width: 70%;
-    font-weight: bold;
-    gap: 5rem;
-   
+    flex-grow: 1; /* Allow links to take up space */
+    justify-content: center; /* Center the links */
+    align-items: center;
+    gap: 4rem; /* Add spacing between links */
 }
 
 .nav-links a {
     color: white;
     text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1rem;
     transition: color 0.2s ease;
 }
 
@@ -34,10 +38,30 @@ nav {
     color: grey;
 }
 
-.cart-icon {
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* Add spacing between buttons */
+}
+
+button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: teal;
     color: white;
-    background: white;
-    padding: 0.5rem 3rem;
-    border-radius: 25px;
-    font-size: 1.5rem;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: grey;
+    color: white;
+}
+
+.user-info {
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
 }
