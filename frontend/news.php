@@ -41,14 +41,14 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             background-image: url('https://t4.ftcdn.net/jpg/04/61/47/03/360_F_461470323_6TMQSkCCs9XQoTtyer8VCsFypxwRiDGU.jpghttps://t4.ftcdn.net/jpg/04/61/47/03/360_F_461470323_6TMQSkCCs9XQoTtyer8VCsFypxwRiDGU.jpg')!important;
             background-size: cover!important;
             color: #333!important;
-            top: 100px!important;
+            top: 50px!important;
             position: relative!important;
         }
 
         /* Container */
         .container {
             width: 80%!important;
-            margin: 20px auto!important;
+            margin: 40px auto!important;
             padding: 0 15px!important;
         }
 
