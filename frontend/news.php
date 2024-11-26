@@ -31,84 +31,82 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <style>
         /* General Body Styles */
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            box-sizing: border-box!important;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif!important;
         }
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+            margin: 0!important;
+            padding: 0!important;
             background-color: black;
-            background-image: url('https://t4.ftcdn.net/jpg/04/61/47/03/360_F_461470323_6TMQSkCCs9XQoTtyer8VCsFypxwRiDGU.jpghttps://t4.ftcdn.net/jpg/04/61/47/03/360_F_461470323_6TMQSkCCs9XQoTtyer8VCsFypxwRiDGU.jpg');
-            background-size: cover;
-            color: #333;
-            top: 100px;
-            position: relative;
+            background-image: url('https://t4.ftcdn.net/jpg/04/61/47/03/360_F_461470323_6TMQSkCCs9XQoTtyer8VCsFypxwRiDGU.jpghttps://t4.ftcdn.net/jpg/04/61/47/03/360_F_461470323_6TMQSkCCs9XQoTtyer8VCsFypxwRiDGU.jpg')!important;
+            background-size: cover!important;
+            color: #333!important;
+            top: 100px!important;
+            position: relative!important;
         }
 
         /* Container */
         .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 15px;
+            width: 80%!important;
+            margin: 20px auto!important;
+            padding: 0 15px!important;
         }
 
         /* News Section Header */
         h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: white;
+            text-align: center!important;
+            margin-bottom: 30px!important;
+            color: white!important;
+            font-size: 2rem!important;
         }
 
         /* News Articles Grid */
         .news-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            display: grid!important;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))!important;
+            gap: 20px!important;
         }
 
         /* Individual Article Card */
         .news-article {
-            background: linear-gradient(to right, #243642, #1a252d);
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: transform 0.3s ease;
+            background: linear-gradient(to right, #243642, #1a252d)!important;
+            border-radius: 8px!important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1)!important;
+            overflow: hidden!important;
+            transition: transform 0.3s ease!important;
         }
 
         .news-article:hover {
-            transform: translateY(-5px);
+            transform: translateY(-5px)!important;
         }
 
         /* News Image */
         .news-article img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
+            width: 100%!important;
+            height: 200px!important;
+            object-fit: cover!important;
         }
 
         /* News Content */
         .news-content {
-            padding: 15px;
+            padding: 15px!important;
         }
 
         .news-content h2 {
-            font-size: 1.5em;
-            color: white;
-            margin: 0 0 10px;
+            font-size: 1.5em!important;
+            color: white!important;
+            margin: 0 0 10px!important;
         }
 
         .news-content .date {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 10px;
+            font-size: 0.9em!important;
+            color: #666!important;
+            margin-bottom: 10px!important;
         }
 
         .news-content p {
-            line-height: 1.6;
-            color: #ddd;
+            line-height: 1.6!important;
+            color: #ddd!important;
         }
     </style>
 </head>
