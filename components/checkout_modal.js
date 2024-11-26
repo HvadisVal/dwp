@@ -8,8 +8,14 @@ document.addEventListener('DOMContentLoaded', function () {
     if (applyCouponButton) {
         applyCouponButton.addEventListener('click', function () {
             const couponCode = document.getElementById('couponCode').value.trim();
+            const couponMessage = document.getElementById('couponMessage');
+            if (!couponMessage) {
+                console.error("Element with id 'couponMessage' not found in the DOM.");
+                return; // Exit the function to avoid further errors
+            }
+                        const totalPriceDisplay = document.getElementById('totalPriceDisplay');
+
             if (!couponCode) {
-                const couponMessage = document.getElementById('couponMessage');
                 couponMessage.style.color = 'red';
                 couponMessage.textContent = "Please enter a coupon code.";
                 couponMessage.style.display = 'block';
@@ -23,9 +29,6 @@ document.addEventListener('DOMContentLoaded', function () {
             })
                 .then(response => response.json())
                 .then(data => {
-                    const couponMessage = document.getElementById('couponMessage');
-                    const totalPriceDisplay = document.getElementById('totalPriceDisplay');
-
                     if (data.valid) {
                         couponMessage.style.color = 'green';
                         couponMessage.textContent = `Coupon applied! You saved DKK ${data.discount}.`;
@@ -38,24 +41,36 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .catch(error => {
                     console.error('Error applying coupon:', error);
+                    couponMessage.style.color = 'red';
+                    couponMessage.textContent = "An error occurred. Please try again.";
+                    couponMessage.style.display = 'block';
                 });
         });
     }
 
-    // Checkout Form Submission
-    const checkoutForm = document.getElementById('checkoutForm');
-    if (checkoutForm) {
-        checkoutForm.addEventListener('submit', function (e) {
-            e.preventDefault();
+    // Select all radio buttons and payment content sections
+    const paymentRadios = document.querySelectorAll('.payment-radio');
+    const paymentContents = document.querySelectorAll('.payment-content');
 
-            // Simulated Payment Logic
-            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-            console.log('Processing payment with method:', paymentMethod);
-            alert('Payment processed successfully!');
+    // Hide all payment content initially
+    paymentContents.forEach(content => {
+        content.style.display = 'none';
+    });
 
-            // Close the modal
-            const modalInstance = M.Modal.getInstance(document.getElementById('checkoutModal'));
-            modalInstance.close();
+    // Add event listeners to payment method radio buttons
+    paymentRadios.forEach(radio => {
+        radio.addEventListener('change', function () {
+            // Hide all payment content
+            paymentContents.forEach(content => {
+                content.style.display = 'none';
+            });
+
+            // Show the selected payment method's content
+            if (radio.value === 'card') {
+                document.getElementById('cardDetails').style.display = 'block';
+            } else if (radio.value === 'mobilepay') {
+                document.getElementById('mobilePayDetails').style.display = 'block';
+            }
         });
-    }
+    });
 });

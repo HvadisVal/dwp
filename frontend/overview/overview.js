@@ -53,44 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Apply Coupon Code
-    const applyCouponButton = document.getElementById('applyCoupon');
-    if (applyCouponButton) {
-        applyCouponButton.addEventListener('click', function () {
-            const couponCode = document.getElementById('couponCode').value.trim();
-            if (!couponCode) {
-                const couponMessage = document.getElementById('couponMessage');
-                couponMessage.style.color = 'red';
-                couponMessage.textContent = "Please enter a coupon code.";
-                couponMessage.style.display = 'block';
-                return;
-            }
 
-            fetch('/dwp/validate-coupon', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ couponCode })
-            })
-            .then(response => response.json())
-            .then(data => {
-                const couponMessage = document.getElementById('couponMessage');
-                const modalTotalPrice = document.getElementById('modalTotalPrice');
-
-                if (data.valid) {
-                    couponMessage.style.color = 'green';
-                    couponMessage.textContent = `Coupon applied! You saved DKK ${data.discount}.`;
-                    modalTotalPrice.textContent = `DKK ${data.newTotalPrice}`;
-                } else {
-                    couponMessage.style.color = 'red';
-                    couponMessage.textContent = data.message;
-                }
-                couponMessage.style.display = 'block';
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-        });
-    }
 
     // Payment Button Click Event
     const payButton = document.getElementById('payButton');
