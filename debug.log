@@ -1,0 +1,134 @@
+Input Data: 
+Coupon Code: 
+Input Data: Array
+(
+    [couponCode] => SUMMER2024
+)
+
+Coupon Code: SUMMER2024
+Query Result: Array
+(
+    [Coupon_ID] => 1
+    [CouponCode] => SUMMER2024
+    [DiscountAmount] => 20.00
+    [ExpireDate] => 2025-08-15
+)
+
+Input Data: Array
+(
+    [couponCode] => WINTER2024
+)
+
+Coupon Code: WINTER2024
+Query Result: Array
+(
+    [Coupon_ID] => 2
+    [CouponCode] => WINTER2024
+    [DiscountAmount] => 25.00
+    [ExpireDate] => 2025-12-31
+)
+
+Input Data: Array
+(
+    [couponCode] => WINTER2024
+)
+
+Coupon Code: WINTER2024
+Query Result: Array
+(
+    [Coupon_ID] => 2
+    [CouponCode] => WINTER2024
+    [DiscountAmount] => 25.00
+    [ExpireDate] => 2025-12-31
+)
+
+Input Data: Array
+(
+    [couponCode] => WINTER2024
+)
+
+Coupon Code: WINTER2024
+Query Result: Array
+(
+    [Coupon_ID] => 2
+    [CouponCode] => WINTER2024
+    [DiscountAmount] => 25.00
+    [ExpireDate] => 2025-12-31
+)
+
+Input Data: Array
+(
+    [couponCode] => WINTER2024
+)
+
+Coupon Code: WINTER2024
+Query Result: Array
+(
+    [Coupon_ID] => 2
+    [CouponCode] => WINTER2024
+    [DiscountAmount] => 25.00
+    [ExpireDate] => 2025-12-31
+)
+
+Input Data: Array
+(
+    [couponCode] => WINTER2024
+)
+
+Coupon Code: WINTER2024
+Query Result: Array
+(
+    [Coupon_ID] => 2
+    [CouponCode] => WINTER2024
+    [DiscountAmount] => 25.00
+    [ExpireDate] => 2025-12-31
+)
+
+Input Data: Array
+(
+    [couponCode] => WINTER2024
+)
+
+Coupon Code: WINTER2024
+Query Result: Array
+(
+    [Coupon_ID] => 2
+    [CouponCode] => WINTER2024
+    [DiscountAmount] => 25.00
+    [ExpireDate] => 2025-12-31
+)
+
+Input Data: Array
+(
+    [couponCode] => WINTER2024
+)
+
+Coupon Code: WINTER2024
+Query Result: Array
+(
+    [Coupon_ID] => 2
+    [CouponCode] => WINTER2024
+    [DiscountAmount] => 25.00
+    [ExpireDate] => 2025-12-31
+)
+
+Input Data: Array
+(
+    [couponCode] => WINTER2024
+)
+
+Coupon Code: WINTER2024
+Query Result: Array
+(
+    [Coupon_ID] => 2
+    [CouponCode] => WINTER2024
+    [DiscountAmount] => 25.00
+    [ExpireDate] => 2025-12-31
+)
+
+Input Data: Array
+(
+    [couponCode] => WINTER2024
+)
+
+Coupon Code: WINTER2024

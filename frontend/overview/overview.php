@@ -3,29 +3,22 @@ session_start();
 require_once("includes/connection.php");
 require_once("dbcon.php");
 
-
-// Check if the user or guest is logged in
 $isLoggedIn = isset($_SESSION['user_id']);
 $isGuest = isset($_SESSION['guest_user_id']);
 
-// Fetch selected seats and ticket types from session (stored from seat selection page)
+// Fetch selected seats and ticket types from session
 $selectedSeats = $_SESSION['selectedSeats'] ?? [];
 $selectedTickets = $_SESSION['selectedTickets'] ?? [];
 
-
-// Check if any tickets were selected
+// Validate ticket selection
 if (empty($selectedTickets) || empty($selectedSeats)) {
     die("No tickets or seats selected. Please go back to select tickets.");
 }
 
-
-// Calculate the total price by retrieving prices from the TicketPrice table
+// Calculate the total price
 $totalPrice = 0;
 $ticketDetails = [];
-
-
 try {
-    // Prepare database query to fetch ticket prices for each selected type
     $dbCon = dbCon($user, $pass);
     foreach ($selectedTickets as $type => $quantity) {
         $priceQuery = $dbCon->prepare("SELECT Price FROM TicketPrice WHERE Type = :type");
@@ -45,8 +38,7 @@ try {
             ];
         }
     }
-     // Store the total price in the session for later use (e.g., in the coupon discount)
-     $_SESSION['totalPrice'] = $totalPrice;
+    $_SESSION['totalPrice'] = $totalPrice;
 } catch (PDOException $e) {
     die("Error retrieving ticket prices: " . $e->getMessage());
 }
@@ -55,10 +47,14 @@ try {
 $movie_id = $_SESSION['movie_id'] ?? null;
 $cinema_hall_id = $_SESSION['cinema_hall_id'] ?? null;
 $showtime = $_SESSION['time'] ?? null;
-$movieQuery = $dbCon->prepare("SELECT * FROM Movie WHERE Movie_ID = :movie_id");
-$movieQuery->bindParam(':movie_id', $movie_id);
-$movieQuery->execute();
-$movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
+
+try {
+    $movieQuery = $dbCon->prepare("SELECT * FROM Movie WHERE Movie_ID = :movie_id");
+    $movieQuery->bindParam(':movie_id', $movie_id);
+    $movieQuery->execute();
+    $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Error retrieving movie details: " . $e->getMessage());
+}
 
 include 'overview_content.php';
-?>
