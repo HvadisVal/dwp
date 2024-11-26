@@ -3,6 +3,7 @@ require_once("./includes/admin_session.php");
 require_once("./includes/connection.php"); 
 require_once("./includes/functions.php"); 
 
+
 // CSRF Protection: Generate token
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
