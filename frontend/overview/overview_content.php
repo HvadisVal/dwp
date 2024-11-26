@@ -67,5 +67,6 @@
     <script src="/dwp/frontend/overview/overview.js"></script>
     <script src="/dwp/components/login_modal.js"></script>
     <script src="/dwp/components/guest_modal.js"></script>
+    <script src="/dwp/components/checkout_modal.js"></script>
 </body>
 </html>
