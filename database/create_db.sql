@@ -969,7 +969,7 @@ INSERT INTO Media (Media_ID, FileName, UploadAt, IsFeatured, Format, Movie_ID, N
 (3, 'b0eb6fef1fdc205c5942a48911a6eb63.jpg', '2024-11-15 14:07:49', 0, 'jpg', NULL, 3),
 (4, '3d77bbf031df90963c843b47243bae8b.jpg', '2024-11-15 14:08:31', 0, 'jpg', NULL, 4),
 (5, '6dd7df067727d698f3eaac28e56847c2.png', '2024-11-15 14:10:42', 0, 'png', NULL, 5);
-INSERT INTO media (Media_ID, FileName, UploadAt, IsFeatured, Format, Movie_ID, News_ID) VALUES
+INSERT INTO Media (Media_ID, FileName, UploadAt, IsFeatured, Format, Movie_ID, News_ID) VALUES
 (6, 'ed10d9830d9f17a1bcbd932fb153bb03.jpg', '2024-11-20 12:17:52', 1, 'jpg', 35, NULL),
 (7, '6043a7285eb367996b0d792cbf8f4e5a.jpg', '2024-11-20 12:18:27', 1, 'jpg', 34, NULL),
 (8, '2d31d140fe3ca1789cccb37b53c115c8.jpg', '2024-11-20 12:19:06', 1, 'jpg', 33, NULL),
@@ -1005,5 +1005,13 @@ INSERT INTO media (Media_ID, FileName, UploadAt, IsFeatured, Format, Movie_ID, N
 (39, '2f2caa6dd073469c788b9f3b582bcd95.jpg', '2024-11-20 12:29:16', 1, 'jpg', 3, NULL),
 (40, 'f70e6aaa1f50c003022e135330c7b6ca.jpg', '2024-11-20 12:29:16', 1, 'jpg', 2, NULL),
 (41, 'a0d5605f20b03783b73db10c6930faa7.jpg', '2024-11-20 12:29:16', 1, 'jpg', 1, NULL);
+INSERT INTO Media (Media_ID, FileName, UploadAt, IsFeatured, Format, Movie_ID, News_ID)
+VALUES
+(42, '23a316172125538b4c296c426039adc3.jpg', '2024-11-26 11:00:40', 0, 'jpg', 1, NULL),
+(43, '8f298896598dc615fce62d72f570cb35.png', '2024-11-26 11:00:40', 0, 'png', 1, NULL),
+(44, 'b8e99580e94ff2fceaad808924495ab4.jpg', '2024-11-26 11:00:40', 0, 'jpg', 1, NULL),
+(45, 'cdab0350ef6af5109a6276b151dd527c.jpg', '2024-11-26 11:00:40', 0, 'jpg', 1, NULL),
+(46, 'f96d0092c2957f5c868d0fb3d0fe12e4.jpg', '2024-11-26 11:00:40', 0, 'jpg', 1, NULL);
+
 
 
