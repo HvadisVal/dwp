@@ -935,7 +935,7 @@ VALUES
 ('1',
  'FilmFusion', 
  'FilmFusion is your destination for an unparalleled cinema experience, blending the latest technology with a warm, welcoming ambiance. Located in the heart of MovieTown, FilmFusion features a mix of blockbuster films, independent cinema, and exclusive screenings that cater to all tastes. Our venue boasts luxurious reclining seats, advanced Dolby Atmos surround sound, and crystal-clear 4K projection in every theater. With spacious aisles, gourmet concessions, and a dedicated lounge for VIP members, FilmFusion transforms moviegoing into a memorable event. Our team is committed to exceptional service, ensuring each guest feels like a star. Whether you\'re here for a family outing, a date night, or a solo escape into the magic of film, FilmFusion offers a viewing experience that\'s both comfortable and captivating. Join us for seasonal film festivals, midnight premieres, and our signature “Retro Movie Nights” that celebrate the classics. FilmFusion—where the magic of cinema comes alive.',
- 'Mon-Fri: 10:00 AM - 11:00 PM; Sat-Sun: 9:00 AM - 12:00 AM', 
+ 'Mon-Fri: 10:00 AM - 11:00 PM; Sat-Sun: 9:00 AM - 12:00 AM;', 
  'contact@filmfusion.com', 
  '123 Cinema Street, MovieTown, MT 12345');
 
