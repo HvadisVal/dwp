@@ -1037,7 +1037,12 @@ VALUES
 (69, '10f0ea5266b90c7f99b9ad935e5e9d3e.png', '2024-11-26 11:00:40', 0, 'png', 6, NULL),
 (70, 'a8b725d6aaf62fd167bf18267acfc236.png', '2024-11-26 11:00:40', 0, 'png', 6, NULL),
 (71, 'd17b396c8e94d3e961a6590f8959d9f7.png', '2024-11-26 11:00:40', 0, 'png', 6, NULL),
-(72, 'f11e73d4a827ebcd31d1c7c4eee63d98.png', '2024-11-26 11:00:40', 0, 'png', 6, NULL);
+(72, 'f11e73d4a827ebcd31d1c7c4eee63d98.png', '2024-11-26 11:00:40', 0, 'png', 6, NULL),
+(73, '4f6b41c5237a1ea50696e7866190ee20.png', '2024-11-26 11:00:40', 0, 'png', 7, NULL),
+(74, '7bf7ce4d9accd1dd51b3ebdc933aea04.png', '2024-11-26 11:00:40', 0, 'png', 7, NULL),
+(75, '90922282be5b0dcbe382c1184eeb9ab0.png', '2024-11-26 11:00:40', 0, 'png', 7, NULL),
+(76, 'ab81cd6aede0e9e7b0edabd2792cf6f4.png', '2024-11-26 11:00:40', 0, 'png', 7, NULL),
+(77, 'fd46c16bba1fae76cedf5c518535cda9.png', '2024-11-26 11:00:40', 0, 'png', 7, NULL);
 
 
 
