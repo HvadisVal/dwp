@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<?php include './frontend/navbar.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/navbar/navbar_structure.php'; ?>
 
 <div class="container">
     <!-- Movie Information Section -->
