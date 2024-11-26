@@ -32,110 +32,107 @@ $description = $result['Description'] ?? 'N/A';
     <title>About Us - FilmFusion</title>
     <style>
         * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-        }
+    box-sizing: border-box!important;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif!important;
+}
 
-        body {
-            background: #000;
-            color: white;
-        }
+body {
+    background: #000!important;
+    color: white!important;
+}
 
-        
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            background: url('https://m.economictimes.com/thumb/msid-104359417,width-1200,height-900,resizemode-4,imgsize-54656/cinema-halls1.jpg') no-repeat center center/cover;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 0 20px;
-        }
-        .hero h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
-            color: #ffffff;
-        }
-        .hero p {
-            font-size: 18px;
-            max-width: 800px;
-            margin: 0 auto;
-            color: #dcdcdc;
-        }
+/* Hero Section */
+.hero {
+    height: 100vh!important;
+    background: url('https://m.economictimes.com/thumb/msid-104359417,width-1200,height-900,resizemode-4,imgsize-54656/cinema-halls1.jpg') no-repeat center center/cover!important;
+    display: flex!important;
+    align-items: center!important;
+    justify-content: center!important;
+    text-align: center!important;
+    padding: 0 20px!important;
+}
+.hero h1 {
+    font-size: 48px!important;
+    font-weight: 600!important;
+    margin-bottom: 20px!important;
+    color: #ffffff!important;
+}
+.hero p {
+    font-size: 18px!important;
+    max-width: 800px!important;
+    margin: 0 auto!important;
+    color: #dcdcdc!important;
+}
 
-        /* About Section */
-        .about {
-            padding: 80px 40px;
-            background-color: #2c2c2c;
-        }
-        .about h2 {
-            text-align: center;
-            font-size: 36px;
-            margin-bottom: 20px;
-            color: white;
-        }
-        .about p {
-            max-width: 1100px;
-            margin: 0 auto 20px auto;
-            font-size: 18px;
-            color: white;
-            
-        }
+/* About Section */
+.about {
+    padding: 80px 40px!important;
+    background-color: #2c2c2c!important;
+}
+.about h2 {
+    text-align: center!important;
+    font-size: 36px!important;
+    margin-bottom: 20px!important;
+    color: white!important;
+}
+.about p {
+    max-width: 1100px!important;
+    margin: 0 auto 20px auto!important;
+    font-size: 18px!important;
+    color: white!important;
+}
 
-        /* Contact Information */
-        .contact {
-            background-color: #1c1c1c;
-            padding: 60px 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .contact h3 {
-            font-size: 28px;
-            margin-bottom: 10px;
-            color: white;
-        }
-        .contact p {
-            font-size: 16px;
-            margin: 10px 0;
-            color: white;
-        }
+/* Contact Information */
+.contact {
+    background-color: #1c1c1c!important;
+    padding: 60px 40px!important;
+    display: flex!important;
+    flex-direction: column!important;
+    align-items: center!important;
+}
+.contact h3 {
+    font-size: 28px!important;
+    margin-bottom: 10px!important;
+    color: white!important;
+}
+.contact p {
+    font-size: 16px!important;
+    margin: 10px 0!important;
+    color: white!important;
+}
 
-        .openingH{
-            width: 250px;
-            display: flex;
-            text-align: center; 
-              
-        }
+.openingH {
+    width: 250px!important;
+    display: flex!important;
+    text-align: center!important; 
+}
 
-        /* Footer */
-        footer {
-            background-color: #000;
-            color: #777;
-            text-align: center;
-            padding: 20px 40px;
-            font-size: 14px;
-        }
+/* Footer */
+footer {
+    background-color: #000!important;
+    color: #777!important;
+    text-align: center!important;
+    padding: 20px 40px!important;
+    font-size: 14px!important;
+}
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .navbar .menu {
-                margin-top: 10px;
-            }
-            .hero h1 {
-                font-size: 32px;
-            }
-            .about h2 {
-                font-size: 28px;
-            }
-        }
+/* Responsive Design */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column!important;
+        align-items: flex-start!important;
+    }
+    .navbar .menu {
+        margin-top: 10px!important;
+    }
+    .hero h1 {
+        font-size: 32px!important;
+    }
+    .about h2 {
+        font-size: 28px!important;
+    }
+}
+
     </style>
 </head>
 <body>
