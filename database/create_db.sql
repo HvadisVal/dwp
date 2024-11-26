@@ -879,8 +879,8 @@ CREATE TABLE GuestUser (
 CREATE TABLE Booking (
     Booking_ID INT PRIMARY KEY AUTO_INCREMENT,
     Movie_ID INT,
-    User_ID INT,
-    GuestUser_ID INT,
+    User_ID INT DEFAULT NULL,
+    GuestUser_ID INT DEFAULT NULL,
     BookingDate DATE,
     NumberOfTickets INT,
     PaymentStatus VARCHAR(50),
@@ -893,7 +893,8 @@ CREATE TABLE Booking (
     FOREIGN KEY (GuestUser_ID) REFERENCES GuestUser(GuestUser_ID),
     FOREIGN KEY (Ticket_ID) REFERENCES Ticket(Ticket_ID),
     FOREIGN KEY (Payment_ID) REFERENCES Payment(Payment_ID),
-    FOREIGN KEY (Invoice_ID) REFERENCES Invoice(Invoice_ID)
+    FOREIGN KEY (Invoice_ID) REFERENCES Invoice(Invoice_ID),
+    CHECK ((User_ID IS NOT NULL AND GuestUser_ID IS NULL) OR (User_ID IS NULL AND GuestUser_ID IS NOT NULL))
 );
 
 -- News Table
