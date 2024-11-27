@@ -1,23 +1,19 @@
 <?php
-session_start(); // Start the session at the beginning
+session_start(); // Start the session
 
 // Connect to the database
 require_once("./dbcon.php");
 $dbCon = dbCon($user, $pass);
 
-// Get movie, time, and cinema hall from query parameters
-$movie_id = isset($_GET['movie_id']) ? $_GET['movie_id'] : 0;
-$time = isset($_GET['time']) ? $_GET['time'] : '';
-$cinemaHallID = isset($_GET['cinema_hall_id']) ? $_GET['cinema_hall_id'] : 0;
+// Retrieve booking session or query parameters
+$movie_id = $_SESSION['booking']['movie_id'] ?? $_GET['movie_id'] ?? 0;
+$time = $_SESSION['booking']['time'] ?? $_GET['time'] ?? 'N/A';
+$cinemaHallID = $_SESSION['booking']['cinema_hall_id'] ?? $_GET['cinema_hall_id'] ?? 0;
+$date = $_SESSION['booking']['date'] ?? $_GET['date'] ?? '';
 
-// Store movie, time, and cinema hall in the session for later use
-$_SESSION['movie_id'] = $movie_id;
-$_SESSION['time'] = $time;
-$_SESSION['cinema_hall_id'] = $cinemaHallID;
-
-// Check if movie_id is valid
-if ($movie_id == 0) {
-    die("Invalid movie ID.");
+// Validate movie_id and cinema hall
+if (!$movie_id || !$cinemaHallID) {
+    die("Invalid movie or cinema hall ID.");
 }
 
 // Fetch movie details
@@ -26,11 +22,9 @@ $movieQuery->bindParam(':movie_id', $movie_id, PDO::PARAM_INT);
 $movieQuery->execute();
 $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
 
-// If movie not found, set a default message
 if (!$movie) {
     $movie = ['Title' => 'Unknown Movie'];
 }
-
 
 // Fetch cinema hall information
 $hallQuery = $dbCon->prepare("SELECT * FROM CinemaHall WHERE CinemaHall_ID = :cinema_hall_id");
@@ -38,7 +32,6 @@ $hallQuery->bindParam(':cinema_hall_id', $cinemaHallID);
 $hallQuery->execute();
 $hall = $hallQuery->fetch(PDO::FETCH_ASSOC);
 
-// Check if hall was found
 if (!$hall) {
     die("Cinema Hall not found.");
 }
@@ -49,18 +42,44 @@ $seatsQuery->bindParam(':cinema_hall_id', $cinemaHallID);
 $seatsQuery->execute();
 $seats = $seatsQuery->fetchAll(PDO::FETCH_ASSOC);
 
-// Check if seats were found
 if (!$seats) {
     die("No seats available for this cinema hall.");
 }
 
-// Fetch ticket prices from the TicketPrice table
+// Fetch ticket prices
 $ticketPricesQuery = $dbCon->prepare("SELECT * FROM TicketPrice");
 $ticketPricesQuery->execute();
 $ticketPrices = $ticketPricesQuery->fetchAll(PDO::FETCH_ASSOC);
+
 $ticketPricesMap = [];
 foreach ($ticketPrices as $ticketPrice) {
     $ticketPricesMap[$ticketPrice['Type']] = $ticketPrice['Price'];
 }
+
+// Fetch booked seats for the current screening
+$bookedSeatsQuery = $dbCon->prepare("
+    SELECT Seat.Row, Seat.SeatNumber 
+    FROM Ticket
+    INNER JOIN Seat ON Ticket.Seat_ID = Seat.Seat_ID
+    WHERE Ticket.Screening_ID = (
+        SELECT Screening_ID 
+        FROM Screening 
+        WHERE Movie_ID = :movie_id 
+        AND CinemaHall_ID = :cinema_hall_id 
+        AND ShowDate = :show_date 
+        AND ShowTime = :show_time
+    )
+");
+$bookedSeatsQuery->bindParam(':movie_id', $movie_id, PDO::PARAM_INT);
+$bookedSeatsQuery->bindParam(':cinema_hall_id', $cinemaHallID, PDO::PARAM_INT);
+$bookedSeatsQuery->bindParam(':show_date', $date, PDO::PARAM_STR);
+$bookedSeatsQuery->bindParam(':show_time', $time, PDO::PARAM_STR);
+$bookedSeatsQuery->execute();
+$bookedSeats = $bookedSeatsQuery->fetchAll(PDO::FETCH_ASSOC);
+
+// Convert booked seats to an array
+$bookedSeatsArray = array_map(function ($seat) {
+    return $seat['Row'] . '-' . $seat['SeatNumber'];
+}, $bookedSeats);
+
 include 'seat_content.php';
-?>

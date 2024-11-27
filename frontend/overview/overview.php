@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 require_once("includes/connection.php");
 require_once("dbcon.php");
 
@@ -44,17 +45,15 @@ try {
 }
 
 // Get movie details
-$movie_id = $_SESSION['movie_id'] ?? null;
-$cinema_hall_id = $_SESSION['cinema_hall_id'] ?? null;
-$showtime = $_SESSION['time'] ?? null;
+$movie_id = $_SESSION['booking']['movie_id'] ?? null;
+$cinema_hall_id = $_SESSION['booking']['cinema_hall_id'] ?? null;
+$showtime = $_SESSION['booking']['time'] ?? null;
 
-try {
-    $movieQuery = $dbCon->prepare("SELECT * FROM Movie WHERE Movie_ID = :movie_id");
-    $movieQuery->bindParam(':movie_id', $movie_id);
-    $movieQuery->execute();
-    $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    die("Error retrieving movie details: " . $e->getMessage());
-}
+
+$movieQuery = $dbCon->prepare("SELECT * FROM Movie WHERE Movie_ID = :movie_id");
+$movieQuery->bindParam(':movie_id', $movie_id);
+$movieQuery->execute();
+$movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
+
 
 include 'overview_content.php';

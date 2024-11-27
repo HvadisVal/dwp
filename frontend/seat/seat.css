@@ -217,3 +217,10 @@ body {
   font-size: 0.9rem;
   cursor: pointer;
 }
+
+.seat.booked {
+  background-color: red;
+  cursor: not-allowed;
+  pointer-events: none; /* Disable clicking on booked seats */
+}
+

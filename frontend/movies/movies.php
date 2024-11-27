@@ -15,10 +15,11 @@ LEFT JOIN Version v ON m.Version_ID = v.Version_ID
 LEFT JOIN Media media ON m.Movie_ID = media.Movie_ID
 GROUP BY m.Movie_ID, s.ShowDate, s.ShowTime
 ORDER BY m.Movie_ID, s.ShowDate, s.ShowTime
-");
+"); 
 
 $moviesQuery->execute();
 $moviesData = $moviesQuery->fetchAll(PDO::FETCH_ASSOC);
+
 
 // Organize the data by movie and date
 $moviesById = [];

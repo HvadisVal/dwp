@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
 <body>
-<?php include '../../../frontend/navbar/navbar_structure.php'; ?>
+<?php include './frontend/navbar/navbar_structure.php'; ?>
 
 <div class="container" style="padding-top: 10%">
     <h3>Profile Overview</h3>
@@ -21,34 +21,41 @@
     </div>
 
     <div class="booking-history">
-        <h5>Booking History</h5>
-        <?php if ($bookings): ?>
-            <table class="highlight">
-                <thead>
+    <h5>Booking History</h5>
+    <?php if ($bookings): ?>
+        <table class="highlight">
+            <thead>
+                <tr>
+                    <th>Booking Date</th>
+                    <th>Movie</th>
+                    <th>Showtime</th>
+                    <th>Cinema Hall</th>
+                    <th>Seats</th>
+                    <th>Tickets</th>
+                    <th>Total Price</th>
+                    <th>Payment Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($bookings as $booking): ?>
                     <tr>
-                        <th>Booking Date</th>
-                        <th>Movie</th>
-                        <th>Tickets</th>
-                        <th>Total Price</th>
-                        <th>Payment Status</th>
+                        <td><?= htmlspecialchars($booking['BookingDate']) ?></td>
+                        <td><?= htmlspecialchars($booking['MovieTitle']) ?></td>
+                        <td><?= htmlspecialchars($booking['ShowTime']) ?> on <?= htmlspecialchars($booking['ShowDate']) ?></td>
+                        <td><?= htmlspecialchars($booking['CinemaHall']) ?></td>
+                        <td><?= htmlspecialchars($booking['Seats']) ?></td>
+                        <td><?= htmlspecialchars($booking['NumberOfTickets']) ?></td>
+                        <td>DKK <?= number_format($booking['TotalPrice'], 2) ?></td>
+                        <td><?= htmlspecialchars($booking['PaymentStatus']) ?></td>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($bookings as $booking): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($booking['BookingDate']) ?></td>
-                            <td><?= htmlspecialchars($booking['MovieTitle']) ?></td>
-                            <td><?= htmlspecialchars($booking['NumberOfTickets']) ?></td>
-                            <td>DKK <?= number_format($booking['TotalPrice'], 2) ?></td>
-                            <td><?= htmlspecialchars($booking['PaymentStatus']) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php else: ?>
-            <p>No bookings found.</p>
-        <?php endif; ?>
-    </div>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <p>No bookings found.</p>
+    <?php endif; ?>
+</div>
+
 
     <button id="deleteAccountButton" class="btn red">Delete Account</button>
 </div>

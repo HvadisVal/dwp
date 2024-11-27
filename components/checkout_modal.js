@@ -73,4 +73,21 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+     // Handle "Checkout" button click
+     const checkoutButton = document.getElementById('checkoutButton');
+     if (checkoutButton) {
+         checkoutButton.addEventListener('click', function () {
+             // Perform any necessary validation before redirecting
+             const selectedPaymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+             if (!selectedPaymentMethod) {
+                 alert('Please select a payment method before proceeding to checkout.');
+                 return;
+             }
+ 
+             // Redirect to the secondary page
+             window.location.href = '/dwp/checkout'; // Update with your secondary page path
+         });
+     }
+
 });

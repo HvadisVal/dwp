@@ -25,6 +25,7 @@ $routes = [
     // user actions
     'user/guest' => 'frontend/user/guest.php',
     'user/login' => 'frontend/user/login.php',
+    'user/profile' => 'frontend/user/profile/profile.php',
     'user/logout' => 'frontend/user/logout.php',
     'user/new_user' => 'frontend/user/new_user/new_user.php',
     'user/switch' => 'frontend/user/switch_user.php',
@@ -44,6 +45,7 @@ $routes = [
     'seat' => 'frontend/seat/seat.php',
     'validate-coupon' => 'frontend/payment/validate_coupon.php',
     'movie'=> 'frontend/movie_profile/movie.php',
+    'checkout'=> 'frontend/checkout.php',
 ];
 
 // Check if the requested path exists in the routes array

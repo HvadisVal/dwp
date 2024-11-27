@@ -33,6 +33,10 @@ try {
     if ($coupon && is_numeric($coupon['DiscountAmount'])) {
         $discount = (float)$coupon['DiscountAmount'];
         $newTotalPrice = max(0, $_SESSION['totalPrice'] - $discount);
+
+        // Save the discounted total price to the session
+        $_SESSION['discountedPrice'] = $newTotalPrice;
+
         echo json_encode(["valid" => true, "discount" => $discount, "newTotalPrice" => $newTotalPrice]);
     } else {
         echo json_encode(["valid" => false, "message" => "Invalid or expired coupon code."]);

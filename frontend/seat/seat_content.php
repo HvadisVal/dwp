@@ -11,7 +11,7 @@
 
 <div class="container">
     <h4><?= htmlspecialchars($hall['Name']); ?> - Seat Selection</h4>
-    <p>Movie: <?= htmlspecialchars($movie['Title']); ?> | Time: <?= htmlspecialchars($time); ?></p>
+    <p>Movie: <?= htmlspecialchars($movie['Title']); ?> | Time: <?= htmlspecialchars($time ?? 'N/A'); ?></p>
 
     <!-- Instructional Messages -->
     <p id="selection-message" style="font-size: 18px; color: white; text-decoration: underline; ">Please select the ticket quantity and type.</p>
@@ -39,22 +39,30 @@
 
     <!-- Right side: Seat Layout with Screen and Row Labels -->
     <div class="seat-layout">
-        <div class="screen-label">SCREEN</div>
-        <?php
-        $currentRow = null;
-        foreach ($seats as $seat) {
-            if ($seat['Row'] !== $currentRow) {
-                if ($currentRow !== null) {
-                    echo '</div>';
-                }
-                $currentRow = $seat['Row'];
-                echo "<div class='seat-row'><span class='row-label'>Row {$currentRow}</span>";
+    <div class="screen-label">SCREEN</div>
+    <?php
+    $currentRow = null;
+    foreach ($seats as $seat) {
+        if ($seat['Row'] !== $currentRow) {
+            if ($currentRow !== null) {
+                echo '</div>';
             }
-            echo "<div class='seat disabled' data-seat-id='" . htmlspecialchars($seat['Seat_ID']) . "' data-seat-number='" . htmlspecialchars($seat['SeatNumber']) . "' data-row='" . htmlspecialchars($seat['Row']) . "'>" . str_pad($seat['SeatNumber'], 2, '0', STR_PAD_LEFT) . "</div>";
+            $currentRow = $seat['Row'];
+            echo "<div class='seat-row'><span class='row-label'>Row {$currentRow}</span>";
         }
-        echo '</div>';
-        ?>
-    </div>
+
+        // Check if the seat is booked
+        $seatId = $seat['Row'] . '-' . $seat['SeatNumber'];
+        $isBooked = in_array($seatId, $bookedSeatsArray);
+
+        // Add a 'booked' class if the seat is already booked
+        $seatClass = $isBooked ? 'seat booked' : 'seat disabled';
+        echo "<div class='{$seatClass}' data-seat-id='" . htmlspecialchars($seat['Seat_ID']) . "' data-seat-number='" . htmlspecialchars($seat['SeatNumber']) . "' data-row='" . htmlspecialchars($seat['Row']) . "'>" . str_pad($seat['SeatNumber'], 2, '0', STR_PAD_LEFT) . "</div>";
+    }
+    echo '</div>';
+    ?>
+</div>
+
 </div>
 
    
