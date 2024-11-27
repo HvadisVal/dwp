@@ -10,10 +10,15 @@
 
 <h1>Manage Company</h1>
 
+<!-- Display message if available -->
+<?php if (isset($_SESSION['message'])): ?>
+    <div class="message"><?php echo $_SESSION['message']; unset($_SESSION['message']); ?></div>
+<?php endif; ?>
+
 <!-- Edit Company Information Section -->
 <h2>Edit Company Details</h2>
 <form method="POST" class="company-card company-form">
-    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
 
     <label for="name">Company Name:</label>
     <input type="text" name="name" value="<?php echo htmlspecialchars($company['Name']); ?>" required>

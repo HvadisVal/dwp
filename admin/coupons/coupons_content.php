@@ -3,57 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<?php echo $csrfToken; ?>"> <!-- Store CSRF token here -->
     <title>Manage Coupons</title>
-    <link rel="stylesheet" href="/dwp/admin/coupons/coupons.css" />
-
+    <link rel="stylesheet" href="/dwp/admin/coupons/coupons.css">
+    <script src="/dwp/admin/coupons/coupons.js" defer></script>
 </head>
+
 <body>
-
 <div class="container">
-    <h1>Manage Coupons</h1>
+    <header>
+        <h1>Manage Coupons</h1>
+    </header>
 
-    <!-- Add Coupon Form -->
-    <h2>Add New Coupon</h2>
-    <form method="POST">
-        <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
+    <!-- Add Coupon Section -->
+    <section class="add-coupon">
+        <h2>Add New Coupon</h2>
+        <form method="POST" class="form-add">
+            <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
+            <input type="hidden" name="action" value="add">
 
-        <label for="coupon_code">Coupon Code:</label>
-        <input type="text" name="coupon_code" required>
-
-        <label for="discount_amount">Discount Amount:</label>
-        <input type="number" name="discount_amount" min="0" step="1" required>
-
-        <label for="expire_date">Expire Date:</label>
-        <input type="date" name="expire_date" required>
-
-        <button type="submit" name="add_coupon" class="add-button">Add Coupon</button>
-    </form>
-
-    <!-- Existing Coupons -->
-    <h2>Existing Coupons</h2>
-    <div class="coupons-grid">
-        <?php foreach ($coupons as $coupon): ?>
-            <form method="POST" class="coupon-card">
-                <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
-                <input type="hidden" name="coupon_id" value="<?php echo $coupon['Coupon_ID']; ?>">
-
+            <fieldset>
                 <label for="coupon_code">Coupon Code:</label>
-                <input type="text" name="coupon_code" value="<?php echo htmlspecialchars($coupon['CouponCode']); ?>" required>
+                <input type="text" name="coupon_code" id="coupon_code" placeholder="Enter coupon code" required>
 
                 <label for="discount_amount">Discount Amount:</label>
-                <input type="number" name="discount_amount" value="<?php echo $coupon['DiscountAmount']; ?>" min="0" step="1" required>
+                <input type="number" name="discount_amount" id="discount_amount" min="0" step="1" placeholder="Enter discount amount" required>
 
                 <label for="expire_date">Expire Date:</label>
-                <input type="date" name="expire_date" value="<?php echo $coupon['ExpireDate']; ?>" required>
+                <input type="date" name="expire_date" id="expire_date" required>
+            </fieldset>
 
-                <div class="button-group">
-                    <button type="submit" name="edit_coupon" class="edit-button">Save Changes</button>
-                    <button type="submit" name="delete_coupon" class="delete-button">Delete Coupon</button>
-                </div>
-            </form>
-        <?php endforeach; ?>
-    </div>
+            <button type="submit" class="add-button">Add Coupon</button>
+        </form>
+    </section>
+
+    <!-- Existing Coupons Section -->
+    <section class="existing-coupons">
+        <h2>Existing Coupons</h2>
+        <div class="coupons-grid">
+            <?php foreach ($coupons as $coupon): ?>
+                <form method="POST" class="coupon-card">
+                    <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
+                    <input type="hidden" name="coupon_id" value="<?php echo $coupon['Coupon_ID']; ?>">
+                    <input type="hidden" name="action" value="edit">
+
+                    <fieldset>
+                        <label for="coupon_code_<?php echo $coupon['Coupon_ID']; ?>">Coupon Code:</label>
+                        <input type="text" name="coupon_code" id="coupon_code_<?php echo $coupon['Coupon_ID']; ?>" 
+                               value="<?php echo htmlspecialchars($coupon['CouponCode']); ?>" required>
+
+                        <label for="discount_amount_<?php echo $coupon['Coupon_ID']; ?>">Discount Amount:</label>
+                        <input type="number" name="discount_amount" id="discount_amount_<?php echo $coupon['Coupon_ID']; ?>" 
+                               value="<?php echo $coupon['DiscountAmount']; ?>" min="0" step="1" required>
+
+                        <label for="expire_date_<?php echo $coupon['Coupon_ID']; ?>">Expire Date:</label>
+                        <input type="date" name="expire_date" id="expire_date_<?php echo $coupon['Coupon_ID']; ?>" 
+                               value="<?php echo $coupon['ExpireDate']; ?>" required>
+                    </fieldset>
+
+                    <div class="button-group">
+                        <button type="submit" class="edit-button">Save Changes</button>
+                        <button type="button" class="delete-button" 
+                                onclick="confirmDelete(<?php echo $coupon['Coupon_ID']; ?>)">Delete Coupon</button>
+                    </div>
+                </form>
+            <?php endforeach; ?>
+        </div>
+    </section>
 </div>
-
 </body>
 </html>

@@ -3,6 +3,8 @@ require_once("./includes/admin_session.php");
 require_once("./includes/connection.php"); 
 require_once("./includes/functions.php");
 
+$csrfToken = generate_csrf_token();
+
 class CouponManager {
     private $connection;
 
@@ -36,7 +38,6 @@ class CouponManager {
     }
 }
 
-// Instantiate the CouponManager
 $couponManager = new CouponManager($connection);
 
 // Generate CSRF token
@@ -50,46 +51,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Refresh CSRF token to avoid reuse
     refresh_csrf_token();
 
-    if (isset($_POST['add_coupon'])) {
-        $couponCode = htmlspecialchars(trim($_POST['coupon_code']));
-        $discountAmount = (float)trim($_POST['discount_amount']);
-        $expireDate = $_POST['expire_date'];
+    // Determine action
+    $action = $_POST['action'] ?? '';
 
-        if ($couponManager->addCoupon($couponCode, $discountAmount, $expireDate)) {
-            $_SESSION['message'] = "Coupon added successfully!";
-        } else {
-            $_SESSION['message'] = "Error adding coupon.";
-        }
-        header("Location: /dwp/admin/manage-coupons");
-        exit();
+    // Process action
+    switch ($action) {
+        case 'add':
+            $couponCode = htmlspecialchars(trim($_POST['coupon_code']));
+            $discountAmount = (float)trim($_POST['discount_amount']);
+            $expireDate = $_POST['expire_date'];
+
+            if ($couponManager->addCoupon($couponCode, $discountAmount, $expireDate)) {
+                $_SESSION['message'] = "Coupon added successfully!";
+            } else {
+                $_SESSION['message'] = "Error adding coupon.";
+            }
+            break;
+
+        case 'edit':
+            $couponId = (int)$_POST['coupon_id'];
+            $couponCode = htmlspecialchars(trim($_POST['coupon_code']));
+            $discountAmount = (float)trim($_POST['discount_amount']);
+            $expireDate = $_POST['expire_date'];
+
+            if ($couponManager->editCoupon($couponId, $couponCode, $discountAmount, $expireDate)) {
+                $_SESSION['message'] = "Coupon updated successfully!";
+            } else {
+                $_SESSION['message'] = "Error updating coupon.";
+            }
+            break;
+
+        case 'delete':
+            $couponId = (int)$_POST['coupon_id'];
+
+            if ($couponManager->deleteCoupon($couponId)) {
+                $_SESSION['message'] = "Coupon deleted successfully!";
+            } else {
+                $_SESSION['message'] = "Error deleting coupon.";
+            }
+            break;
+
+        default:
+            $_SESSION['message'] = "Invalid action.";
+            break;
     }
 
-    if (isset($_POST['edit_coupon'])) {
-        $couponId = (int)$_POST['coupon_id'];
-        $couponCode = htmlspecialchars(trim($_POST['coupon_code']));
-        $discountAmount = (float)trim($_POST['discount_amount']);
-        $expireDate = $_POST['expire_date'];
-
-        if ($couponManager->editCoupon($couponId, $couponCode, $discountAmount, $expireDate)) {
-            $_SESSION['message'] = "Coupon updated successfully!";
-        } else {
-            $_SESSION['message'] = "Error updating coupon.";
-        }
-        header("Location: /dwp/admin/manage-coupons");
-        exit();
-    }
-
-    if (isset($_POST['delete_coupon'])) {
-        $couponId = (int)$_POST['coupon_id'];
-
-        if ($couponManager->deleteCoupon($couponId)) {
-            $_SESSION['message'] = "Coupon deleted successfully!";
-        } else {
-            $_SESSION['message'] = "Error deleting coupon.";
-        }
-        header("Location: /dwp/admin/manage-coupons");
-        exit();
-    }
+    header("Location: /dwp/admin/manage-coupons");
+    exit();
 }
 
 // Fetch all coupons
