@@ -20,6 +20,7 @@ ORDER BY m.Movie_ID, s.ShowDate, s.ShowTime
 $moviesQuery->execute();
 $moviesData = $moviesQuery->fetchAll(PDO::FETCH_ASSOC);
 
+
 // Organize the data by movie and date
 $moviesById = [];
 foreach ($moviesData as $data) {

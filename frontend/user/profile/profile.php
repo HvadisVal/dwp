@@ -20,7 +20,7 @@ try {
     die("Error fetching user data: " . $e->getMessage());
 }
 
-// Fetch booking history for the logged-in user
+// Fetch detailed booking history
 try {
     $bookingQuery = "
         SELECT 
@@ -29,7 +29,7 @@ try {
             b.NumberOfTickets, 
             b.TotalPrice, 
             b.PaymentStatus, 
-            m.Title AS MovieTitle 
+            m.Title AS MovieTitle
         FROM Booking b
         JOIN Movie m ON b.Movie_ID = m.Movie_ID
         WHERE b.User_ID = :user_id
@@ -41,7 +41,7 @@ try {
 } catch (PDOException $e) {
     die("Error fetching booking history: " . $e->getMessage());
 }
+
+
 include 'profile_content.php';
 ?>
-
-

@@ -59,6 +59,14 @@
 </div>
 
 <!-- Checkout Button -->
-<div style="margin-top: 20px;">
-    <button id="checkoutButton" class="btn green">Checkout</button>
-</div>
+<?php if ($isGuest): ?>
+    <form action="/dwp/frontend/checkout.php" method="post">
+        <input type="hidden" name="guest" value="1">
+        <button type="submit" class="btn green" style="margin-top: 20px;">Checkout</button>
+    </form>
+<?php elseif ($isLoggedIn): ?>
+    <form action="/dwp/user/profile" method="post">
+        <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['user_id']); ?>">
+        <button type="submit" class="btn green" style="margin-top: 20px;">Checkout</button>
+    </form>
+<?php endif; ?>
