@@ -14,7 +14,7 @@
 <!-- Add Screening Section -->
 <h2>Add New Screening</h2>
 <form method="POST" class="screening-card">
-    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
 
     <label for="cinemahall_id">Cinema Hall:</label>
     <select name="cinemahall_id" required>
@@ -44,7 +44,7 @@
     <?php foreach ($screenings as $screening): ?>
         <div class="screening-card">
             <form method="POST">
-                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                 <input type="hidden" name="screening_id" value="<?php echo $screening['Screening_ID']; ?>">
 
                 <label for="cinemahall_id">Cinema Hall:</label>
