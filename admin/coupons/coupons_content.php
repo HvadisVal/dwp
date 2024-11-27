@@ -6,7 +6,6 @@
     <title>Manage Coupons</title>
     <link rel="stylesheet" href="/dwp/admin/coupons/coupons.css" />
 
-
 </head>
 <body>
 
