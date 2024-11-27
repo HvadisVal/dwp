@@ -308,3 +308,30 @@ button.next:hover {
   display: flex!important;
   justify-content: center!important;
 }
+
+
+
+
+.filter-container {
+  display: block !important;
+  margin: 50px auto;
+}
+
+.filters {
+  display: flex !important;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.filter-dropdown {
+  display: inline-block !important;
+  background-color: white;
+  color: black;
+}
+
+
+.filter-dropdown:hover {
+  border-color: #3d8bfd;
+}

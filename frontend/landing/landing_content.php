@@ -45,7 +45,31 @@
     </div>
 
     <div class="coming-soon">
-    <a href="/dwp/movies"><h2>Today's screenings ></h2></a>
+    <a href="/dwp/movies"><h2>Screenings ></h2></a>
+    <div class="filter-container">
+        <div class="filters">
+            <select id="select-date" class="filter-dropdown">
+                <option value="" disabled selected>Select date</option>
+                <option value="2024-11-27">November 27, 2024</option>
+                <option value="2024-11-28">November 28, 2024</option>
+                <option value="2024-11-29">November 29, 2024</option>
+            </select>
+
+            <select id="select-movie" class="filter-dropdown">
+                <option value="" disabled selected>Select movie</option>
+                <option value="movie1">Movie 1</option>
+                <option value="movie2">Movie 2</option>
+                <option value="movie3">Movie 3</option>
+            </select>
+
+            <select id="select-version" class="filter-dropdown">
+                <option value="" disabled selected>Select version</option>
+                <option value="standard">Standard</option>
+                <option value="3d">3D</option>
+                <option value="imax">IMAX</option>
+            </select>
+        </div>
+    </div>
     <div class="movie-grid">
         <?php foreach ($movies as $movie): ?>
             <div class="movie-card">
