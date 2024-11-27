@@ -14,7 +14,7 @@
 <!-- Add News Section -->
 <h2>Add New Article</h2>
 <form method="POST" enctype="multipart/form-data" class="news-card">
-    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
 
     <label for="title">Title:</label>
     <input type="text" name="title" required>
@@ -46,7 +46,7 @@
     <?php foreach ($newsArticles as $news): ?>
         <div class="news-card">
             <form method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                 <input type="hidden" name="news_id" value="<?php echo $news['News_ID']; ?>">
 
                 <label for="title">Title:</label>
