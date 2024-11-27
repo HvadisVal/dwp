@@ -120,6 +120,7 @@ h5 {
   width: calc(
     (100% - 10px) / 2
   ); 
+}
 
 .movie-trailer iframe {
   width: 100%;
@@ -197,7 +198,7 @@ h5 {
 /* Responsive behavior */
 @media (max-width: 900px) {
   .schedule {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr); 
   }
   .date-column:nth-last-child(2),
   .date-column:last-child {
@@ -228,5 +229,4 @@ a {
 
 .showtime-card a {
   color: inherit;
-}
 }
