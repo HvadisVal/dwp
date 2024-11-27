@@ -16,7 +16,7 @@
 <h2 class="header">Add New Movie</h2>
 <form method="POST" enctype="multipart/form-data" class="movie-card">
 
-    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
 
     <label for="title">Title:</label>
     <input type="text" name="title" required>
@@ -89,7 +89,7 @@
     <?php foreach ($movies as $movie): ?>
         <div class="movie-card">
             <form method="POST" enctype="multipart/form-data"> 
-                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                 <input type="hidden" name="movie_id" value="<?php echo $movie['Movie_ID']; ?>">
 
                 <!-- Movie Details (title, director, etc.) -->

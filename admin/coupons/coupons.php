@@ -3,20 +3,17 @@ require_once("./includes/admin_session.php");
 require_once("./includes/connection.php"); 
 require_once("./includes/functions.php"); 
 
-// CSRF Protection: Generate token
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
+// Generate CSRF token
+generate_csrf_token();
 
 // Handle the form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // CSRF token check
-    if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
-        die("Invalid CSRF token.");
-    }
+    
+    // Validate CSRF token
+    validate_csrf_token($_POST['csrf_token']);
 
     // Refresh CSRF token to avoid reuse
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    refresh_csrf_token();
 
     // Add Coupon
     if (isset($_POST['add_coupon'])) {

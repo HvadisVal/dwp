@@ -6,7 +6,6 @@
     <title>Manage Coupons</title>
     <link rel="stylesheet" href="/dwp/admin/coupons/coupons.css" />
 
-
 </head>
 <body>
 
@@ -16,13 +15,13 @@
     <!-- Add Coupon Form -->
     <h2>Add New Coupon</h2>
     <form method="POST">
-        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+        <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
 
         <label for="coupon_code">Coupon Code:</label>
         <input type="text" name="coupon_code" required>
 
         <label for="discount_amount">Discount Amount:</label>
-        <input type="number" name="discount_amount" step="0.01" required>
+        <input type="number" name="discount_amount" min="0" step="1" required>
 
         <label for="expire_date">Expire Date:</label>
         <input type="date" name="expire_date" required>
@@ -35,14 +34,14 @@
     <div class="coupons-grid">
         <?php foreach ($coupons as $coupon): ?>
             <form method="POST" class="coupon-card">
-                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                 <input type="hidden" name="coupon_id" value="<?php echo $coupon['Coupon_ID']; ?>">
 
                 <label for="coupon_code">Coupon Code:</label>
                 <input type="text" name="coupon_code" value="<?php echo htmlspecialchars($coupon['CouponCode']); ?>" required>
 
                 <label for="discount_amount">Discount Amount:</label>
-                <input type="number" name="discount_amount" value="<?php echo $coupon['DiscountAmount']; ?>" step="0.01" required>
+                <input type="number" name="discount_amount" value="<?php echo $coupon['DiscountAmount']; ?>" min="0" step="1" required>
 
                 <label for="expire_date">Expire Date:</label>
                 <input type="date" name="expire_date" value="<?php echo $coupon['ExpireDate']; ?>" required>
