@@ -20,3 +20,28 @@ function moveSlide(step) {
 document.addEventListener("DOMContentLoaded", function () {
   showSlides();
 });
+
+
+
+
+
+// Get dropdown elements
+const dateDropdown = document.getElementById('select-date');
+const movieDropdown = document.getElementById('select-movie');
+const versionDropdown = document.getElementById('select-version');
+
+// Example function: Log selected values
+const logSelectedFilters = () => {
+  const selectedDate = dateDropdown.value;
+  const selectedMovie = movieDropdown.value;
+  const selectedVersion = versionDropdown.value;
+
+  console.log(`Selected Date: ${selectedDate}`);
+  console.log(`Selected Movie: ${selectedMovie}`);
+  console.log(`Selected Version: ${selectedVersion}`);
+};
+
+// Add event listeners
+[dateDropdown, movieDropdown, versionDropdown].forEach(dropdown => {
+  dropdown.addEventListener('change', logSelectedFilters);
+});
