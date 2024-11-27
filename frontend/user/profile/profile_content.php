@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
 <body>
-<?php include '../../../frontend/navbar/navbar_structure.php'; ?>
+<?php include './frontend/navbar/navbar_structure.php'; ?>
 
 <div class="container" style="padding-top: 10%">
     <h3>Profile Overview</h3>
