@@ -1,6 +1,6 @@
 <?php
 // Include the database connection file
-require_once 'dbcon.php';
+require_once($_SERVER['DOCUMENT_ROOT'] . '/dwp/dbcon.php');
 
 // Connect to the database
 $conn = dbCon($user, $pass);
