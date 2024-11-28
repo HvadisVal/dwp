@@ -65,7 +65,7 @@
         <button type="submit" class="btn green" style="margin-top: 20px;">Checkout</button>
     </form>
 <?php elseif ($isLoggedIn): ?>
-    <form action="/dwp/user/profile" method="post">
+    <form action="/dwp/frontend/user/profile/booking_process.php" method="post">
         <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['user_id']); ?>">
         <button type="submit" class="btn green" style="margin-top: 20px;">Checkout</button>
     </form>
