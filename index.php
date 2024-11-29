@@ -1,19 +1,36 @@
 <?php
+require_once("./includes/connection.php"); 
+
+// Autoload classes (optional but recommended)
+spl_autoload_register(function ($class_name) {
+    $paths = [
+        'admin/controllers/',
+        'admin/models/',
+        // Add other paths if necessary
+    ];
+    foreach ($paths as $path) {
+        $file = __DIR__ . '/' . $path . $class_name . '.php';
+        if (file_exists($file)) {
+            require_once($file);
+            return;
+        }
+    }
+});
+
 // Get the path from the URL, e.g., "admin/manage_movies"
 $path = isset($_GET['path']) ? $_GET['path'] : 'landing';
 
 // Define routes - mapping URL paths to file locations
 $routes = [
     // Admin pages
-    'admin/login' => 'admin/admin_login/admin_login.html',
-    'admin/admin-login'=> 'admin/admin_login/admin_login.php',
-    'admin/logout' => 'admin/admin_logout.php',
-    'admin/dashboard' => 'admin/admin_dashboard/admin_dashboard.php',
-    'admin/manage-company' => 'admin/company/company.php',
-    'admin/manage-coupons' => 'admin/coupons/coupons.php',
-    'admin/manage-movies' => 'admin/movies/movies.php',
-    'admin/manage-news' => 'admin/news/news.php',
-    'admin/manage-screenings' => 'admin/screenings/screenings.php',
+    'admin/login' => 'admin/controllers/LoginController.php',
+    'admin/logout' => 'admin/controllers/LogoutController.php',
+    'admin/dashboard' => 'admin/controllers/DashboardController.php',
+    'admin/manage-company' => 'admin/controllers/CompanyController.php',
+    'admin/manage-coupons' => 'admin/controllers/CouponController.php',
+    'admin/manage-movies' => 'admin/controllers/MoviesController.php',
+    'admin/manage-news' => 'admin/controllers/NewsController.php',
+    'admin/manage-screenings' => 'admin/controllers/ScreeningController.php',
 
 
     // payment pages
@@ -48,11 +65,52 @@ $routes = [
     'checkout'=> 'frontend/checkout.php',
 ];
 
-// Check if the requested path exists in the routes array
-if (array_key_exists($path, $routes)) {
-    include $routes[$path];
-} else {
-    // Display 404 page if route not found
+// Define a function to handle the routing process
+function routeRequest($path, $routes, $connection) {
+    // Check for login route
+    if ($path == 'admin/login') {
+        loadController('LoginController', $connection, 'login');
+        return;
+    }
+
+    // Check for dashboard route
+    if ($path == 'admin/dashboard') {
+        loadController('DashboardController', $connection, 'getAdminEmail');
+        include 'admin/views/dashboard.php';
+        return;
+    }
+
+    // Check for logout route
+    if ($path == 'admin/logout') {
+        loadController('LogoutController', $connection, 'logout');
+        return;
+    }
+    
+
+     // Handle other dynamic routes based on the $routes array
+     if (array_key_exists($path, $routes)) {
+        // Dynamically include the controller
+        require_once($routes[$path]);
+        
+        // Instantiate the controller class and handle the request
+        $controllerName = basename($routes[$path], '.php'); // Get class name based on file
+        $controllerClass = ucfirst($controllerName);  // Convert to PascalCase
+        $controller = new $controllerClass($connection);
+        $controller->handleRequest(); // Let the controller handle the rendering
+        return;
+    }
+
+    // Default to 404 if no route matched
     http_response_code(404);
     echo "404 - Page Not Found";
 }
+
+// Helper function to load a controller method dynamically
+function loadController($controllerName, $connection, $methodName = 'handleRequest') {
+    require_once("admin/controllers/{$controllerName}.php");
+    $controller = new $controllerName($connection);
+    $controller->$methodName();
+}
+
+// Example usage (you would call this function based on the current request path)
+routeRequest($path, $routes, $connection);

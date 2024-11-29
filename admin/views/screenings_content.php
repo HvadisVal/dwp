@@ -1,16 +1,22 @@
-
+<!-- views/screenings_content.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Screenings</title>
-    <link rel="stylesheet" href="/dwp/admin/screenings/screenings.css" />
+    <link rel="stylesheet" href="/dwp/admin/assets/css/screenings.css" />
 </head>
 <body>
 
 <h1>Manage Screenings</h1>
-
+<?php
+    if (isset($_SESSION['message'])) {
+        echo '<div class="message">' . $_SESSION['message'] . '</div>';
+        // Optionally clear the message after displaying it
+        unset($_SESSION['message']);
+    }
+    ?>
 <!-- Add Screening Section -->
 <h2>Add New Screening</h2>
 <form method="POST" class="screening-card">
