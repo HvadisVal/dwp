@@ -843,20 +843,6 @@ VALUES
 
 
 
--- Modified Ticket Table
-CREATE TABLE Ticket (
-    Ticket_ID INT PRIMARY KEY AUTO_INCREMENT,
-    Screening_ID INT,
-    Seat_ID INT,
-    Price_ID INT,
-    Coupon_ID INT,
-    FOREIGN KEY (Screening_ID) REFERENCES Screening(Screening_ID),
-    FOREIGN KEY (Seat_ID) REFERENCES Seat(Seat_ID),
-    FOREIGN KEY (Price_ID) REFERENCES TicketPrice(Price_ID),
-    FOREIGN KEY (Coupon_ID) REFERENCES Coupon(Coupon_ID)
-);
-
-
 -- User Table
 CREATE TABLE User (
     User_ID INT PRIMARY KEY AUTO_INCREMENT,
@@ -885,16 +871,30 @@ CREATE TABLE Booking (
     NumberOfTickets INT,
     PaymentStatus VARCHAR(50),
     TotalPrice DECIMAL(10, 2),
-    Ticket_ID INT,
     Payment_ID INT,
     Invoice_ID INT,
     FOREIGN KEY (Movie_ID) REFERENCES Movie(Movie_ID),
     FOREIGN KEY (User_ID) REFERENCES User(User_ID),
     FOREIGN KEY (GuestUser_ID) REFERENCES GuestUser(GuestUser_ID),
-    FOREIGN KEY (Ticket_ID) REFERENCES Ticket(Ticket_ID),
     FOREIGN KEY (Payment_ID) REFERENCES Payment(Payment_ID),
     FOREIGN KEY (Invoice_ID) REFERENCES Invoice(Invoice_ID),
     CHECK ((User_ID IS NOT NULL AND GuestUser_ID IS NULL) OR (User_ID IS NULL AND GuestUser_ID IS NOT NULL))
+);
+
+
+-- Modified Ticket Table
+CREATE TABLE Ticket (
+    Ticket_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Screening_ID INT,
+    Seat_ID INT,
+    Price_ID INT,
+    Coupon_ID INT,
+    Booking_ID INT,
+    FOREIGN KEY (Screening_ID) REFERENCES Screening(Screening_ID),
+    FOREIGN KEY (Booking_ID) REFERENCES Booking(Booking_ID),
+    FOREIGN KEY (Seat_ID) REFERENCES Seat(Seat_ID),
+    FOREIGN KEY (Price_ID) REFERENCES TicketPrice(Price_ID),
+    FOREIGN KEY (Coupon_ID) REFERENCES Coupon(Coupon_ID)
 );
 
 -- News Table

@@ -37,19 +37,17 @@ try {
         s.ShowTime,
         s.ShowDate,
         c.Name AS CinemaHall,
-        GROUP_CONCAT(CONCAT(seat.Row, '-', seat.SeatNumber) ORDER BY seat.Row, seat.SeatNumber) AS Seats
+        GROUP_CONCAT(DISTINCT CONCAT(seat.Row, '-', seat.SeatNumber) ORDER BY seat.Row, seat.SeatNumber) AS Seats
     FROM Booking b
     JOIN Movie m ON b.Movie_ID = m.Movie_ID
-    JOIN Screening s ON s.Movie_ID = b.Movie_ID AND s.CinemaHall_ID = (
-        SELECT CinemaHall_ID FROM Screening WHERE Movie_ID = b.Movie_ID LIMIT 1
-    )
+    JOIN Ticket t ON b.Booking_ID = t.Booking_ID
+    JOIN Seat seat ON t.Seat_ID = seat.Seat_ID
+    JOIN Screening s ON t.Screening_ID = s.Screening_ID
     JOIN CinemaHall c ON s.CinemaHall_ID = c.CinemaHall_ID
-    LEFT JOIN Ticket t ON t.Screening_ID = s.Screening_ID
-    LEFT JOIN Seat seat ON t.Seat_ID = seat.Seat_ID
     WHERE b.User_ID = :user_id
     GROUP BY b.Booking_ID
     ORDER BY b.BookingDate DESC";
-
+    
     $stmt = $connection->prepare($bookingQuery);
     $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
     $stmt->execute();
@@ -58,6 +56,7 @@ try {
 } catch (PDOException $e) {
     die("Error fetching booking history: " . $e->getMessage());
 }
+
 
 
 include 'profile_content.php';
