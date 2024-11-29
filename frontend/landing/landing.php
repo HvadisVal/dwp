@@ -7,10 +7,14 @@ $conn = dbCon($user, $pass);
 $pdo = dbCon($user, $pass);
 
 // Fetch Dates for Date Filter
-$query = "SELECT DISTINCT ShowDate FROM Screening ORDER BY ShowDate";
+$query = "SELECT DISTINCT ShowDate 
+          FROM Screening 
+          WHERE ShowDate >= CURDATE() 
+          ORDER BY ShowDate";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
 $dates = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 // Fetch Movies for Movie Filter
 $query = "SELECT DISTINCT m.Movie_ID, m.Title
