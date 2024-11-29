@@ -109,8 +109,9 @@ try {
 
             if ($seatId) {
                 $ticketStmt = $dbCon->prepare("
-                    INSERT INTO Ticket (Screening_ID, Seat_ID, Price_ID)
+                    INSERT INTO Ticket (Booking_ID, Screening_ID, Seat_ID, Price_ID)
                     VALUES (
+                        :booking_id,
                         (SELECT Screening_ID 
                          FROM Screening 
                          WHERE Movie_ID = :movie_id 
@@ -121,17 +122,19 @@ try {
                         (SELECT Price_ID FROM TicketPrice WHERE Type = :ticket_type)
                     )
                 ");
+                $ticketStmt->bindParam(':booking_id', $bookingId, PDO::PARAM_INT); // Associate the ticket with the Booking_ID
                 $ticketStmt->bindParam(':movie_id', $booking['movie_id'], PDO::PARAM_INT);
                 $ticketStmt->bindParam(':cinema_hall_id', $booking['cinema_hall_id'], PDO::PARAM_INT);
                 $ticketStmt->bindParam(':show_date', $booking['date'], PDO::PARAM_STR);
                 $ticketStmt->bindParam(':show_time', $booking['time'], PDO::PARAM_STR);
                 $ticketStmt->bindParam(':seat_id', $seatId, PDO::PARAM_INT);
-
+            
                 foreach ($selectedTickets as $type => $quantity) {
                     $ticketStmt->bindParam(':ticket_type', $type, PDO::PARAM_STR);
                     $ticketStmt->execute();
                 }
             }
+            
         }
         
 
