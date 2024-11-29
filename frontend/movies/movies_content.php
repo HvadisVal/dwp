@@ -15,11 +15,13 @@
             <div class="movie-info">
     <!-- Display poster image -->
     <?php if (!empty($movieData['details']['PosterPath'])): ?>
-        <div class="movie-poster">
-            <?php foreach ($movieData['details']['PosterPath'] as $imagePath): ?>
-                <img src="<?= htmlspecialchars($imagePath); ?>" alt="<?= htmlspecialchars($movieData['details']['Title']); ?>" class="poster">
-            <?php endforeach; ?>
-        </div>
+            <div class="movie-poster">
+            <a href="/dwp/movie?movie_id=<?= urlencode($movieId); ?>">
+                <?php foreach ($movieData['details']['PosterPath'] as $imagePath): ?>
+                    <img src="<?= htmlspecialchars($imagePath); ?>" alt="<?= htmlspecialchars($movieData['details']['Title']); ?>" class="poster">
+                <?php endforeach; ?>
+            </a>     
+            </div> 
     <?php endif; ?>
 
     <div class="movie-details">
