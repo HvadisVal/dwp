@@ -72,6 +72,7 @@
         <p id="ticket-count">0 tickets</p>
         <p id="total-price">DKK 0</p>
         <button class="continue-button" id="continue-button" style="display: none;">Continue</button>
+        
     </div>
 <script src="/dwp/frontend/seat/seat.js"></script>
 
