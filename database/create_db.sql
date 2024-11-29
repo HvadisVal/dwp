@@ -206,7 +206,7 @@ CREATE TABLE Payment (
 CREATE TABLE Invoice (
     Invoice_ID INT PRIMARY KEY AUTO_INCREMENT,
     InvoiceDate DATE,
-    AmountDue DECIMAL(10, 2),
+    TotalAmount DECIMAL(10, 2),
     InvoiceStatus VARCHAR(50)
 );
 

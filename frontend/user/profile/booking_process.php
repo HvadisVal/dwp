@@ -88,6 +88,29 @@ try {
     if ($stmt->execute()) {
         $bookingId = $dbCon->lastInsertId(); // Get the inserted Booking_ID
 
+        // Generate the invoice
+    $invoiceStmt = $dbCon->prepare("
+    INSERT INTO Invoice (InvoiceDate, TotalAmount, InvoiceStatus)
+    VALUES (CURDATE(), :total_amount, 'Unpaid')
+");
+$invoiceStmt->bindParam(':total_amount', $discountedPrice, PDO::PARAM_STR);
+$invoiceStmt->execute();
+
+$invoiceId = $dbCon->lastInsertId(); // Get the inserted Invoice_ID
+
+// Update the Booking table with the Invoice_ID
+$updateBookingStmt = $dbCon->prepare("
+    UPDATE Booking
+    SET Invoice_ID = :invoice_id
+    WHERE Booking_ID = :booking_id
+");
+$updateBookingStmt->bindParam(':invoice_id', $invoiceId, PDO::PARAM_INT);
+$updateBookingStmt->bindParam(':booking_id', $bookingId, PDO::PARAM_INT);
+$updateBookingStmt->execute();
+
+// Save Invoice_ID in session for further use (e.g., PDF generation)
+$_SESSION['invoice_id'] = $invoiceId;
+
         // Insert tickets
         foreach ($selectedSeats as $seat) {
             $seatParts = explode('-', $seat);

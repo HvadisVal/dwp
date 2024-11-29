@@ -2,6 +2,7 @@
 session_start();
 require_once($_SERVER['DOCUMENT_ROOT'] . '/dwp/dbcon.php');
 
+
 // Ensure booking session exists
 if (!isset($_SESSION['booking']) || empty($_SESSION['booking'])) {
     die("No booking information found. Please start a new booking.");
@@ -89,6 +90,30 @@ $bookedSeatsQuery->execute();
 
     if ($stmt->execute()) {
         $bookingId = $dbCon->lastInsertId(); // Get the inserted Booking_ID
+
+// Generate the invoice
+$invoiceStmt = $dbCon->prepare("
+    INSERT INTO Invoice (InvoiceDate, TotalAmount, InvoiceStatus)
+    VALUES (CURDATE(), :total_amount, 'Unpaid')
+");
+$invoiceStmt->bindParam(':total_amount', $discountedPrice, PDO::PARAM_STR);
+$invoiceStmt->execute();
+
+$invoiceId = $dbCon->lastInsertId(); // Get the inserted Invoice_ID
+
+
+// Update the Booking table with the Invoice_ID
+$updateBookingStmt = $dbCon->prepare("
+    UPDATE Booking
+    SET Invoice_ID = :invoice_id
+    WHERE Booking_ID = :booking_id
+");
+$updateBookingStmt->bindParam(':invoice_id', $invoiceId, PDO::PARAM_INT);
+$updateBookingStmt->bindParam(':booking_id', $bookingId, PDO::PARAM_INT);
+$updateBookingStmt->execute();
+
+// Save Invoice_ID in session for further use
+$_SESSION['invoice_id'] = $invoiceId;
 
         // Insert tickets
         foreach ($selectedSeats as $seat) {
@@ -188,6 +213,11 @@ $movie = $movieQuery->fetch(PDO::FETCH_ASSOC);
         <h3>Guest Details</h3>
         <p><strong>Name:</strong> <?= htmlspecialchars($guestFirstName . ' ' . $guestLastName); ?></p>
         <p><strong>Email:</strong> <?= htmlspecialchars($guestEmail); ?></p>
+
+        <a href="/dwp/frontend/payment/invoice.php?invoice_id=<?= htmlspecialchars($_SESSION['invoice_id']); ?>" class="btn">View Invoice</a>
+
     </div>
+
+    
 </body>
 </html>

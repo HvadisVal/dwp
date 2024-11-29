@@ -103,6 +103,33 @@
     </div>
 </div>
 
+<!-- Display Invoice Links -->
+<h5>Invoices</h5>
+<table>
+    <thead>
+        <tr>
+            <th>Invoice ID</th>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($invoices as $invoice): ?>
+            <tr>
+                <td><?= htmlspecialchars($invoice['Invoice_ID']); ?></td>
+                <td><?= htmlspecialchars($invoice['InvoiceDate']); ?></td>
+                <td>DKK <?= number_format($invoice['TotalAmount'], 2); ?></td>
+                <td><?= htmlspecialchars($invoice['InvoiceStatus']); ?></td>
+                <td>
+                    <a href="/dwp/frontend/payment/invoice.php?invoice_id=<?= htmlspecialchars($invoice['Invoice_ID']); ?>" class="btn">View Invoice</a>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
 
 
 <script src="/dwp/frontend/user/profile/javascript.js"></script>
