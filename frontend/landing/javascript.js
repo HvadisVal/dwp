@@ -23,8 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-
-
 // Get dropdown elements
 const dateDropdown = document.getElementById('select-date');
 const movieDropdown = document.getElementById('select-movie');
@@ -45,3 +43,5 @@ const logSelectedFilters = () => {
 [dateDropdown, movieDropdown, versionDropdown].forEach(dropdown => {
   dropdown.addEventListener('change', logSelectedFilters);
 });
+
+

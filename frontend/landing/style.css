@@ -327,8 +327,10 @@ button.next:hover {
 
 .filter-dropdown {
   display: inline-block !important;
-  background-color: white;
-  color: black;
+  padding: 10px 5px !important;
+  border: none;
+  background: linear-gradient(to right, #243642, #1a252d)!important;
+  color: white;
 }
 
 

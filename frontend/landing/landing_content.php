@@ -47,26 +47,35 @@
     <div class="coming-soon">
     <a href="/dwp/movies"><h2>Screenings ></h2></a>
     <div class="filter-container">
-        <div class="filters">
+    <div class="filters">
+            <!-- Date Filter -->
             <select id="select-date" class="filter-dropdown">
                 <option value="" disabled selected>Select date</option>
-                <option value="2024-11-27">November 27, 2024</option>
-                <option value="2024-11-28">November 28, 2024</option>
-                <option value="2024-11-29">November 29, 2024</option>
+                <?php foreach ($dates as $date): ?>
+                    <option value="<?php echo htmlspecialchars($date['ShowDate']); ?>">
+                        <?php echo htmlspecialchars(date("F j, Y", strtotime($date['ShowDate']))); ?>
+                    </option>
+                <?php endforeach; ?>
             </select>
 
+            <!-- Movie Filter -->
             <select id="select-movie" class="filter-dropdown">
                 <option value="" disabled selected>Select movie</option>
-                <option value="movie1">Movie 1</option>
-                <option value="movie2">Movie 2</option>
-                <option value="movie3">Movie 3</option>
+                <?php foreach ($movies as $movie): ?>
+                    <option value="<?php echo htmlspecialchars($movie['Movie_ID']); ?>">
+                        <?php echo htmlspecialchars($movie['Title']); ?>
+                    </option>
+                <?php endforeach; ?>
             </select>
 
+            <!-- Version Filter -->
             <select id="select-version" class="filter-dropdown">
                 <option value="" disabled selected>Select version</option>
-                <option value="standard">Standard</option>
-                <option value="3d">3D</option>
-                <option value="imax">IMAX</option>
+                <?php foreach ($versions as $version): ?>
+                    <option value="<?php echo htmlspecialchars($version['Version_ID']); ?>">
+                        <?php echo htmlspecialchars($version['Format']); ?>
+                    </option>
+                <?php endforeach; ?>
             </select>
         </div>
     </div>

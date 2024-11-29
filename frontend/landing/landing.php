@@ -4,6 +4,27 @@ require_once($_SERVER['DOCUMENT_ROOT'] . '/dwp/dbcon.php');
 
 // Connect to the database
 $conn = dbCon($user, $pass);
+$pdo = dbCon($user, $pass);
+
+// Fetch Dates for Date Filter
+$query = "SELECT DISTINCT ShowDate FROM Screening ORDER BY ShowDate";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+$dates = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch Movies for Movie Filter
+$query = "SELECT DISTINCT m.Movie_ID, m.Title
+          FROM Movie m
+          INNER JOIN Screening s ON m.Movie_ID = s.Movie_ID";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+$movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch Versions for Version Filter
+$query = "SELECT * FROM Version";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+$versions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Fetch company description
 $sql = "SELECT Description FROM Company LIMIT 1";
@@ -50,3 +71,5 @@ foreach ($newsItems as $news) {
 }
 
 include 'landing_content.php';
+
+
