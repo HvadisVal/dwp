@@ -31,20 +31,10 @@ $invoiceQuery->execute();
 
 $invoice = $invoiceQuery->fetch(PDO::FETCH_ASSOC);
 
-// Debugging: Confirm query result
-var_dump($invoice);
-exit();
-
 
 if (!$invoice) {
     die("Invoice not found.");
 }
-
-echo "<h2>Invoice #" . htmlspecialchars($invoice['Invoice_ID']) . "</h2>";
-echo "<p><strong>Date:</strong> " . htmlspecialchars($invoice['InvoiceDate']) . "</p>";
-echo "<p><strong>Total Amount:</strong> DKK " . number_format($invoice['TotalAmount'], 2) . "</p>";
-echo "<p><strong>Status:</strong> " . htmlspecialchars($invoice['InvoiceStatus']) . "</p>";
-
 ?>
 
 <!DOCTYPE html>
