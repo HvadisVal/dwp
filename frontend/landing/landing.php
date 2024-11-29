@@ -45,8 +45,7 @@ $sql = "SELECT DISTINCT Movie.Movie_ID,
                 WHERE Media.Movie_ID = Movie.Movie_ID 
                 LIMIT 1) AS FileName
         FROM Movie
-        JOIN Screening ON Movie.Movie_ID = Screening.Movie_ID
-        WHERE Screening.ShowDate = CURDATE()";
+        JOIN Screening ON Movie.Movie_ID = Screening.Movie_ID";
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 $movies = $stmt->fetchAll(PDO::FETCH_ASSOC);
