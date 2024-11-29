@@ -88,3 +88,66 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+
+document.getElementById('reset-filters').addEventListener('click', function() {
+  // Reset the dropdown values to default (empty or first option)
+  document.getElementById('select-date').selectedIndex = 0;  // Reset Date filter
+  document.getElementById('select-movie').selectedIndex = 0; // Reset Movie filter
+  document.getElementById('select-version').selectedIndex = 0; // Reset Version filter
+  
+  // Optionally, reset the movie grid by reloading the page or calling fetch_movies with no filters
+  resetMovieGrid();
+});
+
+function resetMovieGrid() {
+  // You can reload the movie grid with all movies (no filters applied)
+  // Here, you might want to re-fetch the data without any filters or reload the page to show all movies
+  fetchMovies(); // Assuming fetchMovies handles the request and update
+}
+
+
+function updateMovieGrid(movies) {
+  const movieGrid = document.querySelector('.movie-grid');
+  movieGrid.innerHTML = ''; // Clear the existing movie grid
+
+  // Iterate over the fetched movies and append them to the grid
+  movies.forEach(movie => {
+      const movieCard = document.createElement('div');
+      movieCard.classList.add('movie-card');
+      
+      // Movie content (e.g., image, title)
+      movieCard.innerHTML = `
+          <a href="/dwp/movie?movie_id=${movie.Movie_ID}">
+              <img src="uploads/poster/${movie.FileName}" alt="${movie.Title}" style="width: 100%; border-radius: 8px; margin-bottom: 10px;">
+              <p>${movie.Title}</p>
+          </a>
+      `;
+      
+      movieGrid.appendChild(movieCard);
+  });
+}
+
+function fetchMovies() {
+  const filters = {
+      date: '',         // Empty date filter to show all movies
+      movieId: '',      // Empty movie filter to show all movies
+      versionId: ''     // Empty version filter to show all movies
+  };
+
+  // Send request to the backend with no filters
+  fetch('/dwp/frontend/landing/fetch_movies.php', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(filters)
+  })
+  .then(response => response.json())
+  .then(movies => {
+      // Update the movie grid with all movies
+      updateMovieGrid(movies);
+  });
+}
+
+
+

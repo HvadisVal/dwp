@@ -78,6 +78,8 @@
                 <?php endforeach; ?>
             </select>
         </div>
+        <!-- Reset Filters Button -->
+        <button id="reset-filters" class="reset-button">Reset Filters</button>
     </div>
     <div class="movie-grid">
         <?php foreach ($movies as $movie): ?>
