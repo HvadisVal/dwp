@@ -44,11 +44,21 @@
                         </div>
                         <?php if (isset($movieData['showtimes'][$date])): ?>
                             <?php foreach ($movieData['showtimes'][$date] as $showtime): ?>
-                                <a href="/dwp/seat?movie_id=<?= htmlspecialchars($showtime['Movie_ID']); ?>&cinema_hall_id=<?= htmlspecialchars($showtime['CinemaHall_ID']); ?>&time=<?= urlencode($showtime['ShowTime']); ?>&date=<?= urlencode($showtime['ShowDate']); ?>" class="showtime-card">
-                                    <h6><?= htmlspecialchars($showtime['CinemaHall_Name']); ?></h6>
-                                    <h6><?= date("g:i a", strtotime($showtime['ShowTime'])); ?></h6>
-                                    <div class="version"><?= htmlspecialchars($showtime['Version'] ?? 'Standard'); ?></div>
-                                </a>
+
+                                <a href="/dwp/frontend/booking/initialize_booking.php?movie_id=<?= htmlspecialchars($showtime['Movie_ID']); ?>&cinema_hall_id=<?= htmlspecialchars($showtime['CinemaHall_ID']); ?>&time=<?= urlencode($showtime['ShowTime']); ?>&date=<?= urlencode($showtime['ShowDate']); ?>" class="showtime-card">
+    <h6><?= htmlspecialchars($showtime['CinemaHall_Name']); ?></h6>
+    <h6><?= date("g:i a", strtotime($showtime['ShowTime'])); ?></h6>
+    <div class="version"><?= htmlspecialchars($showtime['Version'] ?? 'Standard'); ?></div>
+</a>
+<?php
+$link = "/dwp/frontend/booking/initialize_booking.php?movie_id=" . htmlspecialchars($showtime['Movie_ID']) . 
+    "&cinema_hall_id=" . htmlspecialchars($showtime['CinemaHall_ID']) . 
+    "&time=" . urlencode($showtime['ShowTime']) . 
+    "&date=" . urlencode($showtime['ShowDate']);
+?>
+
+
+
                             <?php endforeach; ?>
                         <?php else: ?>
                             <div class="no-showtimes"></div>

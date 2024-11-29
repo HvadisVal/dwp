@@ -61,3 +61,5 @@ document.getElementById('deleteAccountButton').addEventListener('click', functio
             .catch(error => console.error('Error:', error));
     }
 });
+
+

@@ -20,13 +20,13 @@
         
 
         <h5>Payment Method</h5>
-<div class="payment-options">
-    <!-- Card Payment Option -->
-    <label>
+<div class="payment-container" style="display: flex; align-items: center; gap: 20px;">
+    <!-- Payment Option: Pay with Card -->
+    <label style="display: flex; align-items: center; gap: 10px;">
         <input name="paymentMethod" type="radio" value="card" class="with-gap payment-radio" />
         <span>Pay with Card</span>
     </label>
-    <div id="cardDetails" class="payment-content" style="display: none; margin-top: 10px;">
+    <div id="cardDetails" class="payment-content" style="display: none; margin-left: 20px;">
         <div class="input-field">
             <input id="cardNumber" type="text" name="cardNumber" required>
             <label for="cardNumber">Card Number</label>
@@ -41,12 +41,12 @@
         </div>
     </div>
 
-    <!-- MobilePay Option -->
-    <label>
+    <!-- Payment Option: MobilePay -->
+    <label style="display: flex; align-items: center; gap: 10px; margin-left: 20px;">
         <input name="paymentMethod" type="radio" value="mobilepay" class="with-gap payment-radio" />
         <span>MobilePay</span>
     </label>
-    <div id="mobilePayDetails" class="payment-content" style="display: none; margin-top: 10px;">
+    <div id="mobilePayDetails" class="payment-content" style="display: none; margin-left: 20px;">
         <div class="input-field">
             <input id="countryCode" type="text" name="countryCode" value="+45" readonly>
             <label for="countryCode">Country Code</label>
@@ -58,3 +58,15 @@
     </div>
 </div>
 
+<!-- Checkout Button -->
+<?php if ($isGuest): ?>
+    <form action="/dwp/frontend/checkout.php" method="post">
+        <input type="hidden" name="guest" value="1">
+        <button type="submit" class="btn green" style="margin-top: 20px;">Checkout</button>
+    </form>
+<?php elseif ($isLoggedIn): ?>
+    <form action="/dwp/frontend/user/profile/booking_process.php" method="post">
+        <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['user_id']); ?>">
+        <button type="submit" class="btn green" style="margin-top: 20px;">Checkout</button>
+    </form>
+<?php endif; ?>

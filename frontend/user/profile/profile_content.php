@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
 <body>
-<?php include '../../../frontend/navbar/navbar_structure.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/navbar/navbar_structure.php'; ?>
 
 <div class="container" style="padding-top: 10%">
     <h3>Profile Overview</h3>
@@ -20,35 +20,59 @@
         <button id="editUserButton" class="btn blue" ">Edit Information</button>
     </div>
 
-    <div class="booking-history">
-        <h5>Booking History</h5>
-        <?php if ($bookings): ?>
-            <table class="highlight">
-                <thead>
-                    <tr>
-                        <th>Booking Date</th>
-                        <th>Movie</th>
-                        <th>Tickets</th>
-                        <th>Total Price</th>
-                        <th>Payment Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($bookings as $booking): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($booking['BookingDate']) ?></td>
-                            <td><?= htmlspecialchars($booking['MovieTitle']) ?></td>
-                            <td><?= htmlspecialchars($booking['NumberOfTickets']) ?></td>
-                            <td>DKK <?= number_format($booking['TotalPrice'], 2) ?></td>
-                            <td><?= htmlspecialchars($booking['PaymentStatus']) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php else: ?>
-            <p>No bookings found.</p>
-        <?php endif; ?>
+   <!-- Success Modal -->
+   <?php if (!empty($bookingSuccessMessage)): ?>
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <h4>Booking Successful</h4>
+            <p><?= htmlspecialchars($bookingSuccessMessage); ?></p>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-close btn green">Okay</button>
+        </div>
     </div>
+<?php endif; ?>
+
+
+<div class="container" style="padding-top: 10%">
+    <!-- User and Booking History Content -->
+    <div class="booking-history">
+    <h5>Booking History</h5>
+    <?php if ($bookings): ?>
+        <table class="highlight">
+            <thead>
+                <tr>
+                    <th>Booking Date</th>
+                    <th>Movie</th>
+                    <th>Showtime</th>
+                    <th>Cinema Hall</th>
+                    <th>Seats</th>
+                    <th>Tickets</th>
+                    <th>Total Price</th>
+                    <th>Payment Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($bookings as $booking): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($booking['BookingDate']) ?></td>
+                        <td><?= htmlspecialchars($booking['MovieTitle']) ?></td>
+                        <td><?= htmlspecialchars($booking['ShowTime'] ?? 'N/A') ?> on <?= htmlspecialchars($booking['ShowDate'] ?? 'N/A') ?></td>
+<td><?= htmlspecialchars($booking['CinemaHall'] ?? 'N/A') ?></td>
+<td><?= htmlspecialchars($booking['Seats'] ?? 'N/A') ?></td>
+
+                        <td><?= htmlspecialchars($booking['NumberOfTickets']) ?></td>
+                        <td>DKK <?= number_format($booking['TotalPrice'], 2) ?></td>
+                        <td><?= htmlspecialchars($booking['PaymentStatus']) ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <p>No bookings found.</p>
+    <?php endif; ?>
+</div>
+
 
     <button id="deleteAccountButton" class="btn red">Delete Account</button>
 </div>
