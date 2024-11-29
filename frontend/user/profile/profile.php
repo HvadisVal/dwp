@@ -58,6 +58,23 @@ try {
 }
 
 
+// Fetch invoices for the user
+try {
+    $invoicesQuery = $connection->prepare("
+        SELECT i.Invoice_ID, i.InvoiceDate, i.TotalAmount, i.InvoiceStatus
+        FROM Invoice i
+        JOIN Booking b ON i.Invoice_ID = b.Invoice_ID
+        WHERE b.User_ID = :user_id
+        ORDER BY i.InvoiceDate DESC
+    ");
+    $invoicesQuery->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+    $invoicesQuery->execute();
+    $invoices = $invoicesQuery->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Error fetching invoices: " . $e->getMessage());
+}
+
+
 
 include 'profile_content.php';
 ?>
