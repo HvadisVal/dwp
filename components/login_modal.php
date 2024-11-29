@@ -3,9 +3,49 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-// Check if the user or guest is logged in
-$isLoggedIn = isset($_SESSION['user_id']);
-$isGuest = isset($_SESSION['guest_user_id']);
+
+// Handle login if POST request is made
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $captcha_response = $_POST['g-recaptcha-response'];
+
+    // Your secret key from Google reCAPTCHA
+    $secret_key = '6LcGh40qAAAAAA3ZkV5HXoWBeZFOt7LzGmXwUKGH';  // Use your actual secret key here
+
+    // Verify the CAPTCHA response
+    $url = 'https://www.google.com/recaptcha/api/siteverify';
+    $data = [
+        'secret' => $secret_key,
+        'response' => $captcha_response
+    ];
+
+    // Send the POST request to verify the CAPTCHA
+    $options = [
+        'http' => [
+            'method' => 'POST',
+            'content' => http_build_query($data),
+            'header'  => "Content-Type: application/x-www-form-urlencoded\r\n"
+        ]
+    ];
+    $context = stream_context_create($options);
+    $verify = file_get_contents($url, false, $context);
+    $response_keys = json_decode($verify);
+
+    // Check if CAPTCHA verification is successful
+    if (intval($response_keys->success) !== 1) {
+        echo "Please verify that you are not a robot.";
+        exit;  // Stop the script if CAPTCHA fails
+    } else {
+        // CAPTCHA passed, continue with login logic (replace with your actual logic)
+        // For example, you could check the credentials in your database
+        
+        // If credentials are correct, proceed with session creation and login
+        // $_SESSION['user_id'] = $user_id; // Example login logic
+        
+        echo "CAPTCHA verified. Proceeding with login...";
+    }
+}
 ?>
 
 <!-- Login Modal -->
@@ -21,6 +61,8 @@ $isGuest = isset($_SESSION['guest_user_id']);
                 <input id="password" type="password" name="pass" required>
                 <label for="password">Password</label>
             </div>
+            <!-- Google reCAPTCHA widget -->
+            <div class="g-recaptcha" data-sitekey="6LcGh40qAAAAADJ9GhkbB2mb-3wNydnZ11-7ton6"></div><br>
             <button class="btn blue" type="submit">Login</button>
         </form>
         <p class="error-message" style="color: red; display: none;"></p>
@@ -60,4 +102,47 @@ $isGuest = isset($_SESSION['guest_user_id']);
     </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
+<script>
+    $(document).ready(function() {
+        // Handle the login form submission
+        $('#loginForm').submit(function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            var username = $('#username').val();
+            var password = $('#password').val();
+            var captchaResponse = grecaptcha.getResponse(); // Get the reCAPTCHA response
+
+            // Ensure the CAPTCHA is completed
+            if (captchaResponse.length == 0) {
+                $('.error-message').text('Please verify that you are not a robot.').show();
+                return;
+            }
+
+            // Submit the form data using AJAX
+            $.ajax({
+                url: 'login_modal.php',  // Use the current PHP file
+                method: 'POST',
+                data: {
+                    username: username,
+                    password: password,
+                    'g-recaptcha-response': captchaResponse
+                },
+                success: function(response) {
+                    if (response === 'CAPTCHA verified. Proceeding with login...') {
+                        // Redirect or update UI for successful login
+                        alert('Login successful!');
+                    } else {
+                        // Handle error, for example invalid credentials or CAPTCHA failure
+                        $('.error-message').text(response).show();
+                    }
+                },
+                error: function() {
+                    $('.error-message').text('An error occurred. Please try again later.').show();
+                }
+            });
+        });
+    });
+</script>
