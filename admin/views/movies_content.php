@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Movies</title>
-    <link rel="stylesheet" href="/dwp/admin/movies/movies.css" />
+    <link rel="stylesheet" href="/dwp/admin/assets/css/movies.css" />
 </head>
 <body>
 
@@ -151,10 +151,10 @@
                     <p>No image available for this movie.</p>
                 <?php endif; ?>
 
-                <label for="image-<?php echo $movie['Movie_ID']; ?>">Upload New Movie Poster (required):</label>
-                <input type="file" name="image" accept="image/*" id="image-<?php echo $movie['Movie_ID']; ?>" onchange="displayFileName(event, <?php echo $movie['Movie_ID']; ?>)"> 
-                <label for="image-<?php echo $movie['Movie_ID']; ?>" class="file-label">Choose New Poster</label>
-                <div class="file-name" id="fileNameContainer-<?php echo $movie['Movie_ID']; ?>"></div>
+                <label for="poster-<?php echo $movie['Movie_ID']; ?>">Upload New Movie Poster (required):</label>
+<input type="file" name="poster" accept="image/*" id="poster-<?php echo $movie['Movie_ID']; ?>" onchange="displayFileName(event, <?php echo $movie['Movie_ID']; ?>)"> 
+<label for="poster-<?php echo $movie['Movie_ID']; ?>" class="file-label">Choose New Poster</label>
+<div class="file-name" id="fileNameContainer-<?php echo $movie['Movie_ID']; ?>"></div>
 
                 <!-- Display gallery images with delete checkboxes -->
                 <?php if (!empty($movie['GalleryImages'])): ?>
@@ -195,7 +195,7 @@
     <?php endforeach; ?>
 </div>
 
-<script src="/dwp/admin/movies/movies.js" defer></script>
+<script src="/dwp/admin/assets/js/movies.js" defer></script>
 <script src="/dwp/includes/functions.js" defer></script>
 
 </body>

@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Company</title>
-    <link rel="stylesheet" href="/dwp/admin/company/company.css" />
+    <link rel="stylesheet" href="/dwp/admin/assets/css/company.css" />
 </head>
 <body>
 
 <h1>Manage Company</h1>
 
-<!-- Display message if available -->
+<!-- Displaying messages -->
 <?php if (isset($_SESSION['message'])): ?>
     <div class="message"><?php echo $_SESSION['message']; unset($_SESSION['message']); ?></div>
 <?php endif; ?>
-
 <!-- Edit Company Information Section -->
 <h2>Edit Company Details</h2>
+
 <form method="POST" class="company-card company-form">
     <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
 
@@ -37,6 +37,7 @@
 
     <button type="submit" name="edit_company" class="save-button">Save Changes</button>
 </form>
+
 
 </body>
 </html>

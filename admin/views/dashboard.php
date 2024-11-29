@@ -1,7 +1,10 @@
 <?php
-require_once('./includes/admin_session.php'); 
-require_once( './includes/connection.php');
-require_once('./includes/functions.php');
+// admin/views/dashboard.php
+require_once('includes/admin_session.php'); 
+require_once('./admin/controllers/DashboardController.php');
+
+$controller = new DashboardController();
+$adminEmail = $controller->getAdminEmail();
 ?>
 
 <!DOCTYPE html>
@@ -12,16 +15,16 @@ require_once('./includes/functions.php');
     <title>Admin Dashboard</title>
     <!-- Materialize CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/dwp/admin/admin_dashboard/style.css" />
+    <link rel="stylesheet" href="/dwp/admin/assets/css/dashboard.css">
 </head>
 <body>
-    <div class="logo">
+<div class="logo">
         <img src="../images/12.png" alt="Logo" height = 70px>
     </div>
 
     <header>
         <h2>Welcome, Admin!</h2>
-        <p>You are logged in as <?php echo htmlspecialchars($_SESSION['admin_email']); ?></p>
+        <p>You are logged in as <?= htmlspecialchars($adminEmail); ?></p>
     </header>
 
     <div class="container">
@@ -116,9 +119,6 @@ require_once('./includes/functions.php');
             </div>
         </div>
 
-        <!-- Add more sections for admin tasks as needed -->
-    </div>
-
     <!-- Logout Button -->
     <div class="container">
         <form action="/dwp/admin/logout" method="POST" style="text-align: center;">
@@ -127,11 +127,10 @@ require_once('./includes/functions.php');
     </div>
 
     <footer>
-        <p>&copy; <?php echo date("Y"); ?> Admin Panel</p>
+        <p>&copy; <?= date("Y"); ?> Admin Panel</p>
     </footer>
 
     <!-- Materialize JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
 </body>
 </html>
