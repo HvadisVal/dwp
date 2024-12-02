@@ -109,7 +109,7 @@
         </div>
     </section>
 
-    <?php include './frontend/footer.php'; ?>
+    <?php include './frontend/footer/footer.php'; ?>
     <script src="/dwp/frontend/landing/javascript.js"></script>
 </body>
 </html>

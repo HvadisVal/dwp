@@ -82,7 +82,7 @@
 
                 <?php if (isset($movieDetails['Showtimes'][$date])): ?>
                     <?php foreach ($movieDetails['Showtimes'][$date] as $showtime): ?>
-                        <a href="/dwp/frontend/booking/initialize_booking.php?movie_id=<?= htmlspecialchars($showtime['Movie_ID']); ?>&cinema_hall_id=<?= htmlspecialchars($showtime['CinemaHall_ID']); ?>&time=<?= urlencode($showtime['ShowTime']); ?>&date=<?= urlencode($showtime['ShowDate']); ?>" class="showtime-card">
+                        <a href="/dwp/frontend/controllers/initialize_booking.php?movie_id=<?= htmlspecialchars($showtime['Movie_ID']); ?>&cinema_hall_id=<?= htmlspecialchars($showtime['CinemaHall_ID']); ?>&time=<?= urlencode($showtime['ShowTime']); ?>&date=<?= urlencode($showtime['ShowDate']); ?>" class="showtime-card">
     <h6><?= htmlspecialchars($showtime['CinemaHall_Name']); ?></h6>
     <h6><?= date("g:i a", strtotime($showtime['ShowTime'])); ?></h6>
     <div class="version"><?= htmlspecialchars($showtime['Version'] ?? 'Standard'); ?></div>
