@@ -31,6 +31,7 @@ $routes = [
     'admin/manage-movies' => 'admin/controllers/MoviesController.php',
     'admin/manage-news' => 'admin/controllers/NewsController.php',
     'admin/manage-screenings' => 'admin/controllers/ScreeningController.php',
+    'admin/manage-bookings' => 'admin/controllers/BookingController.php',
 
 
     // payment pages
