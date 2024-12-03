@@ -20,7 +20,11 @@ h2 {
   font-size: 1.5em;
   margin: 25px 0;
 }
-
+.back-to-dashboard {
+  position: absolute;
+  top: 0;
+  margin: 30px;
+}
 /* Form and Container */
 .company-card {
   margin: 0 auto;

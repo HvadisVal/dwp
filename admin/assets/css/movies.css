@@ -11,7 +11,11 @@
   display: flex;
   justify-content: center;
 }
-
+.back-to-dashboard {
+  position: absolute;
+  top: 0;
+  margin: 30px;
+}
 #moviesContainer {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3 items in a row */

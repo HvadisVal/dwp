@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="/dwp/admin/assets/css/company.css" />
 </head>
 <body>
+    
+<a href="/dwp/admin/dashboard" class="back-to-dashboard"><img src="../images/back-button.png" alt=""></a>
 
 <h1>Manage Company</h1>
 

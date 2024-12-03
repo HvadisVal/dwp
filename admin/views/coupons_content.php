@@ -12,6 +12,9 @@
 
 <body>
 <div class="container">
+    
+<a href="/dwp/admin/dashboard" class="back-to-dashboard"><img src="../images/back-button.png" alt=""></a>
+
     <header>
         <h1>Manage Coupons</h1>
     </header>

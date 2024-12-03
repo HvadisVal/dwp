@@ -9,21 +9,12 @@ class MoviesModel {
     }
 
     public function getAllMovies() {
-        $sql = "SELECT m.Movie_ID, m.Title, m.Director, m.Language, m.Year, m.Duration, m.Rating, m.Description, 
-                       m.TrailerLink, m.AgeLimit, 
-                       MAX(CASE WHEN media.IsFeatured = 1 THEN media.FileName END) AS ImageFileName,
-                       GROUP_CONCAT(CASE WHEN media.IsFeatured = 0 THEN media.FileName END) AS GalleryImages,
-                       g.Genre_ID AS Genre_ID, g.Name AS GenreName,
-                       v.Version_ID AS Version_ID, v.Format AS VersionFormat
-                FROM Movie m
-                LEFT JOIN Media media ON m.Movie_ID = media.Movie_ID
-                LEFT JOIN Genre g ON m.Genre_ID = g.Genre_ID
-                LEFT JOIN Version v ON m.Version_ID = v.Version_ID
-                GROUP BY m.Movie_ID";
+        $sql = "SELECT * FROM MovieDetails";  // Using the SQL view
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
 
     public function getGenres() {
         return $this->connection->query("SELECT Genre_ID, Name FROM Genre")->fetchAll(PDO::FETCH_ASSOC);

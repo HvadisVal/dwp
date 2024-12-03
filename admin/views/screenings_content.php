@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="/dwp/admin/assets/css/screenings.css" />
 </head>
 <body>
+    
+<a href="/dwp/admin/dashboard" class="back-to-dashboard"><img src="../images/back-button.png" alt=""></a>
 
 <h1>Manage Screenings</h1>
 <?php

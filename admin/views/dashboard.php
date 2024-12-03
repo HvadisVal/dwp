@@ -58,7 +58,7 @@ $adminEmail = $controller->getAdminEmail();
                         <p>View or manage customer bookings.</p>
                     </div>
                     <div class="card-action">
-                        <a href="manage_bookings.php" class="btn waves-effect waves-light">Manage Bookings</a>
+                        <a href="/dwp/admin/manage-bookings" class="btn waves-effect waves-light">Manage Bookings</a>
                     </div>
                 </div>
             </div>

@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="/dwp/admin/assets/css/movies.css" />
 </head>
 <body>
+    
+<a href="/dwp/admin/dashboard" class="back-to-dashboard"><img src="../images/back-button.png" alt=""></a>
 
 <h1 class="header">Manage Movies</h1>
 
