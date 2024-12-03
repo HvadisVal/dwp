@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($movieDetails['Title']); ?> - Movie Details</title>
-    <link rel="stylesheet" href="/dwp/frontend/movie_profile/movie.css">
+    <link rel="stylesheet" href="/dwp/frontend/assets/css/movie_profile.css">
 
 </head>
 <body>
@@ -99,7 +99,7 @@
 </div>
 </div>
 
-<?php include './frontend/footer.php'; ?>
+<?php include './frontend/views/footer/footer_content.php'; ?>
 
 </body>
 </html>
