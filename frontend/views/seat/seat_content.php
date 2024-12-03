@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Select Seats</title>
-    <link rel="stylesheet" href="/dwp/frontend/seat/seat.css">
+    <link rel="stylesheet" href="/dwp/frontend/assets/css/seat.css">
     </head>
 <body>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/navbar/navbar_structure.php'; ?>
@@ -74,7 +74,7 @@
         <button class="continue-button" id="continue-button" style="display: none;">Continue</button>
         
     </div>
-<script src="/dwp/frontend/seat/seat.js"></script>
+<script src="/dwp/frontend/assets/js/seat.js"></script>
 
 
 </body>
