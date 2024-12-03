@@ -67,6 +67,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
             gap: 20px!important;
         }
 
+        
         /* Individual Article Card */
         .news-article {
             background: linear-gradient(to right, #243642, #1a252d)!important;
