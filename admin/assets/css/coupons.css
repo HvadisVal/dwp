@@ -18,6 +18,11 @@ h2 {
   text-align: center;
   color: #333;
 }
+.back-to-dashboard {
+  position: absolute;
+  top: 0;
+  margin: 30px;
+}
 label {
   display: block;
   margin: 10px 0 5px;

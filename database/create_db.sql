@@ -8,6 +8,241 @@ CREATE TABLE Genre (
     Name VARCHAR(100),
     Description TEXT
 );
+
+-- Version Table
+CREATE TABLE Version (
+    Version_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Format VARCHAR(50),
+    AdditionalFee DECIMAL(10, 2)
+);
+
+-- Movie Table
+CREATE TABLE Movie (
+    Movie_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Title VARCHAR(255),
+    Director VARCHAR(100),
+    Language VARCHAR(50),
+    Year INT,
+    Duration TIME,
+    Rating INT,
+    Description TEXT,
+    TrailerLink VARCHAR(255),
+    AgeLimit INT,
+    Genre_ID INT,
+    Version_ID INT,
+    FOREIGN KEY (Genre_ID) REFERENCES Genre(Genre_ID),
+    FOREIGN KEY (Version_ID) REFERENCES Version(Version_ID)
+);
+
+-- Payment Table
+CREATE TABLE Payment (
+    Payment_ID INT PRIMARY KEY AUTO_INCREMENT,
+    AmountPaid DECIMAL(10, 2),
+    PaymentMethod VARCHAR(50),
+    PaymentDate DATE,
+    PaymentStatus VARCHAR(50)
+);
+
+-- Invoice Table
+CREATE TABLE Invoice (
+    Invoice_ID INT PRIMARY KEY AUTO_INCREMENT,
+    InvoiceDate DATE,
+    TotalAmount DECIMAL(10, 2),
+    InvoiceStatus VARCHAR(50)
+);
+
+-- Coupon Table
+CREATE TABLE Coupon (
+    Coupon_ID INT PRIMARY KEY AUTO_INCREMENT,
+    CouponCode VARCHAR(50),
+    DiscountAmount DECIMAL(10, 2),
+    ExpireDate DATE
+);
+
+-- CinemaHall Table
+CREATE TABLE CinemaHall (
+    CinemaHall_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(255),
+    TotalSeats INT
+);
+
+-- Screening Table
+CREATE TABLE Screening (
+    Screening_ID INT PRIMARY KEY AUTO_INCREMENT,
+    ShowDate DATE,  
+    ShowTime TIME,
+    CinemaHall_ID INT,  
+    Movie_ID INT,  
+    FOREIGN KEY (CinemaHall_ID) REFERENCES CinemaHall(CinemaHall_ID) ON DELETE CASCADE,
+    FOREIGN KEY (Movie_ID) REFERENCES Movie(Movie_ID) ON DELETE CASCADE
+);
+
+-- Seat Table
+CREATE TABLE Seat (
+    Seat_ID INT PRIMARY KEY AUTO_INCREMENT,
+    SeatNumber INT,
+    Row INT,
+    CinemaHall_ID INT,
+    FOREIGN KEY (CinemaHall_ID) REFERENCES CinemaHall(CinemaHall_ID)
+);
+
+-- Ticket Price Table
+CREATE TABLE TicketPrice (
+    Price_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Type VARCHAR(50),  
+    Price DECIMAL(10, 2),
+    ValidFrom DATE,
+    ValidTo DATE
+);
+
+-- User Table
+CREATE TABLE User (
+    User_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100),
+    Email VARCHAR(100),
+    TelephoneNumber INT,
+    Password VARCHAR(255)
+);
+
+-- GuestUser Table
+CREATE TABLE GuestUser (
+    GuestUser_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Firstname VARCHAR(100),
+    Lastname VARCHAR(100),
+    Email VARCHAR(100),
+    TelephoneNumber INT
+);
+
+-- Booking Table
+CREATE TABLE Booking (
+    Booking_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Movie_ID INT,
+    User_ID INT DEFAULT NULL,
+    GuestUser_ID INT DEFAULT NULL,
+    BookingDate DATE,
+    NumberOfTickets INT,
+    PaymentStatus VARCHAR(50),
+    TotalPrice DECIMAL(10, 2),
+    Payment_ID INT,
+    Invoice_ID INT,
+    FOREIGN KEY (Movie_ID) REFERENCES Movie(Movie_ID),
+    FOREIGN KEY (User_ID) REFERENCES User(User_ID),
+    FOREIGN KEY (GuestUser_ID) REFERENCES GuestUser(GuestUser_ID),
+    FOREIGN KEY (Payment_ID) REFERENCES Payment(Payment_ID),
+    FOREIGN KEY (Invoice_ID) REFERENCES Invoice(Invoice_ID),
+    CHECK ((User_ID IS NOT NULL AND GuestUser_ID IS NULL) OR (User_ID IS NULL AND GuestUser_ID IS NOT NULL))
+);
+
+-- Ticket Table
+CREATE TABLE Ticket (
+    Ticket_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Screening_ID INT,
+    Seat_ID INT,
+    Price_ID INT,
+    Coupon_ID INT,
+    Booking_ID INT,
+    FOREIGN KEY (Screening_ID) REFERENCES Screening(Screening_ID),
+    FOREIGN KEY (Booking_ID) REFERENCES Booking(Booking_ID),
+    FOREIGN KEY (Seat_ID) REFERENCES Seat(Seat_ID),
+    FOREIGN KEY (Price_ID) REFERENCES TicketPrice(Price_ID),
+    FOREIGN KEY (Coupon_ID) REFERENCES Coupon(Coupon_ID)
+);
+
+-- News Table
+CREATE TABLE News (
+    News_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Title VARCHAR(255),
+    Content TEXT,
+    DatePosted DATE
+);
+
+-- Company Table
+CREATE TABLE Company (
+    Company_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(255),
+    Description TEXT,
+    OpeningHours VARCHAR(100),
+    Email VARCHAR(255),
+    Location VARCHAR(255)
+); 
+
+-- Admin Table
+CREATE TABLE Admin (
+    Admin_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Email VARCHAR(100),
+    Password VARCHAR(255)
+);
+
+-- Media Table
+CREATE TABLE Media (
+    Media_ID INT PRIMARY KEY AUTO_INCREMENT,
+    FileName VARCHAR(255),
+    UploadAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    IsFeatured BOOLEAN DEFAULT 0,
+    `Format` ENUM('jpg', 'png') NOT NULL,
+    Movie_ID INT DEFAULT NULL,
+    News_ID INT DEFAULT NULL,
+    FOREIGN KEY (Movie_ID) REFERENCES Movie(Movie_ID) ON DELETE CASCADE,
+    FOREIGN KEY (News_ID) REFERENCES News(News_ID) ON DELETE CASCADE,
+    CHECK ((Movie_ID IS NOT NULL AND News_ID IS NULL) OR (Movie_ID IS NULL AND News_ID IS NOT NULL))
+);
+
+-- DetailedBookings View
+CREATE VIEW DetailedBookings AS
+SELECT 
+    b.Booking_ID,
+    m.Title AS MovieTitle,
+    COALESCE(u.Name, CONCAT(g.Firstname, ' ', g.Lastname)) AS CustomerName,
+    b.BookingDate,
+    b.NumberOfTickets,
+    b.TotalPrice,
+    b.PaymentStatus
+FROM 
+    Booking b
+LEFT JOIN 
+    Movie m ON b.Movie_ID = m.Movie_ID
+LEFT JOIN 
+    User u ON b.User_ID = u.User_ID
+LEFT JOIN 
+    GuestUser g ON b.GuestUser_ID = g.GuestUser_ID;
+
+-- MovieDetails View
+CREATE VIEW MovieDetails AS
+SELECT 
+    m.Movie_ID,
+    m.Title,
+    m.Director,
+    m.Language,
+    m.Year,
+    m.Duration,
+    m.Rating,
+    m.Description,
+    m.TrailerLink,
+    m.AgeLimit,
+    -- Fetch the main (featured) poster image for the movie
+    MAX(CASE WHEN media.IsFeatured = 1 THEN media.FileName END) AS ImageFileName,
+    -- Fetch gallery images for the movie
+    GROUP_CONCAT(CASE WHEN media.IsFeatured = 0 THEN media.FileName END) AS GalleryImages,
+    -- Movie genre information
+    g.Genre_ID,
+    g.Name AS GenreName,
+    -- Movie version information
+    v.Version_ID,
+    v.Format AS VersionFormat
+FROM 
+    Movie m
+LEFT JOIN 
+    Media media ON m.Movie_ID = media.Movie_ID
+LEFT JOIN 
+    Genre g ON m.Genre_ID = g.Genre_ID
+LEFT JOIN 
+    Version v ON m.Version_ID = v.Version_ID
+GROUP BY 
+    m.Movie_ID;
+
+-- Inserting sample data
+
+-- Inserting into table 'Genre'
 INSERT INTO Genre (Genre_ID, Name, Description) VALUES 
 (1, 'Action', 'This genre focuses on action and brings thrilling experiences to the audience.');
 
@@ -53,13 +288,7 @@ INSERT INTO Genre (Genre_ID, Name, Description) VALUES
 INSERT INTO Genre (Genre_ID, Name, Description) VALUES 
 (15, 'Fantasy', 'This genre focuses on fantasy and brings thrilling experiences to the audience.');
 
-
--- Version Table
-CREATE TABLE Version (
-    Version_ID INT PRIMARY KEY AUTO_INCREMENT,
-    Format VARCHAR(50),
-    AdditionalFee DECIMAL(10, 2)
-);
+-- Inserting into table 'Version'
 
 INSERT INTO Version (Version_ID, Format, AdditionalFee) VALUES (1, '2D', 0.00);
 INSERT INTO Version (Version_ID, Format, AdditionalFee) VALUES (2, '3D', 3.00);
@@ -68,24 +297,8 @@ INSERT INTO Version (Version_ID, Format, AdditionalFee) VALUES (4, 'IMAX 3D', 7.
 INSERT INTO Version (Version_ID, Format, AdditionalFee) VALUES (5, '4DX', 10.00);
 INSERT INTO Version (Version_ID, Format, AdditionalFee) VALUES (6, 'Dolby Cinema', 8.00);
 
+-- Inserting into table 'Movie'
 
--- Movie Table
-CREATE TABLE Movie (
-    Movie_ID INT PRIMARY KEY AUTO_INCREMENT,
-    Title VARCHAR(255),
-    Director VARCHAR(100),
-    Language VARCHAR(50),
-    Year INT,
-    Duration TIME,
-    Rating INT,
-    Description TEXT,
-    TrailerLink VARCHAR(255),
-    AgeLimit INT,
-    Genre_ID INT,
-    Version_ID INT,
-    FOREIGN KEY (Genre_ID) REFERENCES Genre(Genre_ID),
-    FOREIGN KEY (Version_ID) REFERENCES Version(Version_ID)
-);
 INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
 (1, 'The Dark Knight', 'Christopher Nolan', 'English', 2008, '02:32:00', 9, 'A crime drama about Batman taking on the Joker.', 'https://www.youtube.com/embed/EXeTwQWrcwY?si=ZMBW7Y-W88cDaEGu', 1, 1, 13);
 
@@ -191,32 +404,7 @@ INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, 
 INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
 (35, 'Indiana Jones and the Last Crusade', 'Steven Spielberg', 'English', 1989, '02:07:00', 8, 'An adventure movie about the search for the Holy Grail.', 'https://www.youtube.com/embed/DKg36LBVgfg?si=ycMV5NduMRSqwAfi', 11, 1, 12);
 
-
-
--- Payment Table
-CREATE TABLE Payment (
-    Payment_ID INT PRIMARY KEY AUTO_INCREMENT,
-    AmountPaid DECIMAL(10, 2),
-    PaymentMethod VARCHAR(50),
-    PaymentDate DATE,
-    PaymentStatus VARCHAR(50)
-);
-
--- Invoice Table
-CREATE TABLE Invoice (
-    Invoice_ID INT PRIMARY KEY AUTO_INCREMENT,
-    InvoiceDate DATE,
-    TotalAmount DECIMAL(10, 2),
-    InvoiceStatus VARCHAR(50)
-);
-
--- Coupon Table
-CREATE TABLE Coupon (
-    Coupon_ID INT PRIMARY KEY AUTO_INCREMENT,
-    CouponCode VARCHAR(50),
-    DiscountAmount DECIMAL(10, 2),
-    ExpireDate DATE
-);
+-- Inserting into table 'Coupon'
 
 INSERT INTO Coupon (Coupon_ID, CouponCode, DiscountAmount, ExpireDate)
 VALUES (1, 'SUMMER2024', 20.00, '2025-08-15');
@@ -233,154 +421,146 @@ VALUES (4, 'FALL2025', 50.00, '2025-09-30');
 INSERT INTO Coupon (Coupon_ID, CouponCode, DiscountAmount, ExpireDate)
 VALUES (5, 'HOLIDAY2025', 35.00, '2025-12-25');
 
+-- Inserting into table 'CinemaHall'
 
--- CinemaHall Table
-CREATE TABLE CinemaHall (
-    CinemaHall_ID INT PRIMARY KEY AUTO_INCREMENT,
-    Name VARCHAR(255),
-    TotalSeats INT
-);
 INSERT INTO CinemaHall (CinemaHall_ID, Name, TotalSeats) VALUES (1, 'Hall 1', 120);
 INSERT INTO CinemaHall (CinemaHall_ID, Name, TotalSeats) VALUES (2, 'Hall 2', 150);
 INSERT INTO CinemaHall (CinemaHall_ID, Name, TotalSeats) VALUES (3, 'Hall 3', 180);
 INSERT INTO CinemaHall (CinemaHall_ID, Name, TotalSeats) VALUES (4, 'Hall 4', 100);
 
-
--- Screening Table ? 35
-CREATE TABLE Screening (
-    Screening_ID INT PRIMARY KEY AUTO_INCREMENT,
-    ShowDate DATE,  
-    ShowTime TIME,
-    CinemaHall_ID INT,  
-    Movie_ID INT,  
-    FOREIGN KEY (CinemaHall_ID) REFERENCES CinemaHall(CinemaHall_ID) ON DELETE CASCADE,
-    FOREIGN KEY (Movie_ID) REFERENCES Movie(Movie_ID) ON DELETE CASCADE
-);
+-- Inserting into table 'Screening'
 
 INSERT INTO Screening (Screening_ID, ShowDate, ShowTime, CinemaHall_ID, Movie_ID) VALUES
 
--- Week 2: 2024-11-26 to 2024-12-02
-(1, '2024-11-26', '10:00:00', 1, 1),
-(2, '2024-11-26', '13:00:00', 1, 2),
-(3, '2024-11-26', '16:00:00', 1, 3),
-(4, '2024-11-26', '19:00:00', 1, 4),
-(5, '2024-11-26', '10:15:00', 2, 5),
-(6, '2024-11-26', '13:45:00', 2, 6),
-(7, '2024-11-26', '16:30:00', 2, 7),
-(8, '2024-11-26', '19:00:00', 2, 1),
-(9, '2024-11-26', '11:00:00', 3, 2),
-(10, '2024-11-26', '14:00:00', 3, 3),
-(11, '2024-11-26', '17:30:00', 3, 4),
-(12, '2024-11-26', '20:30:00', 3, 5),
-(13, '2024-11-26', '10:30:00', 4, 6),
-(14, '2024-11-26', '13:30:00', 4, 7),
-(15, '2024-11-26', '16:30:00', 4, 1),
+-- Week 1: 2024-12-03 to 2024-12-09
+(1, '2024-12-03', '10:00:00', 1, 1),
+(2, '2024-12-03', '13:00:00', 1, 2),
+(3, '2024-12-03', '16:00:00', 1, 3),
+(4, '2024-12-03', '19:00:00', 1, 4),
+(5, '2024-12-03', '10:15:00', 2, 5),
+(6, '2024-12-03', '13:45:00', 2, 6),
+(7, '2024-12-03', '16:30:00', 2, 7),
+(8, '2024-12-03', '19:00:00', 2, 1),
+(9, '2024-12-03', '11:00:00', 3, 2),
+(10, '2024-12-03', '14:00:00', 3, 3),
+(11, '2024-12-03', '17:30:00', 3, 4),
+(12, '2024-12-03', '20:30:00', 3, 5),
+(13, '2024-12-03', '10:30:00', 4, 6),
+(14, '2024-12-03', '13:30:00', 4, 7),
+(15, '2024-12-03', '16:30:00', 4, 1),
 
-(16, '2024-11-27', '10:00:00', 1, 2),
-(17, '2024-11-27', '13:00:00', 1, 3),
-(18, '2024-11-27', '16:00:00', 1, 4),
-(19, '2024-11-27', '19:00:00', 1, 5),
-(20, '2024-11-27', '10:15:00', 2, 6),
-(21, '2024-11-27', '13:45:00', 2, 7),
-(22, '2024-11-27', '16:30:00', 2, 1),
-(23, '2024-11-27', '19:00:00', 2, 2),
-(24, '2024-11-27', '11:00:00', 3, 3),
-(25, '2024-11-27', '14:00:00', 3, 4),
-(26, '2024-11-27', '17:30:00', 3, 5),
-(27, '2024-11-27', '20:30:00', 3, 6),
-(28, '2024-11-27', '10:30:00', 4, 7),
-(29, '2024-11-27', '13:30:00', 4, 1),
-(30, '2024-11-27', '16:30:00', 4, 2),
+(16, '2024-12-04', '10:00:00', 1, 2),
+(17, '2024-12-04', '13:00:00', 1, 3),
+(18, '2024-12-04', '16:00:00', 1, 4),
+(19, '2024-12-04', '19:00:00', 1, 5),
+(20, '2024-12-04', '10:15:00', 2, 6),
+(21, '2024-12-04', '13:45:00', 2, 7),
+(22, '2024-12-04', '16:30:00', 2, 1),
+(23, '2024-12-04', '19:00:00', 2, 2),
+(24, '2024-12-04', '11:00:00', 3, 3),
+(25, '2024-12-04', '14:00:00', 3, 4),
+(26, '2024-12-04', '17:30:00', 3, 5),
+(27, '2024-12-04', '20:30:00', 3, 6),
+(28, '2024-12-04', '10:30:00', 4, 7),
+(29, '2024-12-04', '13:30:00', 4, 1),
+(30, '2024-12-04', '16:30:00', 4, 2),
 
-(31, '2024-11-28', '10:00:00', 1, 3),
-(32, '2024-11-28', '13:00:00', 1, 4),
-(33, '2024-11-28', '16:00:00', 1, 5),
-(34, '2024-11-28', '19:00:00', 1, 6),
-(35, '2024-11-28', '10:15:00', 2, 7),
-(36, '2024-11-28', '13:45:00', 2, 1),
-(37, '2024-11-28', '16:30:00', 2, 2),
-(38, '2024-11-28', '19:00:00', 2, 3),
-(39, '2024-11-28', '11:00:00', 3, 4),
-(40, '2024-11-28', '14:00:00', 3, 5),
-(41, '2024-11-28', '17:30:00', 3, 6),
-(42, '2024-11-28', '20:30:00', 3, 7),
-(43, '2024-11-28', '10:30:00', 4, 1),
-(44, '2024-11-28', '13:30:00', 4, 2),
-(45, '2024-11-28', '16:30:00', 4, 3),
+(31, '2024-12-05', '10:00:00', 1, 3),
+(32, '2024-12-05', '13:00:00', 1, 4),
+(33, '2024-12-05', '16:00:00', 1, 5),
+(34, '2024-12-05', '19:00:00', 1, 6),
+(35, '2024-12-05', '10:15:00', 2, 7),
+(36, '2024-12-05', '13:45:00', 2, 1),
+(37, '2024-12-05', '16:30:00', 2, 2),
+(38, '2024-12-05', '19:00:00', 2, 3),
+(39, '2024-12-05', '11:00:00', 3, 4),
+(40, '2024-12-05', '14:00:00', 3, 5),
+(41, '2024-12-05', '17:30:00', 3, 6),
+(42, '2024-12-05', '20:30:00', 3, 7),
+(43, '2024-12-05', '10:30:00', 4, 1),
+(44, '2024-12-05', '13:30:00', 4, 2),
+(45, '2024-12-05', '16:30:00', 4, 3),
 
-(46, '2024-11-29', '10:00:00', 1, 4),
-(47, '2024-11-29', '13:00:00', 1, 5),
-(48, '2024-11-29', '16:00:00', 1, 6),
-(49, '2024-11-29', '19:00:00', 1, 7),
-(50, '2024-11-29', '10:15:00', 2, 1),
-(51, '2024-11-29', '13:45:00', 2, 2),
-(52, '2024-11-29', '16:30:00', 2, 3),
-(53, '2024-11-29', '19:00:00', 2, 4),
-(54, '2024-11-29', '11:00:00', 3, 5),
-(55, '2024-11-29', '14:00:00', 3, 6),
-(56, '2024-11-29', '17:30:00', 3, 7),
-(57, '2024-11-29', '20:30:00', 3, 1),
-(58, '2024-11-29', '10:30:00', 4, 2),
-(59, '2024-11-29', '13:30:00', 4, 3),
-(60, '2024-11-29', '16:30:00', 4, 4),
+(46, '2024-12-06', '10:00:00', 1, 4),
+(47, '2024-12-06', '13:00:00', 1, 5),
+(48, '2024-12-06', '16:00:00', 1, 6),
+(49, '2024-12-06', '19:00:00', 1, 7),
+(50, '2024-12-06', '10:15:00', 2, 1),
+(51, '2024-12-06', '13:45:00', 2, 2),
+(52, '2024-12-06', '16:30:00', 2, 3),
+(53, '2024-12-06', '19:00:00', 2, 4),
+(54, '2024-12-06', '11:00:00', 3, 5),
+(55, '2024-12-06', '14:00:00', 3, 6),
+(56, '2024-12-06', '17:30:00', 3, 7),
+(57, '2024-12-06', '20:30:00', 3, 1),
+(58, '2024-12-06', '10:30:00', 4, 2),
+(59, '2024-12-06', '13:30:00', 4, 3),
+(60, '2024-12-06', '16:30:00', 4, 4),
 
-(61, '2024-11-30', '10:00:00', 1, 5),
-(62, '2024-11-30', '13:00:00', 1, 6),
-(63, '2024-11-30', '16:00:00', 1, 7),
-(64, '2024-11-30', '19:00:00', 1, 1),
-(65, '2024-11-30', '10:15:00', 2, 2),
-(66, '2024-11-30', '13:45:00', 2, 3),
-(67, '2024-11-30', '16:30:00', 2, 4),
-(68, '2024-11-30', '19:00:00', 2, 5),
-(69, '2024-11-30', '11:00:00', 3, 6),
-(70, '2024-11-30', '14:00:00', 3, 7),
-(71, '2024-11-30', '17:30:00', 3, 1),
-(72, '2024-11-30', '20:30:00', 3, 2),
-(73, '2024-11-30', '10:30:00', 4, 3),
-(74, '2024-11-30', '13:30:00', 4, 4),
-(75, '2024-11-30', '16:30:00', 4, 5),
+(61, '2024-12-07', '10:00:00', 1, 5),
+(62, '2024-12-07', '13:00:00', 1, 6),
+(63, '2024-12-07', '16:00:00', 1, 7),
+(64, '2024-12-07', '19:00:00', 1, 1),
+(65, '2024-12-07', '10:15:00', 2, 2),
+(66, '2024-12-07', '13:45:00', 2, 3),
+(67, '2024-12-07', '16:30:00', 2, 4),
+(68, '2024-12-07', '19:00:00', 2, 5),
+(69, '2024-12-07', '11:00:00', 3, 6),
+(70, '2024-12-07', '14:00:00', 3, 7),
+(71, '2024-12-07', '17:30:00', 3, 1),
+(72, '2024-12-07', '20:30:00', 3, 2),
+(73, '2024-12-07', '10:30:00', 4, 3),
+(74, '2024-12-07', '13:30:00', 4, 4),
+(75, '2024-12-07', '16:30:00', 4, 5),
 
-(76, '2024-12-01', '10:00:00', 1, 6),
-(77, '2024-12-01', '13:00:00', 1, 7),
-(78, '2024-12-01', '16:00:00', 1, 1),
-(79, '2024-12-01', '19:00:00', 1, 2),
-(80, '2024-12-01', '10:15:00', 2, 3),
-(81, '2024-12-01', '13:45:00', 2, 4),
-(82, '2024-12-01', '16:30:00', 2, 5),
-(83, '2024-12-01', '19:00:00', 2, 6),
-(84, '2024-12-01', '11:00:00', 3, 7),
-(85, '2024-12-01', '14:00:00', 3, 1),
-(86, '2024-12-01', '17:30:00', 3, 2),
-(87, '2024-12-01', '20:30:00', 3, 3),
-(88, '2024-12-01', '10:30:00', 4, 4),
-(89, '2024-12-01', '13:30:00', 4, 5),
-(90, '2024-12-01', '16:30:00', 4, 6),
+(76, '2024-12-08', '10:00:00', 1, 6),
+(77, '2024-12-08', '13:00:00', 1, 7),
+(78, '2024-12-08', '16:00:00', 1, 1),
+(79, '2024-12-08', '19:00:00', 1, 2),
+(80, '2024-12-08', '10:15:00', 2, 3),
+(81, '2024-12-08', '13:45:00', 2, 4),
+(82, '2024-12-08', '16:30:00', 2, 5),
+(83, '2024-12-08', '19:00:00', 2, 6),
+(84, '2024-12-08', '11:00:00', 3, 7),
+(85, '2024-12-08', '14:00:00', 3, 1),
+(86, '2024-12-08', '17:30:00', 3, 2),
+(87, '2024-12-08', '20:30:00', 3, 3),
+(88, '2024-12-08', '10:30:00', 4, 4),
+(89, '2024-12-08', '13:30:00', 4, 5),
+(90, '2024-12-08', '16:30:00', 4, 6),
 
-(91, '2024-12-02', '10:00:00', 1, 7),
-(92, '2024-12-02', '13:00:00', 1, 1),
-(93, '2024-12-02', '16:00:00', 1, 2),
-(94, '2024-12-02', '19:00:00', 1, 3),
-(95, '2024-12-02', '10:15:00', 2, 4),
-(96, '2024-12-02', '13:45:00', 2, 5),
-(97, '2024-12-02', '16:30:00', 2, 6),
-(98, '2024-12-02', '19:00:00', 2, 7),
-(99, '2024-12-02', '11:00:00', 3, 1),
-(100, '2024-12-02', '14:00:00', 3, 2),
-(101, '2024-12-02', '17:30:00', 3, 3),
-(102, '2024-12-02', '20:30:00', 3, 4),
-(103, '2024-12-02', '10:30:00', 4, 5),
-(104, '2024-12-02', '13:30:00', 4, 6),
-(105, '2024-12-02', '16:30:00', 4, 7);
+(91, '2024-12-09', '10:00:00', 1, 7),
+(92, '2024-12-09', '13:00:00', 1, 1),
+(93, '2024-12-09', '16:00:00', 1, 2),
+(94, '2024-12-09', '19:00:00', 1, 3),
+(95, '2024-12-09', '10:15:00', 2, 4),
+(96, '2024-12-09', '13:45:00', 2, 5),
+(97, '2024-12-09', '16:30:00', 2, 6),
+(98, '2024-12-09', '19:00:00', 2, 7),
+(99, '2024-12-09', '11:00:00', 3, 1),
+(100, '2024-12-09', '14:00:00', 3, 2),
+(101, '2024-12-09', '17:30:00', 3, 3),
+(102, '2024-12-09', '20:30:00', 3, 4),
+(103, '2024-12-09', '10:30:00', 4, 5),
+(104, '2024-12-09', '13:30:00', 4, 6),
+(105, '2024-12-09', '16:30:00', 4, 7),
 
-
--- Seat Table ? 100 each
-CREATE TABLE Seat (
-    Seat_ID INT PRIMARY KEY AUTO_INCREMENT,
-    SeatNumber INT,
-    Row INT,
-    CinemaHall_ID INT,
-    FOREIGN KEY (CinemaHall_ID) REFERENCES CinemaHall(CinemaHall_ID)
-);
+(106, '2024-12-10', '10:00:00', 1, 1),
+(107, '2024-12-10', '13:00:00', 1, 2),
+(108, '2024-12-10', '16:00:00', 1, 3),
+(109, '2024-12-10', '19:00:00', 1, 4),
+(110, '2024-12-10', '10:15:00', 2, 5),
+(111, '2024-12-10', '13:45:00', 2, 6),
+(112, '2024-12-10', '16:30:00', 2, 7),
+(113, '2024-12-10', '19:00:00', 2, 1),
+(114, '2024-12-10', '11:00:00', 3, 2),
+(115, '2024-12-10', '14:00:00', 3, 3),
+(116, '2024-12-10', '17:30:00', 3, 4),
+(117, '2024-12-10', '20:30:00', 3, 5),
+(118, '2024-12-10', '10:30:00', 4, 6),
+(119, '2024-12-10', '13:30:00', 4, 7),
+(120, '2024-12-10', '16:30:00', 4, 1);
+-- Inserting into table 'Seat'
 
 -- Row 1 Hall 1
 INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (1, 1, 1, 1);
@@ -822,16 +1002,7 @@ INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (398, 18, 5, 4
 INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (399, 19, 5, 4);
 INSERT INTO Seat (Seat_ID, SeatNumber, Row, CinemaHall_ID) VALUES (400, 20, 5, 4);
 
-
-
--- Ticket Price Table
-CREATE TABLE TicketPrice (
-    Price_ID INT PRIMARY KEY AUTO_INCREMENT,
-    Type VARCHAR(50),  
-    Price DECIMAL(10, 2),
-    ValidFrom DATE,
-    ValidTo DATE
-);
+-- Inserting into table 'TicketPrice'
 
 INSERT INTO TicketPrice (Type, Price, ValidFrom, ValidTo)
 VALUES
@@ -841,69 +1012,7 @@ VALUES
 ('VIP', 200.00, NULL, NULL),
 ('Weekend Special', 120.00, '2024-12-01', '2024-12-31');  
 
-
-
--- User Table
-CREATE TABLE User (
-    User_ID INT PRIMARY KEY AUTO_INCREMENT,
-    Name VARCHAR(100),
-    Email VARCHAR(100),
-    TelephoneNumber INT,
-    Password VARCHAR(255)
-);
-
--- GuestUser Table
-CREATE TABLE GuestUser (
-    GuestUser_ID INT PRIMARY KEY AUTO_INCREMENT,
-    Firstname VARCHAR(100),
-    Lastname VARCHAR(100),
-    Email VARCHAR(100),
-    TelephoneNumber INT
-);
-
--- Booking Table
-CREATE TABLE Booking (
-    Booking_ID INT PRIMARY KEY AUTO_INCREMENT,
-    Movie_ID INT,
-    User_ID INT DEFAULT NULL,
-    GuestUser_ID INT DEFAULT NULL,
-    BookingDate DATE,
-    NumberOfTickets INT,
-    PaymentStatus VARCHAR(50),
-    TotalPrice DECIMAL(10, 2),
-    Payment_ID INT,
-    Invoice_ID INT,
-    FOREIGN KEY (Movie_ID) REFERENCES Movie(Movie_ID),
-    FOREIGN KEY (User_ID) REFERENCES User(User_ID),
-    FOREIGN KEY (GuestUser_ID) REFERENCES GuestUser(GuestUser_ID),
-    FOREIGN KEY (Payment_ID) REFERENCES Payment(Payment_ID),
-    FOREIGN KEY (Invoice_ID) REFERENCES Invoice(Invoice_ID),
-    CHECK ((User_ID IS NOT NULL AND GuestUser_ID IS NULL) OR (User_ID IS NULL AND GuestUser_ID IS NOT NULL))
-);
-
-
--- Modified Ticket Table
-CREATE TABLE Ticket (
-    Ticket_ID INT PRIMARY KEY AUTO_INCREMENT,
-    Screening_ID INT,
-    Seat_ID INT,
-    Price_ID INT,
-    Coupon_ID INT,
-    Booking_ID INT,
-    FOREIGN KEY (Screening_ID) REFERENCES Screening(Screening_ID),
-    FOREIGN KEY (Booking_ID) REFERENCES Booking(Booking_ID),
-    FOREIGN KEY (Seat_ID) REFERENCES Seat(Seat_ID),
-    FOREIGN KEY (Price_ID) REFERENCES TicketPrice(Price_ID),
-    FOREIGN KEY (Coupon_ID) REFERENCES Coupon(Coupon_ID)
-);
-
--- News Table
-CREATE TABLE News (
-    News_ID INT PRIMARY KEY AUTO_INCREMENT,
-    Title VARCHAR(255),
-    Content TEXT,
-    DatePosted DATE
-);
+-- Inserting into table 'News'
 
 INSERT INTO News (News_ID, Title, Content, DatePosted) VALUES 
 (1, 'Blockbuster Release: ''The Last Adventure''', 'This weekend, cinema-goers will be treated to the much-anticipated release of ''The Last Adventure,'' directed by acclaimed filmmaker Sarah Johnson. The film promises to deliver breathtaking visuals and an engaging story that keeps audiences on the edge of their seats. Don’t miss it!', '2024-10-28');
@@ -920,50 +1029,19 @@ INSERT INTO News (News_ID, Title, Content, DatePosted) VALUES
 INSERT INTO News (News_ID, Title, Content, DatePosted) VALUES 
 (5, 'Iconic Film Remake: ''The Phantom Opera'' Returns', 'Fans of classic cinema are in for a treat as ''The Phantom Opera'' is set to be remade with a fresh twist. The film will feature a star-studded cast and modern music, promising to capture the essence of the original while appealing to a new generation.', '2024-10-25');
 
+-- Inserting into table 'Company'
 
--- Company Table
-CREATE TABLE Company (
-    Company_ID INT PRIMARY KEY AUTO_INCREMENT,
-    Name VARCHAR(255),
-    Description TEXT,
-    OpeningHours VARCHAR(100),
-    Email VARCHAR(255),
-    Location VARCHAR(255)
-); 
--- Insert data into Company table for FilmFusion cinema with a detailed description
 INSERT INTO Company (Company_ID, Name, Description, OpeningHours, Email, Location)
 VALUES 
 ('1',
  'FilmFusion', 
  'FilmFusion is your destination for an unparalleled cinema experience, blending the latest technology with a warm, welcoming ambiance. Located in the heart of MovieTown, FilmFusion features a mix of blockbuster films, independent cinema, and exclusive screenings that cater to all tastes. Our venue boasts luxurious reclining seats, advanced Dolby Atmos surround sound, and crystal-clear 4K projection in every theater. With spacious aisles, gourmet concessions, and a dedicated lounge for VIP members, FilmFusion transforms moviegoing into a memorable event. Our team is committed to exceptional service, ensuring each guest feels like a star. Whether you\'re here for a family outing, a date night, or a solo escape into the magic of film, FilmFusion offers a viewing experience that\'s both comfortable and captivating. Join us for seasonal film festivals, midnight premieres, and our signature “Retro Movie Nights” that celebrate the classics. FilmFusion—where the magic of cinema comes alive.',
- 'Mon-Fri: 10:00 AM - 11:00 PM; Sat-Sun: 9:00 AM - 12:00 AM;', 
+ 'Mon-Fri: 10:00 AM - 11:00 PM; Sat-Sun: 9:00 AM - 12:00 PM;', 
  'contact@filmfusion.com', 
- '123 Cinema Street, MovieTown, MT 12345');
+ 'Grådybet 73E 8 47, Esbjerg, 6700, Denmark');
 
+-- Inserting into table 'Media'
 
-
-CREATE TABLE Admin (
-    Admin_ID INT PRIMARY KEY AUTO_INCREMENT,
-    Email VARCHAR(100),
-    Password VARCHAR(255)
-);
-
--- Media Table
-CREATE TABLE Media (
-    Media_ID INT PRIMARY KEY AUTO_INCREMENT,
-    FileName VARCHAR(255),
-    UploadAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    IsFeatured BOOLEAN DEFAULT 0,
-    `Format` ENUM('jpg', 'png') NOT NULL,
-    Movie_ID INT DEFAULT NULL,
-    News_ID INT DEFAULT NULL,
-    FOREIGN KEY (Movie_ID) REFERENCES Movie(Movie_ID) ON DELETE CASCADE,
-    FOREIGN KEY (News_ID) REFERENCES News(News_ID) ON DELETE CASCADE,
-    CHECK ((Movie_ID IS NOT NULL AND News_ID IS NULL) OR (Movie_ID IS NULL AND News_ID IS NOT NULL))
-);
-
-
--- Inserting data into Media Table
 INSERT INTO Media (Media_ID, FileName, UploadAt, IsFeatured, Format, Movie_ID, News_ID) VALUES
 (1, '979a6575f6a496682a0b69ff2a5993e4.jpg', '2024-11-15 14:00:14', 0, 'jpg', NULL, 1),
 (2, '44c64ccf7fdfdebe5be61b73a74371cb.jpg', '2024-11-15 14:07:16', 0, 'jpg', NULL, 2),
@@ -1183,6 +1261,3 @@ VALUES
 (215, '79c25c4cd128ce0d003cb21401172f81.png', '2024-11-26 11:00:40', 0, 'png', 35, NULL),
 (216, '41a33d5000ce32e41fef08a5f9d69c19.png', '2024-11-26 11:00:40', 0, 'png', 35, NULL),
 (217, 'e285827ec1f33666e8463a2ea437dd01.png', '2024-11-26 11:00:40', 0, 'png', 35, NULL);
-
-
-

@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="/dwp/admin/assets/css/news.css" />
 </head>
 <body>
+    
+<a href="/dwp/admin/dashboard" class="back-to-dashboard"><img src="../images/back-button.png" alt=""></a>
 
 <h1>Manage News</h1>
 
