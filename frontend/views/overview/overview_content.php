@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Booking Overview</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/dwp/frontend/overview/overview.css">
+    <link rel="stylesheet" href="/dwp/frontend/assets/css/overview.css">
 </head>
 <body>
     <div class="logo">
@@ -64,8 +64,8 @@
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/dwp/frontend/overview/overview.js"></script>
-    <script src="/dwp/components/login_modal.js"></script>
+    <script src="/dwp/frontend/assets/js/overview.js"></script>
+        <script src="/dwp/components/login_modal.js"></script>
     <script src="/dwp/components/guest_modal.js"></script>
     <script src="/dwp/components/checkout_modal.js"></script>
 </body>
