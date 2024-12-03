@@ -1,5 +1,5 @@
 <?php
-require_once '../controllers/FooterController.php'; // Adjust the path if needed
+require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/controllers/FooterController.php';
 
 $footerController = new FooterController();
 $footerData = $footerController->getFooterData();
@@ -12,7 +12,7 @@ $email = $footerData['email'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/frontend/assets/css/footer.css">
+    <link rel="stylesheet" href="/dwp/frontend/assets/css/footer.css">
     <title>Footer</title>
 </head>
 <body>

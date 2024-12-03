@@ -51,7 +51,7 @@ $routes = [
 
     // Main pages
     'about' => 'frontend/about_us.php',
-    'landing' => 'frontend/landing/landing.php', // default path if no path specified
+    'landing' => 'frontend/controllers/LandingController.php', // default path if no path specified
     'news' => 'frontend/news.php',
     /* 'movies' => 'frontend/movies.php', */
     'movies' => 'frontend/movies/movies.php',

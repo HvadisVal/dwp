@@ -4,6 +4,10 @@ require_once 'dbcon.php';
 
 class FooterController {
     public function getFooterData() {
+        // Define the database credentials
+        $user = "root";
+        $pass = "";
+
         // Connect to the database
         $conn = dbCon($user, $pass);
 

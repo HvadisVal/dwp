@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cinema Website</title>
-    <link rel="stylesheet" href="/dwp/frontend/landing/style.css">
+    <link rel="stylesheet" href="/dwp/frontend/assets/css/landing.css">
 </head>
 <body>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/navbar/navbar_structure.php'; ?>
@@ -109,7 +109,7 @@
         </div>
     </section>
 
-    <?php include './frontend/footer/footer.php'; ?>
-    <script src="/dwp/frontend/landing/javascript.js"></script>
+    <?php include './frontend/views/footer/footer_content.php'; ?>
+    <script src="/dwp/frontend/assets/js/landing.js"></script>
 </body>
 </html>
