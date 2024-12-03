@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movies Schedule</title>
-    <link rel="stylesheet" href="/dwp/frontend/movies/movies.css">
+    <link rel="stylesheet" href="/dwp/frontend/assets/css/movies.css">
 </head>
 <body>
 <?php include './frontend/navbar/navbar_structure.php'; ?>
@@ -71,6 +71,6 @@ $link = "/dwp/frontend/controllers/initialize_booking.php?movie_id=" . htmlspeci
 </div>
 
 
-<?php include './frontend/footer.php'; ?>
+<?php include './frontend/views/footer/footer_content.php'; ?>
 </body>
 </html>
