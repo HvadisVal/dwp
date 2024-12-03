@@ -59,8 +59,8 @@ $routes = [
     'overview' => 'frontend/overview/overview.php',
     /* 'save-selection' => 'frontend/save_selection.php',
     'seat' => 'frontend/seat.php', */
-    'save-selection' => 'frontend/seat/save_selection.php',
-    'seat' => 'frontend/seat/seat.php',
+    'save-selection' => 'frontend/save_selection.php',
+    'seat' => 'frontend/controllers/SeatController.php',
     'validate-coupon' => 'frontend/payment/validate_coupon.php',
     'movie'=> 'frontend/controllers/MovieProfileController.php',
     'checkout'=> 'frontend/checkout.php',
@@ -85,6 +85,11 @@ function routeRequest($path, $routes, $connection) {
     if ($path == 'admin/logout') {
         loadController('LogoutController', $connection, 'logout');
         return;
+    }
+    
+    if ($path === 'save-selection') {
+        require_once 'frontend/save_selection.php';
+        exit;
     }
     
 
