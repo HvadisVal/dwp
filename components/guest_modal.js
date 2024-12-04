@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
 $('#guestForm').on('submit', function(e) {
     e.preventDefault();
     $.ajax({
-        url: '/dwp/user/controllers/GuestController.php',
+        url: '/dwp/user/guest',
         type: 'POST',
         data: $(this).serialize(),
         success: function(response) {

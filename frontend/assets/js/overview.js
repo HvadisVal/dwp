@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
         switchUserButton.addEventListener('click', function () {
             $.ajax({
                 type: 'POST',
-                url: '/dwp/frontend/user/switch_user.php',
+                url: '/dwp/user/switch',
                 success: function (response) {
                     try {
                         const data = typeof response === "string" ? JSON.parse(response) : response;
