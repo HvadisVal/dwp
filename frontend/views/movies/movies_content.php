@@ -7,7 +7,12 @@
     <link rel="stylesheet" href="/dwp/frontend/assets/css/movies.css">
 </head>
 <body>
-<?php include './frontend/navbar/navbar_structure.php'; ?>
+
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/controllers/NavbarController.php';
+$navbar = new NavbarController();
+$navbar->handleRequest();
+ ?>
+ 
 <div class="container">
     <?php foreach ($moviesById as $movieId => $movieData): ?>
         <div class="movie-container">

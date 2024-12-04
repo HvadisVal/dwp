@@ -137,8 +137,10 @@ footer {
 </head>
 <body>
 
-<?php include 'frontend/navbar/navbar_structure.php'; ?>
-
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/controllers/NavbarController.php';
+$navbar = new NavbarController();
+$navbar->handleRequest();
+ ?>
     <!-- Hero Section -->
     <section class="hero">
         <div>

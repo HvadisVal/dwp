@@ -112,8 +112,10 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </style>
 </head>
 <body>
-<?php include 'frontend/navbar/navbar_structure.php'; ?>
-    <div class="container">
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/controllers/NavbarController.php';
+$navbar = new NavbarController();
+$navbar->handleRequest();
+ ?>    <div class="container">
         <h1>Latest News</h1>
         <div class="news-grid">
             <?php if (!empty($results)): ?>

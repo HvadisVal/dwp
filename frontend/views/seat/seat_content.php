@@ -7,7 +7,11 @@
     <link rel="stylesheet" href="/dwp/frontend/assets/css/seat.css">
     </head>
 <body>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/navbar/navbar_structure.php'; ?>
+
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/controllers/NavbarController.php';
+$navbar = new NavbarController();
+$navbar->handleRequest();
+ ?>
 
 <div class="container">
     <h4><?= htmlspecialchars($hall['Name']); ?> - Seat Selection</h4>
