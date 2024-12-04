@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="password">Password</label>
             </div>
             <!-- Google reCAPTCHA widget -->
-            <div class="g-recaptcha" data-sitekey="6LcGh40qAAAAADJ9GhkbB2mb-3wNydnZ11-7ton6" data-callback="onCaptchaCompleted"></div><br>
+            <div class="g-recaptcha" data-sitekey="6LcGh40qAAAAADJ9GhkbB2mb-3wNydnZ11-7ton6" data-callback="onLoginCaptchaCompleted"></div><br>
             <button class="btn blue" type="submit" id="loginButton" disabled>Login</button>
 
         </form>
@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="new_password">Password</label>
             </div>
             <!-- Google reCAPTCHA widget -->
-            <div class="g-recaptcha" data-sitekey="6LcGh40qAAAAADJ9GhkbB2mb-3wNydnZ11-7ton6" data-callback="onCaptchaCompleted"></div><br>
+            <div class="g-recaptcha" data-sitekey="6LcGh40qAAAAADJ9GhkbB2mb-3wNydnZ11-7ton6" data-callback="onCreateCaptchaCompleted"></div><br>
             <button class="btn blue" type="submit" id="createButton" disabled>Create Account</button>
         </form>
         <p class="error-message" style="color: red; display: none;"></p>
@@ -117,16 +117,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 <script>
-    function onCaptchaCompleted() {
-    // Enable the submit button
+  function onLoginCaptchaCompleted() {
     $('#loginButton').prop('disabled', false);
     console.log('CAPTCHA verified. Login button enabled.');
 }
-    function onCaptchaCompleted() {
-    // Enable the submit button
+
+function onCreateCaptchaCompleted() {
     $('#createButton').prop('disabled', false);
-    console.log('CAPTCHA verified. Login button enabled.');
+    console.log('CAPTCHA verified. Create Account button enabled.');
 }
+
 
 
    $(document).ready(function() {
