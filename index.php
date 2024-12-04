@@ -50,7 +50,7 @@ $routes = [
     'user/forgot-password' => 'frontend/user/forget_password.php',
 
     // Main pages
-    'about' => 'frontend/about_us.php',
+    'about' => 'frontend/controllers/AboutController.php',
     'landing' => 'frontend/controllers/LandingController.php', // default path if no path specified
     'news' => 'frontend/controllers/NewsController.php',
     /* 'movies' => 'frontend/movies.php', */
