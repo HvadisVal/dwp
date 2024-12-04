@@ -147,7 +147,7 @@ function onCreateCaptchaCompleted() {
 
         // Submit the form data using AJAX
         $.ajax({
-            url: 'login_modal.php',  // Use the current PHP file
+            url: 'dwp/user/login',  // Use the current PHP file
             method: 'POST',
             data: {
                 username: username,

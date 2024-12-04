@@ -42,9 +42,9 @@ $routes = [
 
     // user actions
     'user/guest' => 'user/controllers/GuestController.php',
-    'user/login' => 'frontend/user/login.php',
+    'user/login' => 'user/controllers/LoginController.php',
     'user/profile' => 'frontend/user/profile/profile.php',
-    'user/logout' => 'frontend/user/logout.php',
+    'user/logout' => 'user/controllers/LogoutController.php',
     'user/new_user' => 'frontend/user/new_user/new_user.php',
     'user/switch' => 'frontend/user/switch_user.php',
     'user/forgot-password' => 'frontend/user/forget_password.php',
@@ -100,6 +100,20 @@ function routeRequest($path, $routes, $connection) {
         exit;
     }
     
+    if ($path === 'user/login') {
+        require_once 'user/controllers/LoginController.php';
+        $controller = new LoginController($connection);
+        $controller->handleRequest();
+        exit;
+    }
+    
+    if ($path === 'user/logout') {
+        require_once 'user/controllers/LogoutController.php';
+        $controller = new LogoutController();
+        $controller->handleRequest();
+        exit;
+    }
+    
     
 
      // Handle other dynamic routes based on the $routes array
@@ -114,6 +128,7 @@ function routeRequest($path, $routes, $connection) {
         $controller->handleRequest(); // Let the controller handle the rendering
         return;
     }
+
 
     // Default to 404 if no route matched
     http_response_code(404);
