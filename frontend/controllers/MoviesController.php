@@ -4,8 +4,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/models/MoviesModel.php';
 class MoviesController {
     private $model;
 
-    public function __construct() {
-        $this->model = new MoviesModel();
+    public function __construct($connection) {
+        // Pass the connection to the AboutModel constructor
+        $this->model = new MoviesModel($connection);
     }
 
     public function handleRequest() {
