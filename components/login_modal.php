@@ -105,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <!-- Google reCAPTCHA widget -->
             <div class="g-recaptcha" data-sitekey="6LcGh40qAAAAADJ9GhkbB2mb-3wNydnZ11-7ton6" data-callback="onCaptchaCompleted"></div><br>
-            <button class="btn blue" type="submit" id="loginButton" disabled>Create Account</button>
+            <button class="btn blue" type="submit" id="createButton" disabled>Create Account</button>
         </form>
         <p class="error-message" style="color: red; display: none;"></p>
     </div>
@@ -120,6 +120,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     function onCaptchaCompleted() {
     // Enable the submit button
     $('#loginButton').prop('disabled', false);
+    console.log('CAPTCHA verified. Login button enabled.');
+}
+    function onCaptchaCompleted() {
+    // Enable the submit button
+    $('#createButton').prop('disabled', false);
     console.log('CAPTCHA verified. Login button enabled.');
 }
 
