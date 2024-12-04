@@ -1,15 +1,14 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/dbcon.php';
+require_once("./includes/connection.php");
 
 class NewsModel {
-    private $db;
+    private $connection;
 
-    public function __construct() {
-        $this->db = dbCon("root", ""); // Update with actual credentials if needed
+    public function __construct($connection) {
+        $this->connection = $connection;
     }
-
     public function getNewsWithMedia() {
-        $query = "
+        $sql = "
             SELECT 
                 News.Title, 
                 News.Content, 
@@ -21,7 +20,7 @@ class NewsModel {
             ORDER BY News.DatePosted DESC
         ";
 
-        $stmt = $this->db->prepare($query);
+        $stmt = $this->connection->prepare($sql);
         $stmt->execute();
 
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
