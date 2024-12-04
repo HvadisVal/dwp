@@ -1,25 +1,25 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/dbcon.php';
+require_once("./includes/connection.php");
 
 class LandingModel {
-    private $db;
+    private $connection;
 
-    public function __construct() {
-        $this->db = dbCon("root", "");
+    public function __construct($connection) {
+        $this->connection = $connection;
     }
 
     public function getDistinctDates() {
-        $query = "SELECT DISTINCT ShowDate 
+        $sql = "SELECT DISTINCT ShowDate 
                   FROM Screening 
                   WHERE ShowDate >= CURDATE() 
                   ORDER BY ShowDate";
-        $stmt = $this->db->prepare($query);
+        $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getMovies() {
-        $query = "SELECT DISTINCT Movie.Movie_ID, 
+        $sql = "SELECT DISTINCT Movie.Movie_ID, 
                         Movie.Title,
                         (SELECT FileName 
                          FROM Media 
@@ -27,32 +27,32 @@ class LandingModel {
                          LIMIT 1) AS FileName
                   FROM Movie
                   JOIN Screening ON Movie.Movie_ID = Screening.Movie_ID";
-        $stmt = $this->db->prepare($query);
+        $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getVersions() {
-        $query = "SELECT * FROM Version";
-        $stmt = $this->db->prepare($query);
+        $sql = "SELECT * FROM Version";
+        $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getCompanyDescription() {
-        $query = "SELECT Description FROM Company LIMIT 1";
-        $stmt = $this->db->prepare($query);
+        $sql = "SELECT Description FROM Company LIMIT 1";
+        $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['Description'] ?? 'N/A';
     }
 
     public function generateNewsHTML() {
-        $query = "SELECT n.Title, n.Content, n.DatePosted, m.FileName 
+        $sql = "SELECT n.Title, n.Content, n.DatePosted, m.FileName 
                   FROM News n
                   LEFT JOIN Media m ON n.News_ID = m.News_ID 
                   ORDER BY n.DatePosted DESC";
-        $stmt = $this->db->prepare($query);
+        $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         $newsItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
