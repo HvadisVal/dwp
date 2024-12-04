@@ -48,10 +48,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
+<style>
+    .header {
+        color: #2196F3;
+    }
+</style>
+
 <!-- Login Modal -->
 <div id="loginModal" class="modal">
     <div class="modal-content">
-        <h5>Login</h5>
+        <h5 class="header">Login</h5>
         <form id="loginForm">
             <div class="input-field">
                 <input id="username" type="text" name="user" required>
@@ -62,8 +68,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <label for="password">Password</label>
             </div>
             <!-- Google reCAPTCHA widget -->
-            <div class="g-recaptcha" data-sitekey="6LcGh40qAAAAADJ9GhkbB2mb-3wNydnZ11-7ton6"></div><br>
-            <button class="btn blue" type="submit">Login</button>
+            <div class="g-recaptcha" data-sitekey="6LcGh40qAAAAADJ9GhkbB2mb-3wNydnZ11-7ton6" data-callback="onCaptchaCompleted"></div><br>
+            <button class="btn blue" type="submit" id="loginButton" disabled>Login</button>
+
         </form>
         <p class="error-message" style="color: red; display: none;"></p>
 
@@ -78,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <!-- Create New User Modal -->
 <div id="newUserModal" class="modal">
     <div class="modal-content">
-        <h5>Create New User</h5>
+        <h5 class="header">Create New User</h5>
         <form id="newUserForm">
             <div class="input-field">
                 <input id="new_username" type="text" name="user" required>
@@ -96,53 +103,63 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input id="new_password" type="password" name="pass" required>
                 <label for="new_password">Password</label>
             </div>
-            <button class="btn blue" type="submit">Create Account</button>
+            <!-- Google reCAPTCHA widget -->
+            <div class="g-recaptcha" data-sitekey="6LcGh40qAAAAADJ9GhkbB2mb-3wNydnZ11-7ton6" data-callback="onCaptchaCompleted"></div><br>
+            <button class="btn blue" type="submit" id="loginButton" disabled>Create Account</button>
         </form>
         <p class="error-message" style="color: red; display: none;"></p>
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
 <script>
-    $(document).ready(function() {
-        // Handle the login form submission
-        $('#loginForm').submit(function(e) {
-            e.preventDefault(); // Prevent the default form submission
+    function onCaptchaCompleted() {
+    // Enable the submit button
+    $('#loginButton').prop('disabled', false);
+    console.log('CAPTCHA verified. Login button enabled.');
+}
 
-            var username = $('#username').val();
-            var password = $('#password').val();
-            var captchaResponse = grecaptcha.getResponse(); // Get the reCAPTCHA response
 
-            // Ensure the CAPTCHA is completed
-            if (captchaResponse.length == 0) {
-                $('.error-message').text('Please verify that you are not a robot.').show();
-                return;
-            }
+   $(document).ready(function() {
+    // Handle the login form submission
+    $('#loginForm').submit(function(e) {
+        e.preventDefault(); // Prevent the default form submission
 
-            // Submit the form data using AJAX
-            $.ajax({
-                url: 'login_modal.php',  // Use the current PHP file
-                method: 'POST',
-                data: {
-                    username: username,
-                    password: password,
-                    'g-recaptcha-response': captchaResponse
-                },
-                success: function(response) {
-                    if (response === 'CAPTCHA verified. Proceeding with login...') {
-                        // Redirect or update UI for successful login
-                        alert('Login successful!');
-                    } else {
-                        // Handle error, for example invalid credentials or CAPTCHA failure
-                        $('.error-message').text(response).show();
-                    }
-                },
-                error: function() {
-                    $('.error-message').text('An error occurred. Please try again later.').show();
+        var username = $('#username').val();
+        var password = $('#password').val();
+        var captchaResponse = grecaptcha.getResponse(); // Get the reCAPTCHA response
+
+        // Ensure the CAPTCHA is completed
+        if (!captchaResponse || captchaResponse.length === 0) {
+            $('.error-message').text('Please verify that you are not a robot.').show();
+            return; // Stop further execution if CAPTCHA is not filled
+        }
+
+        // Submit the form data using AJAX
+        $.ajax({
+            url: 'login_modal.php',  // Use the current PHP file
+            method: 'POST',
+            data: {
+                username: username,
+                password: password,
+                'g-recaptcha-response': captchaResponse
+            },
+            success: function(response) {
+                if (response.trim() === 'CAPTCHA verified. Proceeding with login...') {
+                    // Redirect or update UI for successful login
+                    alert('Login successful!');
+                } else {
+                    // Handle error, for example invalid credentials or CAPTCHA failure
+                    $('.error-message').text(response).show();
                 }
-            });
+            },
         });
     });
+});
+
+
 </script>
