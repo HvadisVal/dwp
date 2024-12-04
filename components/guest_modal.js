@@ -42,7 +42,7 @@ function onCaptchaCompleted() {
 
         // Ensure the CAPTCHA is completed
         if (!captchaResponse || captchaResponse.length === 0) {
-            $('.error-message').text('Please verify that you are not a robot.').show();
+            $('.error-message');
             return; // Stop further execution if CAPTCHA is not filled
         }
 
