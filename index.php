@@ -65,6 +65,7 @@ $routes = [
     'invoice' => 'frontend/controllers/InvoiceController.php',
     'movie'=> 'frontend/controllers/MovieProfileController.php',
     'guest-checkout' => 'frontend/controllers/GuestCheckoutController.php',
+    'footer' => 'frontend/controllers/FooterController.php',   
 ];
 
 // Define a function to handle the routing process
@@ -151,3 +152,19 @@ function loadController($controllerName, $connection, $methodName = 'handleReque
 
 // Example usage (you would call this function based on the current request path)
 routeRequest($path, $routes, $connection);
+// Footer
+/* require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/controllers/FooterController.php';
+$footer = new FooterController($connection);
+$footer->handleRequest(); */
+// Pages where footer should appear
+$pagesWithFooter = [
+    'landing',
+    'news',
+    'movies',
+    'movie',
+];// Conditionally include footer
+if (in_array($path, $pagesWithFooter)) {
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/controllers/FooterController.php';
+    $footer = new FooterController($connection);
+    $footer->handleRequest();
+}

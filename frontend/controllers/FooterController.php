@@ -1,29 +1,20 @@
 <?php
-// Include the database connection file
-require_once 'dbcon.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/models/FooterModel.php';
 
 class FooterController {
-    public function getFooterData() {
-        // Define the database credentials
-        $user = "root";
-        $pass = "";
+    private $model;
 
-        // Connect to the database
-        $conn = dbCon($user, $pass);
+    public function __construct($connection) {
+        // Pass the connection to the FooterModel constructor
+        $this->model = new FooterModel($connection);
+    }
 
-        // Query to retrieve Location and Email
-        $sql = "SELECT Location, Email FROM Company LIMIT 1";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    public function handleRequest() {
+        // Get the footer information
+        $footerData = $this->model->getFooterData();
 
-        // Return data or defaults
-        return [
-            'location' => $result['Location'] ?? 'N/A',
-            'email' => $result['Email'] ?? 'N/A',
-        ];
+        // Pass data to the view
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/views/footer/footer_content.php';
     }
 }
 ?>
-
-

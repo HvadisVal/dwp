@@ -1,12 +1,4 @@
-<?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/controllers/FooterController.php';
 
-$footerController = new FooterController();
-$footerData = $footerController->getFooterData();
-
-$location = $footerData['location'];
-$email = $footerData['email'];
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,14 +18,14 @@ $email = $footerData['email'];
         <h3>Contact Us</h3>
         <p>
             <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="email icon" style="width: 18px; margin-right: 8px;">
-            <a href="mailto:<?php echo htmlspecialchars($email); ?>" style="color: white; text-decoration: underline;">
-                <?php echo htmlspecialchars($email); ?>
+            <a href="mailto:<?= htmlspecialchars($footerData['Email']); ?>" style="color: white; text-decoration: underline;">
+            <?= htmlspecialchars($footerData['Email']); ?>
             </a>
         </p>
         <p>
-            <a href="https://www.google.com/maps/search/<?php echo urlencode($location); ?>" target="_blank">
+            <a href="https://www.google.com/maps/search/<?= htmlspecialchars($footerData['Location']); ?>" target="_blank">
                 <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="location icon" style="width: 18px; margin-right: 8px;">
-                <?php echo htmlspecialchars($location); ?>
+                <?= htmlspecialchars($footerData['Location']); ?>
             </a>
         </p>
     </div>
@@ -42,5 +34,6 @@ $email = $footerData['email'];
         <a href="https://www.snapchat.com"><img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c4/Snapchat_logo.svg/1024px-Snapchat_logo.svg.png" alt="Snapchat" style="width: 60px;"></a>
     </div>
 </footer>
+
 </body>
 </html>

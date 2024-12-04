@@ -33,6 +33,5 @@
             <?php endif; ?>
         </div>
     </div>
-    <?php include $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/views/footer/footer_content.php'; ?>
 </body>
 </html>
