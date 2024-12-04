@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/models/MoviesModel.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/models/FetchModel.php';
 
 class FetchController {
     private $model;

@@ -1,5 +1,5 @@
 <?php
-require_once("./includes/connection.php");
+require_once("../includes/connection.php");
 
 class MoviesModel {
     private $connection;
@@ -17,26 +17,31 @@ class MoviesModel {
                   INNER JOIN Screening ON Movie.Movie_ID = Screening.Movie_ID
                   LEFT JOIN Version ON Movie.Version_ID = Version.Version_ID
                   WHERE 1=1";
-
+    
         $params = [];
-
+    
         if ($date) {
             $sql .= " AND Screening.ShowDate = :date";
             $params[':date'] = $date;
         }
-
+    
         if ($movieId) {
             $sql .= " AND Movie.Movie_ID = :movieId";
             $params[':movieId'] = $movieId;
         }
-
+    
         if ($versionId) {
             $sql .= " AND Movie.Version_ID = :versionId";
             $params[':versionId'] = $versionId;
         }
-
+    
+        // Debugging: Print the SQL query and parameters
+        error_log("SQL Query: " . $sql);
+        error_log("Params: " . print_r($params, true));
+    
         $stmt = $this->connection->prepare($sql);
         $stmt->execute($params);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    
 }
