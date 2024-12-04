@@ -5,8 +5,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/models/OverviewModel.php
 class OverviewController {
     private $model;
 
-    public function __construct() {
-        $this->model = new OverviewModel();
+    public function __construct($connection) {
+        // Pass the connection to the AboutModel constructor
+        $this->model = new OverviewModel($connection);
     }
 
     public function handleRequest() {
