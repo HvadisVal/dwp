@@ -1,48 +1,9 @@
-<?php
-session_start();
-require_once($_SERVER['DOCUMENT_ROOT'] . '/dwp/dbcon.php');
-
-$dbCon = dbCon($user, $pass);
-
-// Get the Invoice ID from the URL
-$invoiceId = $_GET['invoice_id'] ?? null;
-if (!$invoiceId) {
-    die("Invoice not found.");
-}
-
-// Fetch Invoice Details
-$invoiceQuery = $dbCon->prepare("
-    SELECT i.Invoice_ID, i.InvoiceDate, i.TotalAmount, i.InvoiceStatus,
-           b.BookingDate, b.NumberOfTickets,
-           m.Title AS MovieTitle, s.ShowDate, s.ShowTime, c.Name AS CinemaHall,
-           GROUP_CONCAT(CONCAT(seat.Row, '-', seat.SeatNumber) ORDER BY seat.Row, seat.SeatNumber) AS Seats
-    FROM Invoice i
-    JOIN Booking b ON i.Invoice_ID = b.Invoice_ID
-    JOIN Movie m ON b.Movie_ID = m.Movie_ID
-    JOIN Ticket t ON b.Booking_ID = t.Booking_ID
-    JOIN Seat seat ON t.Seat_ID = seat.Seat_ID
-    JOIN Screening s ON t.Screening_ID = s.Screening_ID
-    JOIN CinemaHall c ON s.CinemaHall_ID = c.CinemaHall_ID
-    WHERE i.Invoice_ID = :invoice_id
-    GROUP BY i.Invoice_ID
-");
-$invoiceQuery->bindParam(':invoice_id', $invoiceId, PDO::PARAM_INT);
-$invoiceQuery->execute();
-
-$invoice = $invoiceQuery->fetch(PDO::FETCH_ASSOC);
-
-
-if (!$invoice) {
-    die("Invoice not found.");
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Invoice #<?= htmlspecialchars($invoice['Invoice_ID']); ?></title>
-    <link rel="stylesheet" href="/dwp/frontend/payment/invoice.css">
+    <link rel="stylesheet" href="/dwp/frontend/assets/css/invoice.css">
 </head>
 <body>
     <div class="invoice-container">

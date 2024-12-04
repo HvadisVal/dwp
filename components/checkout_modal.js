@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            fetch('/dwp/frontend/payment/validate_coupon.php', {
+            fetch('/dwp/frontend/validate_coupon.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ couponCode })

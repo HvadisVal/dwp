@@ -61,7 +61,8 @@ $routes = [
     'seat' => 'frontend/seat.php', */
     'save-selection' => 'frontend/save_selection.php',
     'seat' => 'frontend/controllers/SeatController.php',
-    'validate-coupon' => 'frontend/payment/validate_coupon.php',
+    'validate-coupon' => 'frontend/validate_coupon.php',
+    'invoice' => 'frontend/controllers/InvoiceController.php',
     'movie'=> 'frontend/controllers/MovieProfileController.php',
     'checkout'=> 'frontend/checkout.php',
 ];
