@@ -127,7 +127,7 @@ $navbar->handleRequest();
                 <td>DKK <?= number_format($invoice['TotalAmount'], 2); ?></td>
                 <td><?= htmlspecialchars($invoice['InvoiceStatus']); ?></td>
                 <td>
-                    <a href="/dwp/frontend/payment/invoice.php?invoice_id=<?= htmlspecialchars($invoice['Invoice_ID']); ?>" class="btn">View Invoice</a>
+                    <a href="/dwp/frontend/controllers/InvoiceController.php?invoice_id=<?= htmlspecialchars($invoice['Invoice_ID']); ?>" class="btn">View Invoice</a>
                 </td>
             </tr>
         <?php endforeach; ?>
