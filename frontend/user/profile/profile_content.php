@@ -8,7 +8,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 </head>
 <body>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/navbar/navbar_structure.php'; ?>
+
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/controllers/NavbarController.php';
+$navbar = new NavbarController();
+$navbar->handleRequest();
+ ?>
 
 <div class="container" style="padding-top: 10%">
     <h3>Profile Overview</h3>
@@ -134,6 +138,8 @@
 
 <script src="/dwp/frontend/user/profile/javascript.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<?php include './frontend/views/footer/footer_content.php'; ?>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var modals = document.querySelectorAll('.modal');
