@@ -113,7 +113,6 @@ $navbar->handleRequest();
         </div>
     </section>
 
-    <?php include './frontend/views/footer/footer_content.php'; ?>
     <script src="/dwp/frontend/assets/js/landing.js"></script>
 </body>
 </html>

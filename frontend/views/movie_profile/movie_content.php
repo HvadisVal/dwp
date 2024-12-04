@@ -101,8 +101,5 @@ $navbar->handleRequest();
     </div>
 </div>
 </div>
-
-<?php include './frontend/views/footer/footer_content.php'; ?>
-
 </body>
 </html>

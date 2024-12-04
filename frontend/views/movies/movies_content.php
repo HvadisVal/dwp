@@ -76,6 +76,5 @@ $link = "/dwp/frontend/controllers/initialize_booking.php?movie_id=" . htmlspeci
 </div>
 
 
-<?php include './frontend/views/footer/footer_content.php'; ?>
 </body>
 </html>
