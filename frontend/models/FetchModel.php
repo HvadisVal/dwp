@@ -1,15 +1,14 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/dbcon.php';
+require_once("./includes/connection.php");
 
 class MoviesModel {
-    private $db;
+    private $connection;
 
-    public function __construct() {
-        $this->db = dbCon("root", "");
+    public function __construct($connection) {
+        $this->connection = $connection;
     }
-
     public function getFilteredMovies($date, $movieId, $versionId) {
-        $query = "SELECT DISTINCT Movie.Movie_ID, Movie.Title, 
+        $sql = "SELECT DISTINCT Movie.Movie_ID, Movie.Title, 
                          (SELECT FileName 
                           FROM Media 
                           WHERE Media.Movie_ID = Movie.Movie_ID 
@@ -22,21 +21,21 @@ class MoviesModel {
         $params = [];
 
         if ($date) {
-            $query .= " AND Screening.ShowDate = :date";
+            $sql .= " AND Screening.ShowDate = :date";
             $params[':date'] = $date;
         }
 
         if ($movieId) {
-            $query .= " AND Movie.Movie_ID = :movieId";
+            $sql .= " AND Movie.Movie_ID = :movieId";
             $params[':movieId'] = $movieId;
         }
 
         if ($versionId) {
-            $query .= " AND Movie.Version_ID = :versionId";
+            $sql .= " AND Movie.Version_ID = :versionId";
             $params[':versionId'] = $versionId;
         }
 
-        $stmt = $this->db->prepare($query);
+        $stmt = $this->connection->prepare($sql);
         $stmt->execute($params);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

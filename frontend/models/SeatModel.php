@@ -1,46 +1,46 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/dbcon.php';
+require_once("./includes/connection.php");
 
 class SeatModel {
-    private $db;
+    private $connection;
 
-    public function __construct() {
-        $this->db = dbCon("root", "");
+    public function __construct($connection) {
+        $this->connection = $connection;
     }
 
     public function getMovieDetails($movieId) {
-        $query = "SELECT Title FROM Movie WHERE Movie_ID = :movie_id";
-        $stmt = $this->db->prepare($query);
+        $sql = "SELECT Title FROM Movie WHERE Movie_ID = :movie_id";
+        $stmt = $this->connection->prepare($sql);
         $stmt->bindParam(':movie_id', $movieId, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?? ['Title' => 'Unknown Movie'];
     }
 
     public function getCinemaHall($cinemaHallID) {
-        $query = "SELECT * FROM CinemaHall WHERE CinemaHall_ID = :cinema_hall_id";
-        $stmt = $this->db->prepare($query);
+        $sql = "SELECT * FROM CinemaHall WHERE CinemaHall_ID = :cinema_hall_id";
+        $stmt = $this->connection->prepare($sql);
         $stmt->bindParam(':cinema_hall_id', $cinemaHallID, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public function getSeats($cinemaHallID) {
-        $query = "SELECT * FROM Seat WHERE CinemaHall_ID = :cinema_hall_id ORDER BY Row, SeatNumber";
-        $stmt = $this->db->prepare($query);
+        $sql = "SELECT * FROM Seat WHERE CinemaHall_ID = :cinema_hall_id ORDER BY Row, SeatNumber";
+        $stmt = $this->connection->prepare($sql);
         $stmt->bindParam(':cinema_hall_id', $cinemaHallID, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getTicketPrices() {
-        $query = "SELECT * FROM TicketPrice";
-        $stmt = $this->db->prepare($query);
+        $sql = "SELECT * FROM TicketPrice";
+        $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getBookedSeats($movieId, $cinemaHallID, $date, $time) {
-        $query = "
+        $sql = "
             SELECT Seat.Row, Seat.SeatNumber 
             FROM Ticket
             INNER JOIN Seat ON Ticket.Seat_ID = Seat.Seat_ID
@@ -53,7 +53,7 @@ class SeatModel {
                 AND ShowTime = :show_time
             )
         ";
-        $stmt = $this->db->prepare($query);
+        $stmt = $this->connection->prepare($sql);
         $stmt->bindParam(':movie_id', $movieId, PDO::PARAM_INT);
         $stmt->bindParam(':cinema_hall_id', $cinemaHallID, PDO::PARAM_INT);
         $stmt->bindParam(':show_date', $date, PDO::PARAM_STR);

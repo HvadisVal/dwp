@@ -1,11 +1,11 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/dbcon.php';
+require_once("./includes/connection.php");
 
 class ValidateCouponModel {
-    private $db;
+    private $connection;
 
-    public function __construct() {
-        $this->db = dbCon("root", ""); // Update with actual credentials
+    public function __construct($connection) {
+        $this->connection = $connection;
     }
 
     public function validateCoupon($couponCode, $totalPrice) {
@@ -14,7 +14,7 @@ class ValidateCouponModel {
         }
 
         try {
-            $stmt = $this->db->prepare("SELECT * FROM Coupon WHERE CouponCode = :couponCode AND ExpireDate >= CURDATE()");
+            $stmt = $this->connection->prepare("SELECT * FROM Coupon WHERE CouponCode = :couponCode AND ExpireDate >= CURDATE()");
             $stmt->bindParam(':couponCode', $couponCode);
             $stmt->execute();
             $coupon = $stmt->fetch(PDO::FETCH_ASSOC);
