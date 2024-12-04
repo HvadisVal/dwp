@@ -41,7 +41,7 @@ $routes = [
     'payment/confirmation' => 'frontend/payment/confirmation.php',
 
     // user actions
-    'user/guest' => 'frontend/user/guest.php',
+    'user/guest' => 'user/controllers/GuestController.php',
     'user/login' => 'frontend/user/login.php',
     'user/profile' => 'frontend/user/profile/profile.php',
     'user/logout' => 'frontend/user/logout.php',
@@ -92,6 +92,14 @@ function routeRequest($path, $routes, $connection) {
         require_once 'frontend/save_selection.php';
         exit;
     }
+
+    if ($path === 'user/guest') {
+        require_once 'user/controllers/GuestController.php';
+        $controller = new GuestController();
+        $controller->handleRequest();
+        exit;
+    }
+    
     
 
      // Handle other dynamic routes based on the $routes array
