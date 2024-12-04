@@ -6,10 +6,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/models/MovieProfileModel
 class MovieProfileController {
     private $model;
 
-    public function __construct() {
-        $this->model = new MovieModel();
+    public function __construct($connection) {
+        // Pass the connection to the AboutModel constructor
+        $this->model = new MovieModel($connection);
     }
-
     public function handleRequest() {
         // Validate the `movie_id` parameter
         $movieId = isset($_GET['movie_id']) ? (int)$_GET['movie_id'] : 0;
