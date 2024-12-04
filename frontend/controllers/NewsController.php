@@ -4,8 +4,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/models/NewsModel.php';
 class NewsController {
     private $model;
 
-    public function __construct() {
-        $this->model = new NewsModel();
+    public function __construct($connection) {
+        // Pass the connection to the AboutModel constructor
+        $this->model = new NewsModel($connection);
     }
 
     public function handleRequest() {
