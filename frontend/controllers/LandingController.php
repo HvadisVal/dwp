@@ -4,9 +4,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/models/LandingModel.php'
 
 class LandingController {
     private $model;
-
-    public function __construct() {
-        $this->model = new LandingModel();
+    public function __construct($connection) {
+        // Pass the connection to the AboutModel constructor
+        $this->model = new LandingModel($connection);
     }
 
     // Entry point for the controller
