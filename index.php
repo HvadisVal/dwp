@@ -64,7 +64,7 @@ $routes = [
     'validate-coupon' => 'frontend/validate_coupon.php',
     'invoice' => 'frontend/controllers/InvoiceController.php',
     'movie'=> 'frontend/controllers/MovieProfileController.php',
-    'checkout'=> 'frontend/checkout.php',
+    'guest-checkout' => 'frontend/controllers/GuestCheckoutController.php',
 ];
 
 // Define a function to handle the routing process

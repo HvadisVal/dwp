@@ -60,7 +60,7 @@
 
 <!-- Checkout Button -->
 <?php if ($isGuest): ?>
-    <form action="/dwp/frontend/checkout.php" method="post">
+    <form action="/dwp/frontend/views/guest_checkout/guest_checkout_content.php" method="post">
         <input type="hidden" name="guest" value="1">
         <button type="submit" class="btn green" style="margin-top: 20px;">Checkout</button>
     </form>
