@@ -4,8 +4,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/models/ValidateCouponMod
 class ValidateCouponController {
     private $model;
 
-    public function __construct() {
-        $this->model = new ValidateCouponModel();
+    public function __construct($connection) {
+        // Pass the connection to the AboutModel constructor
+        $this->model = new ValidateCouponModel($connection);
     }
 
     public function handleRequest() {

@@ -5,8 +5,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/models/SeatModel.php';
 class SeatController {
     private $model;
 
-    public function __construct() {
-        $this->model = new SeatModel();
+    public function __construct($connection) {
+        // Pass the connection to the AboutModel constructor
+        $this->model = new SeatModel($connection);
     }
 
     public function handleRequest() {
