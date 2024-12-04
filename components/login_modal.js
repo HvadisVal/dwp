@@ -2,7 +2,7 @@
 $('#loginForm').on('submit', function (e) {
     e.preventDefault();
     $.ajax({
-        url: '/dwp/frontend/user/login.php',
+        url: '/dwp/user/login',
         type: 'POST',
         data: $(this).serialize(),
         success: function (response) {
@@ -43,7 +43,7 @@ $('#newUserForm').on('submit', function (e) {
  // Logout Button
  $(document).on('click', '#logoutButton', function () {
     $.ajax({
-        url: '/dwp/frontend/user/logout.php', // Path to your logout script
+        url: '/dwp/user/logout', // Path to your logout script
         type: 'POST',
         success: function (response) {
             if (response.success) {

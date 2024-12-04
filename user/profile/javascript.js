@@ -53,7 +53,7 @@ document.getElementById('deleteAccountButton').addEventListener('click', functio
             .then(data => {
                 if (data.success) {
                     M.toast({ html: data.message });
-                    window.location.href = '/dwp/frontend/user/login.php'; // Redirect after deletion
+                    window.location.href = '/dwp/user/controllers/LoginController.php'; // Redirect after deletion
                 } else {
                     M.toast({ html: data.message, classes: 'red' });
                 }
