@@ -32,11 +32,11 @@ $adminEmail = $controller->getAdminEmail();
             <div class="col s12 m6">
                 <div class="card">
                     <div class="card-content">
-                        <span class="card-title">Manage Users</span>
+                        <span class="card-title">Manage Landing Movies</span>
                         <p>View, edit, or remove users in the system.</p>
                     </div>
                     <div class="card-action">
-                        <a href="manage_users.php" class="btn waves-effect waves-light">Manage Users</a>
+                        <a href="/dwp/admin/manage-landing" class="btn waves-effect waves-light">Manage Landing Movies</a>
                     </div>
                 </div>
             </div>
