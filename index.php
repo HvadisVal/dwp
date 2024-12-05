@@ -43,7 +43,7 @@ $routes = [
     // user actions
     'user/guest' => 'user/controllers/GuestController.php',
     'user/login' => 'user/controllers/LoginController.php',
-    'user/profile' => 'user/controllers/ProfileController.php',
+    'user/profiles' => 'user/controllers/ProfileController.php',
     'user/logout' => 'user/controllers/LogoutController.php',
     'user/new_user' => 'user/controllers/NewUserController.php',
     'user/switch' => 'user/controllers/SwitchUserController.php',
@@ -132,7 +132,7 @@ function routeRequest($path, $routes, $connection) {
         exit();
     }
     
-    if ($path === 'user/profile') {
+    if ($path === 'user/profiles') {
         require_once 'user/controllers/ProfileController.php';
         $controller = new ProfileController($connection);
         $controller->handleRequest();

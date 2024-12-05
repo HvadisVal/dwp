@@ -16,18 +16,53 @@ $navbar->handleRequest();
 <div class="container">
     <h3>Profile Overview</h3>
     <div class="user-details">
+    <h5>Personal Information</h5>
+    <?php if (!empty($user)): ?>
         <p><strong>Name:</strong> <?= htmlspecialchars($user['Name']); ?></p>
         <p><strong>Email:</strong> <?= htmlspecialchars($user['Email']); ?></p>
         <p><strong>Phone:</strong> <?= htmlspecialchars($user['TelephoneNumber']); ?></p>
+        <!-- Add Edit and Delete Buttons -->
         <button id="editUserButton" class="btn blue">Edit Information</button>
+        <button id="deleteAccountButton" class="btn red">Delete Account</button>
+        
+    <?php else: ?>
+        <p>No user information found.</p>
+    <?php endif; ?>
+</div>
+
+
+<!-- Edit User Modal -->
+<div id="editUserModal" class="modal">
+    <div class="modal-content">
+        <h5>Edit Personal Information</h5>
+        <form id="editUserForm">
+            <div class="input-field">
+                <input id="editName" name="name" type="text" value="<?= htmlspecialchars($user['Name']); ?>" required>
+                <label for="editName">Name</label>
+            </div>
+            <div class="input-field">
+                <input id="editEmail" name="email" type="email" value="<?= htmlspecialchars($user['Email']); ?>" required>
+                <label for="editEmail">Email</label>
+            </div>
+            <div class="input-field">
+                <input id="editPhone" name="phone" type="text" value="<?= htmlspecialchars($user['TelephoneNumber']); ?>" required>
+                <label for="editPhone">Phone</label>
+            </div>
+            <div class="input-field">
+                <input id="editPassword" name="password" type="password" placeholder="Enter new password (optional)">
+                <label for="editPassword">New Password</label>
+            </div>
+            <button class="btn blue" type="submit">Save Changes</button>
+        </form>
     </div>
+</div>
 
     <?php if (!empty($bookingSuccessMessage)): ?>
         <p class="success-message"><?= htmlspecialchars($bookingSuccessMessage); ?></p>
     <?php endif; ?>
 
     <h5>Booking History</h5>
-    <?php if ($bookings): ?>
+    <?php if (!empty($bookings)): ?>
         <table>
             <thead>
                 <tr>
@@ -61,28 +96,38 @@ $navbar->handleRequest();
     <?php endif; ?>
 
     <h5>Invoices</h5>
-    <table>
-        <thead>
-            <tr>
-                <th>Invoice ID</th>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($invoices as $invoice): ?>
+    <?php if (!empty($invoices)): ?>
+        <table>
+            <thead>
                 <tr>
-                    <td><?= htmlspecialchars($invoice['Invoice_ID']); ?></td>
-                    <td><?= htmlspecialchars($invoice['InvoiceDate']); ?></td>
-                    <td>DKK <?= number_format($invoice['TotalAmount'], 2); ?></td>
-                    <td><?= htmlspecialchars($invoice['InvoiceStatus']); ?></td>
-                    <td><a href="/dwp/frontend/controllers/InvoiceController.php?invoice_id=<?= htmlspecialchars($invoice['Invoice_ID']); ?>" class="btn">View Invoice</a></td>
+                    <th>Invoice ID</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Action</th>
                 </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <?php foreach ($invoices as $invoice): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($invoice['Invoice_ID']); ?></td>
+                        <td><?= htmlspecialchars($invoice['InvoiceDate']); ?></td>
+                        <td>DKK <?= number_format($invoice['TotalAmount'], 2); ?></td>
+                        <td><?= htmlspecialchars($invoice['InvoiceStatus']); ?></td>
+                        <td>
+                            <a href="/dwp/invoice?invoice_id=<?= htmlspecialchars($invoice['Invoice_ID']); ?>" class="btn">View Invoice</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <p>No invoices found.</p>
+    <?php endif; ?>
+    
 </div>
 </body>
 </html>
+
+<script src="/dwp/user/assets/js/profile.js"></script>
+

@@ -162,7 +162,7 @@ $_SESSION['invoice_id'] = $invoiceId;
         
 
         unset($_SESSION['booking'], $_SESSION['selectedSeats'], $_SESSION['selectedTickets'], $_SESSION['totalPrice']);
-        header("Location: /dwp/user/views/profile/profile_content.php?success=1");
+        header("Location: /dwp/user/profiles?success=1");
         exit();
     } else {
         echo "<p>Failed to save booking.</p>";

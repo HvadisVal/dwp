@@ -30,7 +30,7 @@ $isLoggedIn = isset($_SESSION['user_id']); // Check login state
             <?php if ($isLoggedIn): ?>
                 <!-- Show Logout Button -->
                 <span class="user-info">Welcome, <?= htmlspecialchars($_SESSION['user']); ?></span>
-                <a href="/dwp/user/profile" class="btn blue">Profile</a>
+                <a href="/dwp/user/profiles" class="btn blue">Profile</a>
 
                 <button id="logoutButton" class="btn red">Logout</button>
             <?php else: ?>
