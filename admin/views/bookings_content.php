@@ -32,12 +32,12 @@
         <?php foreach ($bookings as $index => $booking): ?>
             <tr>
                 <td><?php echo $index + 1; ?></td>
-                <td><?php echo htmlspecialchars($booking['MovieTitle']); ?></td>
-                <td><?php echo htmlspecialchars($booking['CustomerName']); ?></td>
-                <td><?php echo htmlspecialchars($booking['BookingDate']); ?></td>
-                <td><?php echo htmlspecialchars($booking['NumberOfTickets']); ?></td>
-                <td><?php echo htmlspecialchars($booking['TotalPrice']); ?></td>
-                <td><?php echo htmlspecialchars($booking['PaymentStatus']); ?></td>
+                <td><?php echo htmlspecialchars_decode($booking['MovieTitle']); ?></td>
+                <td><?php echo htmlspecialchars_decode($booking['CustomerName']); ?></td>
+                <td><?php echo htmlspecialchars_decode($booking['BookingDate']); ?></td>
+                <td><?php echo htmlspecialchars_decode($booking['NumberOfTickets']); ?></td>
+                <td><?php echo htmlspecialchars_decode($booking['TotalPrice']); ?></td>
+                <td><?php echo htmlspecialchars_decode($booking['PaymentStatus']); ?></td>
                 <td>
                     <form method="POST" style="display: inline;">
                         <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
