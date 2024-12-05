@@ -15,29 +15,40 @@ $navbar->handleRequest();
  ?>
 
 
-    <div class="hero">
+<div class="hero">
+    <?php if (!empty($landingMovies)): ?>
+        <img src="uploads/gallery/<?php echo htmlspecialchars($landingMovies[0]['FileName']); ?>" alt="<?php echo htmlspecialchars($landingMovies[0]['Title']); ?>">
         <div class="hero-content">
-            <h1>MARVEL<br>SPIDER-MAN<br>REMASTERED</h1>
-            <a href="/dwp/movies" class="book-ticket">Book a ticket</a>
+            <h1><?php echo htmlspecialchars($landingMovies[0]['Title']); ?></h1>
+            <?php if (empty($landingMovies[0]['FirstScreeningDate'])): ?>
+                <p>Coming Soon</p>
+            <?php else: ?>
+                <p>From: <?php echo date('F j, Y', strtotime($landingMovies[0]['FirstScreeningDate'])); ?></p>
+            <?php endif; ?>
+            <a href="/dwp/movie?movie_id=<?php echo $landingMovies[0]['Movie_ID']; ?>" class="book-ticket">Read more</a>
         </div>
-    </div>
+    <?php else: ?>
+        <p>No movies available to display.</p>
+    <?php endif; ?>
+</div>
 
-    <div class="info-cards">
-        <div class="info-card">
-            <img src="https://image.api.playstation.com/vulcan/img/rnd/202011/0714/Cu9fyu6DM41JPekXLf1neF9r.png" alt="Cinema content 1">
-            <div class="info-card-content">
-                <h3>Cinema website</h3>
-                <p>is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+
+<div class="info-cards">
+<?php if (!empty($landingMovies)): ?>
+    <div class="info-card">
+        <img src="uploads/gallery/<?php echo htmlspecialchars($landingMovies[0]['FileName']); ?>" alt="<?php echo htmlspecialchars($landingMovies[0]['Title']); ?>">
+        <div class="info-card-content">
+                <h3>Description</h3>
+                <p><?php echo htmlspecialchars($landingMovies[0]['Description']); ?></p>
             </div>
         </div>
-        <div class="info-card">
-            <img src="https://image.api.playstation.com/vulcan/img/rnd/202011/0714/Cu9fyu6DM41JPekXLf1neF9r.png" alt="Cinema content 2">
-            <div class="info-card-content">
-                <h3>Cinema website</h3>
-                <p>is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-            </div>
-        </div>
-    </div>
+        <?php else: ?>
+        <p>No movies available to display.</p>
+    <?php endif; ?>
+</div>
+
+
+
 
     <div class="news-slider">
         <h2>Film News</h2>

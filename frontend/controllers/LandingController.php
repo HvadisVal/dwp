@@ -13,6 +13,7 @@ class LandingController {
     public function handleRequest() {
         $dates = $this->model->getDistinctDates();
         $movies = $this->model->getMovies();
+        $landingMovies = $this->model->getLandingMovies();  // Fetch landing page movies
         $versions = $this->model->getVersions();
         $description = $this->model->getCompanyDescription();
         $shortDescription = substr($description, 0, 352);
