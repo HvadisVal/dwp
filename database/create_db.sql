@@ -491,6 +491,14 @@ INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, 
 INSERT INTO Movie (Movie_ID, Title, Director, Language, Year, Duration, Rating, Description, TrailerLink, Genre_ID, Version_ID, AgeLimit) VALUES 
 (35, 'Indiana Jones and the Last Crusade', 'Steven Spielberg', 'English', 1989, '02:07:00', 8, 'Indiana Jones and the Last Crusade (1989), directed by Steven Spielberg, is the third installment in the iconic action-adventure series. The film follows archaeologist Indiana Jones (Harrison Ford) as he embarks on a quest to find the Holy Grail, a legendary artifact believed to grant eternal life. His search takes him across Europe, where he is joined by his estranged father, Henry Jones Sr. (Sean Connery), a renowned scholar who has been missing for years. As they face Nazi agents, treacherous traps, and ancient puzzles, the film explores themes of father-son relationships, adventure, and the pursuit of knowledge. With its perfect blend of action, humor, and heart, *The Last Crusade* is considered one of the best films in the Indiana Jones series, offering a thrilling and emotional conclusion to the trilogy.', 'https://www.youtube.com/embed/DKg36LBVgfg?si=ycMV5NduMRSqwAfi', 11, 1, 12);
 
+-- Inserting into table 'LandingMovies'
+
+INSERT INTO LandingMovies (LandingMovie_ID, Movie_ID, DisplayOrder)
+VALUES
+    (1, 32, 1),
+    (2, 3, 2),
+    (3, 33, 3);
+
 -- Inserting into table 'Coupon'
 
 INSERT INTO Coupon (Coupon_ID, CouponCode, DiscountAmount, ExpireDate)
