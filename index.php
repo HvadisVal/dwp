@@ -43,11 +43,13 @@ $routes = [
     // user actions
     'user/guest' => 'user/controllers/GuestController.php',
     'user/login' => 'user/controllers/LoginController.php',
-    'user/profile' => 'frontend/user/profile/profile.php',
+    'user/profile' => 'user/controllers/ProfileController.php',
     'user/logout' => 'user/controllers/LogoutController.php',
     'user/new_user' => 'user/controllers/NewUserController.php',
     'user/switch' => 'user/controllers/SwitchUserController.php',
     'user/forgot-password' => 'frontend/user/forget_password.php',
+    'user/edit_user' => 'user/controllers/EditUserController.php',
+    'user/delete_user' => 'user/controllers/DeleteUserController.php',
 
     // Main pages
     'about' => 'frontend/controllers/AboutController.php',
@@ -128,6 +130,35 @@ function routeRequest($path, $routes, $connection) {
         $controller->handleRequest();
         exit();
     }
+    
+    if ($path === 'user/profile') {
+        require_once 'user/controllers/ProfileController.php';
+        $controller = new ProfileController($connection);
+        $controller->handleRequest();
+        exit;
+    }    
+
+    if ($path === 'user/edit_user') {
+        require_once 'user/controllers/EditUserController.php';
+        $controller = new EditUserController($connection);
+        $controller->handleRequest();
+        exit;
+    }
+
+    if ($path === 'user/delete_user') {
+        require_once 'user/controllers/DeleteUserController.php';
+        $controller = new DeleteUserController($connection);
+        $controller->handleRequest();
+        exit;
+    }
+    
+  /*   if ($path === 'user/booking_process') {
+        require_once 'user/controllers/BookingProcessController.php';
+        $controller = new BookingProcessController($connection);
+        $controller->handleRequest();
+        exit;
+    } */
+    
     
     
 
