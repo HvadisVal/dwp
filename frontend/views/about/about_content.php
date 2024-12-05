@@ -17,7 +17,7 @@ $navbar->handleRequest();
 <!-- Hero Section -->
 <section class="hero">
     <div>
-        <h1>Welcome to FilmFusion</h1>
+        <h1>Welcome to <?= htmlspecialchars_decode($aboutData['Name']); ?></h1>
         <p>Experience movies like never before in the heart of MovieTown.</p>
     </div>
 </section>
@@ -25,7 +25,7 @@ $navbar->handleRequest();
 <!-- About Section -->
 <section class="about">
     <h2>About Us</h2>
-    <p><?= htmlspecialchars($aboutData['Description']); ?></p>
+    <p><?= htmlspecialchars_decode($aboutData['Description']); ?></p>
 </section>
 
 <!-- Contact Information -->

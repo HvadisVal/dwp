@@ -10,11 +10,12 @@ class AboutModel {
     }
 
     public function getAboutData() {
-        $sql = "SELECT Location, Email, OpeningHours, Description FROM Company LIMIT 1";
+        $sql = "SELECT Name, Location, Email, OpeningHours, Description FROM Company LIMIT 1";
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
 
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: [
+            'Name' => 'N/A',
             'Location' => 'N/A',
             'Email' => 'N/A',
             'OpeningHours' => 'N/A',
