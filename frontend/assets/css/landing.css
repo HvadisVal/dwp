@@ -244,6 +244,16 @@ button.next:hover {
   margin: 20px 0!important;
 }
 
+
+
+.no-movies-message {
+  font-size: 1.5rem; 
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  width: 100%;
+}
+
 .movie-card {
   background: linear-gradient(to right, #243642, #1a252d)!important;
   padding: 15px!important;
@@ -354,6 +364,9 @@ button.next:hover {
 .reset-button:hover {
   transform: translateY(-3px)!important;
 }
+
+
+
 
 
 

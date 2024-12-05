@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const date = dateFilter.value || "";
     const movieId = movieFilter.value || "";
     const versionId = versionFilter.value || "";
-
+  
     // Send AJAX request to fetch filtered movies
     fetch("/dwp/frontend/fetch_movies.php", {
       method: "POST",
@@ -63,7 +63,19 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((rawData) => {
         console.log("Raw response data:", rawData); // Log the raw data to inspect it
         const data = JSON.parse(rawData); // Then parse it as JSON
-        // Update the movie grid
+  
+        // Check if data is empty
+        if (data.length === 0) {
+          movieGrid.innerHTML = `
+            <div class="no-movies-message">
+              <p>No movies available for the selected filters.</p>
+            </div>`;
+          return;
+        }
+        
+        
+  
+        // Update the movie grid with movie cards
         movieGrid.innerHTML = data
           .map(
             (movie) => `
@@ -72,8 +84,8 @@ document.addEventListener("DOMContentLoaded", () => {
                       ${
                         movie.FileName
                           ? `<img src="uploads/poster/${movie.FileName}" 
-                            alt="${movie.Title}" 
-                            style="width: 100%; border-radius: 8px; margin-bottom: 10px;">`
+                                alt="${movie.Title}" 
+                                style="width: 100%; border-radius: 8px; margin-bottom: 10px;">`
                           : "<p>No Image Available</p>"
                       }
                       <p>${movie.Title}</p>
@@ -85,6 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .catch((error) => console.error("Error fetching movies:", error));
   };
+  
 
   // Attach change event listeners to filters
   dateFilter.addEventListener("change", fetchMovies);
