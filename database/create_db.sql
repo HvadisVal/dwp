@@ -34,6 +34,14 @@ CREATE TABLE Movie (
     FOREIGN KEY (Version_ID) REFERENCES Version(Version_ID)
 );
 
+-- LandingMovies Table
+CREATE TABLE LandingMovies (
+    LandingMovie_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Movie_ID INT NOT NULL,
+    DisplayOrder INT NOT NULL,
+    FOREIGN KEY (Movie_ID) REFERENCES Movie(Movie_ID) ON DELETE CASCADE
+);
+
 -- Payment Table
 CREATE TABLE Payment (
     Payment_ID INT PRIMARY KEY AUTO_INCREMENT,
