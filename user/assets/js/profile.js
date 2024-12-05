@@ -46,7 +46,7 @@ document.getElementById('editUserForm').addEventListener('submit', function (e) 
 // Delete Account
 document.getElementById('deleteAccountButton').addEventListener('click', function () {
     if (confirm('Are you sure you want to delete your account?')) {
-        fetch('/dwp/frontend/user/profile/delete_user.php', {
+        fetch('/dwp/user/delete_user.php', {
             method: 'POST',
         })
             .then(response => response.json())

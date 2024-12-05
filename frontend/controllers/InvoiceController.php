@@ -22,6 +22,6 @@ class InvoiceController {
         }
 
         // Pass data to the view
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/views/payment/invoice_content.php';
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/views/invoice/invoice_content.php';
     }
 }
