@@ -24,6 +24,11 @@ class CouponController {
             switch ($action) {
                 case 'add':
                     $couponCode = htmlspecialchars(trim($_POST['coupon_code']));
+                    if (!validate_for_letter_numbers($couponCode)) {
+                        $_SESSION['message'] = "Coupon code can only contain letters and numbers.";
+                        header("Location: /dwp/admin/manage-coupons");
+                        exit();
+                    }
                     $discountAmount = (float)trim($_POST['discount_amount']);
                     $expireDate = $_POST['expire_date'];
                     $this->couponModel->addCoupon($couponCode, $discountAmount, $expireDate);
@@ -33,6 +38,11 @@ class CouponController {
                 case 'edit':
                     $couponId = (int)$_POST['coupon_id'];
                     $couponCode = htmlspecialchars(trim($_POST['coupon_code']));
+                    if (!validate_for_letter_numbers($couponCode)) {
+                        $_SESSION['message'] = "Coupon code can only contain letters and numbers.";
+                        header("Location: /dwp/admin/manage-coupons");
+                        exit();
+                    }
                     $discountAmount = (float)trim($_POST['discount_amount']);
                     $expireDate = $_POST['expire_date'];
                     $this->couponModel->editCoupon($couponId, $couponCode, $discountAmount, $expireDate);

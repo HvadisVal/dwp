@@ -22,3 +22,10 @@ function validate_csrf_token($token) {
 function refresh_csrf_token() {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
+// Function to validate coupon code (only letters and numbers)
+function validate_for_letter_numbers($input) {
+    if (!preg_match('/^[a-zA-Z0-9]+$/', $input)) {
+        return false; // Invalid input, contains characters other than letters or numbers
+    }
+    return true; // Valid input
+}
