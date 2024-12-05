@@ -32,7 +32,7 @@ $routes = [
     'admin/manage-news' => 'admin/controllers/NewsController.php',
     'admin/manage-screenings' => 'admin/controllers/ScreeningController.php',
     'admin/manage-bookings' => 'admin/controllers/BookingController.php',
-
+    'admin/manage-landing' => 'admin/controllers/LandingMoviesController.php',
 
     // payment pages
     'payment/apply-coupon' => 'frontend/payment/apply_coupon.php',
@@ -68,6 +68,7 @@ $routes = [
     'movie'=> 'frontend/controllers/MovieProfileController.php',
     'guest-checkout' => 'frontend/controllers/GuestCheckoutController.php',
     'footer' => 'frontend/controllers/FooterController.php',   
+    
 ];
 
 // Define a function to handle the routing process
