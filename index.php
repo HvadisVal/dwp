@@ -45,7 +45,7 @@ $routes = [
     'user/login' => 'user/controllers/LoginController.php',
     'user/profile' => 'frontend/user/profile/profile.php',
     'user/logout' => 'user/controllers/LogoutController.php',
-    'user/new_user' => 'frontend/user/new_user/new_user.php',
+    'user/new_user' => 'user/controllers/NewUserController.php',
     'user/switch' => 'user/controllers/SwitchUserController.php',
     'user/forgot-password' => 'frontend/user/forget_password.php',
 
@@ -120,6 +120,13 @@ function routeRequest($path, $routes, $connection) {
         $controller = new SwitchUserController();
         $controller->handleRequest();
         exit;
+    }
+
+    if ($path === 'user/new_user') {
+        require_once 'user/controllers/NewUserController.php';
+        $controller = new NewUserController($connection); // Pass the connection here
+        $controller->handleRequest();
+        exit();
     }
     
     
