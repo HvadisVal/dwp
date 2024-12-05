@@ -16,6 +16,7 @@
 <?php if (isset($_SESSION['message'])): ?>
     <div class="message"><?php echo $_SESSION['message']; unset($_SESSION['message']); ?></div>
 <?php endif; ?>
+
 <!-- Edit Company Information Section -->
 <h2>Edit Company Details</h2>
 
@@ -23,22 +24,28 @@
     <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
 
     <label for="name">Company Name:</label>
-    <input type="text" name="name" value="<?php echo htmlspecialchars($company['Name']); ?>" required>
+    <input type="text" name="name" 
+           value="<?php echo htmlspecialchars(htmlspecialchars_decode($company['Name'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" required>
 
     <label for="description">Description:</label>
-    <textarea name="description" required><?php echo htmlspecialchars($company['Description']); ?></textarea>
+    <textarea name="description" required><?php echo htmlspecialchars(htmlspecialchars_decode($company['Description'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?></textarea>
 
     <label for="opening_hours">Opening Hours:</label>
-    <input type="text" name="opening_hours" value="<?php echo htmlspecialchars($company['OpeningHours']); ?>" required>
+    <input type="text" name="opening_hours" 
+           value="<?php echo htmlspecialchars(htmlspecialchars_decode($company['OpeningHours'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" required>
 
     <label for="email">Email:</label>
-    <input type="email" name="email" value="<?php echo htmlspecialchars($company['Email']); ?>" required>
+    <input type="email" name="email" 
+           value="<?php echo htmlspecialchars(htmlspecialchars_decode($company['Email'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" required>
 
     <label for="location">Location:</label>
-    <input type="text" name="location" value="<?php echo htmlspecialchars($company['Location']); ?>" required>
+    <input type="text" name="location" 
+           value="<?php echo htmlspecialchars(htmlspecialchars_decode($company['Location'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" required>
 
     <button type="submit" name="edit_company" class="save-button">Save Changes</button>
 </form>
+
+
 
 
 </body>
