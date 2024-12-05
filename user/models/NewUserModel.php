@@ -4,7 +4,7 @@ class NewUserModel {
 
     public function __construct($connection) {
         $this->connection = $connection;
-    }
+    } 
 
     public function createNewUser($username, $email, $phone, $password) {
         try {

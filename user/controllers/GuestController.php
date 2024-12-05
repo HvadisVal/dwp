@@ -1,16 +1,15 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . '/dwp/includes/connection.php');
-require_once($_SERVER['DOCUMENT_ROOT'] . '/dwp/dbcon.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . '/dwp/user/models/GuestModel.php');
 
 class GuestController {
     private $model;
 
-    public function __construct() {
-        $connection = dbCon("root", "");
+    public function __construct($connection) {
         $this->model = new GuestModel($connection);
     }
-
+    
+ 
     public function handleRequest() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $firstname = $_POST['firstname'] ?? null;

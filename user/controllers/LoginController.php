@@ -1,4 +1,5 @@
 <?php
+require_once($_SERVER['DOCUMENT_ROOT'] . '/dwp/includes/connection.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . '/dwp/user/models/LoginModel.php');
 
 class LoginController {

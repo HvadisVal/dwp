@@ -1,10 +1,10 @@
 <?php
 class GuestModel {
-    private $db;
+    private $connection;
 
-    public function __construct($dbConnection) {
-        $this->db = $dbConnection;
-    }
+    public function __construct($connection) {
+        $this->connection = $connection;
+    } 
 
     public function createGuest($firstname, $lastname, $email, $phone) {
         try {

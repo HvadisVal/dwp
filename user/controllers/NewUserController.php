@@ -3,7 +3,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/includes/connection.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/user/models/NewUserModel.php';
 
 class NewUserController {
-    private $model;
+    private $model; 
 
     public function __construct($connection) {
         $this->model = new NewUserModel($connection);
