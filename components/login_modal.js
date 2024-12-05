@@ -22,7 +22,7 @@ $('#loginForm').on('submit', function (e) {
 $('#newUserForm').on('submit', function (e) {
     e.preventDefault();
     $.ajax({
-        url: '/dwp/frontend/user/new_user/new_user.php', // Adjust the path as needed
+        url: '/dwp/user/new_user', // Adjust the path as needed
         type: 'POST',
         data: $(this).serialize(),
         success: function (response) {
