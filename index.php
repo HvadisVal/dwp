@@ -96,10 +96,10 @@ function routeRequest($path, $routes, $connection) {
 
     if ($path === 'user/guest') {
         require_once 'user/controllers/GuestController.php';
-        $controller = new GuestController();
+        $controller = new GuestController($connection);
         $controller->handleRequest();
         exit;
-    }
+    }    
     
     if ($path === 'user/login') {
         require_once 'user/controllers/LoginController.php';
@@ -110,21 +110,21 @@ function routeRequest($path, $routes, $connection) {
     
     if ($path === 'user/logout') {
         require_once 'user/controllers/LogoutController.php';
-        $controller = new LogoutController();
+        $controller = new LogoutController($connection);
         $controller->handleRequest();
         exit;
     }
     
     if ($path === 'user/switch') {
         require_once 'user/controllers/SwitchUserController.php';
-        $controller = new SwitchUserController();
+        $controller = new SwitchUserController($connection);
         $controller->handleRequest();
         exit;
     }
 
     if ($path === 'user/new_user') {
         require_once 'user/controllers/NewUserController.php';
-        $controller = new NewUserController($connection); // Pass the connection here
+        $controller = new NewUserController($connection); //
         $controller->handleRequest();
         exit();
     }

@@ -4,7 +4,7 @@ class LoginModel {
 
     public function __construct($connection) {
         $this->connection = $connection;
-    }
+    } 
 
     public function getUserByUsername($username) {
         try {
