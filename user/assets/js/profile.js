@@ -18,7 +18,7 @@ document.getElementById('editUserForm').addEventListener('submit', function (e) 
 
     const formData = new FormData(this);
 
-    fetch('/dwp/frontend/user/profile/edit_user.php', {
+    fetch('/dwp/user/edit_user', {
         method: 'POST',
         body: formData,
     })
@@ -46,20 +46,26 @@ document.getElementById('editUserForm').addEventListener('submit', function (e) 
 // Delete Account
 document.getElementById('deleteAccountButton').addEventListener('click', function () {
     if (confirm('Are you sure you want to delete your account?')) {
-        fetch('/dwp/user/delete_user.php', {
+        fetch('/dwp/user/delete_user', {
             method: 'POST',
         })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     M.toast({ html: data.message });
-                    window.location.href = '/dwp/user/controllers/LoginController.php'; // Redirect after deletion
+                    // Redirect to the landing page
+                    window.location.href = '/dwp/landing';
                 } else {
                     M.toast({ html: data.message, classes: 'red' });
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                M.toast({ html: 'An error occurred while deleting the account.', classes: 'red' });
+            });
     }
 });
+
+
 
 

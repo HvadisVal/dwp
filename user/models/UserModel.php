@@ -51,9 +51,35 @@ class UserModel {
             $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
             $stmt->execute();
         } catch (PDOException $e) {
-            throw new Exception("Database error: " . $e->getMessage());
+            throw new Exception("Error deleting user: " . $e->getMessage());
         }
     }
-    
+
+    public function deleteUserBookings($user_id) {
+        try {
+            $this->connection->beginTransaction();
+
+            // Delete tickets associated with the user's bookings
+            $deleteTicketsQuery = "
+                DELETE FROM Ticket
+                WHERE Booking_ID IN (
+                    SELECT Booking_ID FROM Booking WHERE User_ID = :user_id
+                )";
+            $stmt = $this->connection->prepare($deleteTicketsQuery);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            // Delete the user's bookings
+            $deleteBookingsQuery = "DELETE FROM Booking WHERE User_ID = :user_id";
+            $stmt = $this->connection->prepare($deleteBookingsQuery);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $this->connection->commit();
+        } catch (PDOException $e) {
+            $this->connection->rollBack();
+            throw new Exception("Error deleting user bookings: " . $e->getMessage());
+        }
+    }
     
 }

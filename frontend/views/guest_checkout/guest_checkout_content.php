@@ -29,7 +29,7 @@
         <!-- Action Buttons -->
         <div class="action-buttons">
             <a href="/dwp/invoice?invoice_id=<?= htmlspecialchars($invoice['Invoice_ID']); ?>" class="btn">View Full Invoice</a>
-            <a href="/dwp/user/profile" class="btn">Back to Profile</a>
+            <a href="/dwp/user/profiles" class="btn">Back to Profile</a>
         </div>
     </div>
 </body>
