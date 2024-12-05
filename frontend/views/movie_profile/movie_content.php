@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($movieDetails['Title']); ?> - Movie Details</title>
     <link rel="stylesheet" href="/dwp/frontend/assets/css/movie_profile.css">
-
 </head>
 <body>
 
@@ -36,7 +35,11 @@ $navbar->handleRequest();
                 <p><strong>Director:</strong> <?= htmlspecialchars($movieDetails['Director']); ?></p>
                 <p><strong>Language:</strong> <?= htmlspecialchars($movieDetails['Language']); ?></p>
                 <p><strong>Year:</strong> <?= htmlspecialchars($movieDetails['Year']); ?></p>
-                <p><strong>Description:</strong> <?= nl2br(htmlspecialchars($movieDetails['Description'])); ?></p>
+                <p><strong>Description:</strong> 
+                    <span id="short-description"><?= htmlspecialchars(substr($movieDetails['Description'], 0, 200)); ?>...</span>
+                    <span id="full-description" style="display: none;"><?= nl2br(htmlspecialchars($movieDetails['Description'])); ?></span>
+                    <a href="javascript:void(0);" id="expand-description" onclick="toggleDescription()">Read more</a>
+                </p>
 
             </div>
         </div>
@@ -101,5 +104,6 @@ $navbar->handleRequest();
     </div>
 </div>
 </div>
+<script src="/dwp/frontend/assets/js/movie_profile.js"></script>
 </body>
 </html>
