@@ -37,21 +37,22 @@ class CompanyController {
     }
 
     private function editCompany() {
-        $name = htmlspecialchars(trim($_POST['name']));
-        $description = htmlspecialchars(trim($_POST['description']));
-        $openingHours = htmlspecialchars(trim($_POST['opening_hours']));
-        $email = htmlspecialchars(trim($_POST['email']));
-        $location = htmlspecialchars(trim($_POST['location']));
-
+        $name = htmlspecialchars(trim($_POST['name']), ENT_QUOTES, 'UTF-8');
+        $description = htmlspecialchars(trim($_POST['description']), ENT_QUOTES, 'UTF-8');
+        $openingHours = htmlspecialchars(trim($_POST['opening_hours']), ENT_QUOTES, 'UTF-8');
+        $email = htmlspecialchars(trim($_POST['email']), ENT_QUOTES, 'UTF-8');
+        $location = htmlspecialchars(trim($_POST['location']), ENT_QUOTES, 'UTF-8');
+    
         if ($this->model->updateCompanyInfo($this->companyId, $name, $description, $openingHours, $email, $location)) {
             $_SESSION['message'] = "Company information updated successfully!";
         } else {
             $_SESSION['message'] = "Error updating company information.";
         }
-
-        header("Location: /dwp/admin/manage-company");
+    
+        header("Location: /dwp/admin/manage-company", true, 303);
         exit();
     }
+    
 
     private function showCompanyPage() {
         $company = $this->model->getCompanyInfo($this->companyId);
