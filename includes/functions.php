@@ -29,6 +29,19 @@ function validate_for_letter_numbers($input) {
     }
     return true; // Valid input
 }
+function validate_numeric($value, $positive = true) {
+    if (is_numeric($value)) {
+        if ($positive && $value >= 0) {
+            return true;
+        } elseif (!$positive && $value != 0) {
+            return true;
+        }
+    }
+    return false;
+}
+function validate_date($date) {
+    return preg_match('/^\d{4}-\d{2}-\d{2}$/', $date);
+}
 
 // Function to validate email address
 function validate_email($email) {
