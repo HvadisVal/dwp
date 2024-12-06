@@ -58,6 +58,11 @@ class NewsController {
         $title = htmlspecialchars(trim($_POST['title']));
         $content = htmlspecialchars(trim($_POST['content']));
         $datePosted = $_POST['dateposted'];
+        if (!validate_date($datePosted)) {
+            $_SESSION['message'] = "Please enter a valid  date (YYYY-MM-DD).";
+            header("Location: /dwp/admin/manage-coupons");
+            exit();
+        }
 
         // Add the news article
         $newsId = $this->model->addNews($title, $content, $datePosted);
@@ -78,7 +83,12 @@ class NewsController {
         $title = htmlspecialchars(trim($_POST['title']));
         $content = htmlspecialchars(trim($_POST['content']));
         $datePosted = $_POST['dateposted'];
-
+        if (!validate_date($datePosted)) {
+            $_SESSION['message'] = "Please enter a valid  date (YYYY-MM-DD).";
+            header("Location: /dwp/admin/manage-coupons");
+            exit();
+        }
+        
         if ($this->model->editNews($newsId, $title, $content, $datePosted)) {
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                 deleteImage($newsId, 'news', $this->connection); // Pass connection here to delete old image
