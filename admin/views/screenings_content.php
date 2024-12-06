@@ -14,21 +14,23 @@
 <h1>Manage Screenings</h1>
 <?php
     if (isset($_SESSION['message'])) {
-        echo '<div class="message">' . $_SESSION['message'] . '</div>';
+        echo '<div class="message">' . htmlspecialchars($_SESSION['message'], ENT_QUOTES, 'UTF-8') . '</div>';
         // Optionally clear the message after displaying it
         unset($_SESSION['message']);
     }
-    ?>
+?>
 <!-- Add Screening Section -->
 <h2>Add New Screening</h2>
 <form method="POST" class="screening-card">
-    <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
     <label for="cinemahall_id">Cinema Hall:</label>
     <select name="cinemahall_id" required>
         <option value="">Select Cinema Hall</option>
         <?php foreach ($cinemaHalls as $hall): ?>
-            <option value="<?php echo $hall['CinemaHall_ID']; ?>"><?php echo htmlspecialchars($hall['Name']); ?></option>
+            <option value="<?php echo htmlspecialchars($hall['CinemaHall_ID'], ENT_QUOTES, 'UTF-8'); ?>">
+                <?php echo htmlspecialchars_decode($hall['Name'], ENT_QUOTES); ?>
+            </option>
         <?php endforeach; ?>
     </select>
 
@@ -36,7 +38,9 @@
     <select name="movie_id" required>
         <option value="">Select Movie</option>
         <?php foreach ($movies as $movie): ?>
-            <option value="<?php echo $movie['Movie_ID']; ?>"><?php echo htmlspecialchars($movie['Title']); ?></option>
+            <option value="<?php echo htmlspecialchars($movie['Movie_ID'], ENT_QUOTES, 'UTF-8'); ?>">
+                <?php echo htmlspecialchars_decode($movie['Title'], ENT_QUOTES); ?>
+            </option>
         <?php endforeach; ?>
     </select>
 
@@ -52,14 +56,15 @@
     <?php foreach ($screenings as $screening): ?>
         <div class="screening-card">
             <form method="POST">
-                <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
-                <input type="hidden" name="screening_id" value="<?php echo $screening['Screening_ID']; ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="screening_id" value="<?php echo htmlspecialchars($screening['Screening_ID'], ENT_QUOTES, 'UTF-8'); ?>">
 
                 <label for="cinemahall_id">Cinema Hall:</label>
                 <select name="cinemahall_id" required>
                     <?php foreach ($cinemaHalls as $hall): ?>
-                        <option value="<?php echo $hall['CinemaHall_ID']; ?>" <?php echo $hall['CinemaHall_ID'] == $screening['CinemaHall_ID'] ? 'selected' : ''; ?>>
-                            <?php echo htmlspecialchars($hall['Name']); ?>
+                        <option value="<?php echo htmlspecialchars($hall['CinemaHall_ID'], ENT_QUOTES, 'UTF-8'); ?>" 
+                            <?php echo $hall['CinemaHall_ID'] == $screening['CinemaHall_ID'] ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars_decode($hall['Name'], ENT_QUOTES); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -67,14 +72,15 @@
                 <label for="movie_id">Movie:</label>
                 <select name="movie_id" required>
                     <?php foreach ($movies as $movie): ?>
-                        <option value="<?php echo $movie['Movie_ID']; ?>" <?php echo $movie['Movie_ID'] == $screening['Movie_ID'] ? 'selected' : ''; ?>>
-                            <?php echo htmlspecialchars($movie['Title']); ?>
+                        <option value="<?php echo htmlspecialchars($movie['Movie_ID'], ENT_QUOTES, 'UTF-8'); ?>" 
+                            <?php echo $movie['Movie_ID'] == $screening['Movie_ID'] ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars_decode($movie['Title'], ENT_QUOTES); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
 
                 <label for="showtime">Show Time:</label>
-                <input type="datetime-local" name="showtime" value="<?php echo date('Y-m-d\TH:i', strtotime($screening['ShowDate'] . ' ' . $screening['ShowTime'])); ?>" required>
+                <input type="datetime-local" name="showtime" value="<?php echo htmlspecialchars(date('Y-m-d\TH:i', strtotime($screening['ShowDate'] . ' ' . $screening['ShowTime'])), ENT_QUOTES, 'UTF-8'); ?>" required>
 
                 <button type="submit" name="edit_screening" class="edit-button">Edit Screening</button>
                 <button type="submit" name="delete_screening" class="delete-button">Delete Screening</button>
