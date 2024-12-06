@@ -1,4 +1,3 @@
-<!-- news_view.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,24 +13,24 @@
 <h1>Manage News</h1>
 
 <?php if (isset($_SESSION['message'])): ?>
-        <p><?php echo $_SESSION['message']; ?></p>
+        <p><?php echo htmlspecialchars($_SESSION['message'], ENT_QUOTES, 'UTF-8'); ?></p>
         <?php unset($_SESSION['message']); ?>
-    <?php endif; ?>
+<?php endif; ?>
 
 <!-- Add News Section -->
 <h2>Add New Article</h2>
 <form method="POST" enctype="multipart/form-data" class="news-card">
-    <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
     <input type="hidden" name="action" value="add">
 
     <label for="title">Title:</label>
-    <input type="text" name="title" required>
+    <input type="text" name="title" value="<?php echo htmlspecialchars(htmlspecialchars_decode($data['title'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>" required>
 
     <label for="content">Content:</label>
-    <textarea name="content" required></textarea>
+    <textarea name="content" required><?php echo htmlspecialchars(htmlspecialchars_decode($data['content'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></textarea>
 
     <label for="dateposted">Date Posted:</label>
-    <input type="date" name="dateposted" required>
+    <input type="date" name="dateposted" value="<?php echo htmlspecialchars(htmlspecialchars_decode($data['dateposted'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>" required>
 
     <div class="file-input-container">
         <label for="image">Upload New Image:</label>
@@ -49,37 +48,37 @@
     <?php foreach ($newsWithImages as $newsId => $data): ?>
         <div class="news-card">
             <form method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
-                <input type="hidden" name="news_id" value="<?php echo $data['article']['News_ID']; ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="news_id" value="<?php echo htmlspecialchars($data['article']['News_ID'], ENT_QUOTES, 'UTF-8'); ?>">
 
                 <label for="title">Title:</label>
-                <input type="text" name="title" value="<?php echo htmlspecialchars($data['article']['Title']); ?>" required>
+                <input type="text" name="title" value="<?php echo htmlspecialchars(htmlspecialchars_decode($data['article']['Title'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" required>
 
                 <label for="content">Content:</label>
-                <textarea name="content" required><?php echo htmlspecialchars($data['article']['Content']); ?></textarea>
+                <textarea name="content" required><?php echo htmlspecialchars(htmlspecialchars_decode($data['article']['Content'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?></textarea>
 
                 <label for="dateposted">Date Posted:</label>
-                <input type="date" name="dateposted" value="<?php echo htmlspecialchars($data['article']['DatePosted']); ?>" required>
+                <input type="date" name="dateposted" value="<?php echo htmlspecialchars(htmlspecialchars_decode($data['article']['DatePosted'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" required>
 
                 <label>Current Image:</label>
                 <?php if (!empty($data['images'])): ?>
-                    <img src="../uploads/news_images/<?php echo htmlspecialchars($data['images'][0]); ?>" alt="News Image" class="image-preview">
+                    <img src="../uploads/news_images/<?php echo htmlspecialchars($data['images'][0], ENT_QUOTES, 'UTF-8'); ?>" alt="News Image" class="image-preview">
                 <?php else: ?>
                     <p>No image uploaded for this article.</p>
                 <?php endif; ?>
 
                 <div class="file-input-container">
-                    <label for="image-<?php echo $data['article']['News_ID']; ?>">Upload New Image:</label>
-                    <input type="file" id="image-<?php echo $data['article']['News_ID']; ?>" name="image" accept="image/png, image/jpeg" onchange="displayFileName(event, <?php echo $data['article']['News_ID']; ?>)">
-                    <label for="image-<?php echo $data['article']['News_ID']; ?>" class="file-label">Choose Image</label>
-                    <div class="file-name" id="fileNameContainer-<?php echo $data['article']['News_ID']; ?>"></div>
+                    <label for="image-<?php echo htmlspecialchars($data['article']['News_ID'], ENT_QUOTES, 'UTF-8'); ?>">Upload New Image:</label>
+                    <input type="file" id="image-<?php echo htmlspecialchars($data['article']['News_ID'], ENT_QUOTES, 'UTF-8'); ?>" name="image" accept="image/png, image/jpeg" onchange="displayFileName(event, <?php echo htmlspecialchars($data['article']['News_ID'], ENT_QUOTES, 'UTF-8'); ?>)">
+                    <label for="image-<?php echo htmlspecialchars($data['article']['News_ID'], ENT_QUOTES, 'UTF-8'); ?>" class="file-label">Choose Image</label>
+                    <div class="file-name" id="fileNameContainer-<?php echo htmlspecialchars($data['article']['News_ID'], ENT_QUOTES, 'UTF-8'); ?>"></div>
                 </div>
 
                 <button type="submit" name="action" value="edit" class="edit-button">Edit News</button>
             </form>
             <form method="POST" style="margin-top: 10px;">
-                <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
-                <input type="hidden" name="news_id" value="<?php echo $data['article']['News_ID']; ?>">
+                <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="news_id" value="<?php echo htmlspecialchars($data['article']['News_ID'], ENT_QUOTES, 'UTF-8'); ?>">
                 <button type="submit" name="action" value="delete" class="delete-button">Delete News</button>
             </form>
         </div>
