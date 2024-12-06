@@ -14,14 +14,14 @@
 
 <!-- Displaying messages -->
 <?php if (isset($_SESSION['message'])): ?>
-    <div class="message"><?php echo $_SESSION['message']; unset($_SESSION['message']); ?></div>
+    <div class="message"><?php echo htmlspecialchars($_SESSION['message'], ENT_QUOTES, 'UTF-8'); unset($_SESSION['message']); ?></div>
 <?php endif; ?>
 
 <!-- Edit Company Information Section -->
 <h2>Edit Company Details</h2>
 
 <form method="POST" class="company-card company-form">
-    <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
     <label for="name">Company Name:</label>
     <input type="text" name="name" 
@@ -44,9 +44,6 @@
 
     <button type="submit" name="edit_company" class="save-button">Save Changes</button>
 </form>
-
-
-
 
 </body>
 </html>
