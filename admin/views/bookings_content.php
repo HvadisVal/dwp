@@ -12,7 +12,7 @@
 <h1>Manage Bookings</h1>
 
 <?php if (isset($_SESSION['message'])): ?>
-    <div class="alert"><?php echo $_SESSION['message']; unset($_SESSION['message']); ?></div>
+    <div class="alert"><?php echo htmlspecialchars($_SESSION['message'], ENT_QUOTES, 'UTF-8'); unset($_SESSION['message']); ?></div>
 <?php endif; ?>
 
 <table>
@@ -31,17 +31,17 @@
     <tbody>
         <?php foreach ($bookings as $index => $booking): ?>
             <tr>
-                <td><?php echo $index + 1; ?></td>
-                <td><?php echo htmlspecialchars_decode($booking['MovieTitle']); ?></td>
-                <td><?php echo htmlspecialchars_decode($booking['CustomerName']); ?></td>
-                <td><?php echo htmlspecialchars_decode($booking['BookingDate']); ?></td>
-                <td><?php echo htmlspecialchars_decode($booking['NumberOfTickets']); ?></td>
-                <td><?php echo htmlspecialchars_decode($booking['TotalPrice']); ?></td>
-                <td><?php echo htmlspecialchars_decode($booking['PaymentStatus']); ?></td>
+                <td><?php echo htmlspecialchars($index + 1, ENT_QUOTES, 'UTF-8'); ?></td>
+                <td><?php echo htmlspecialchars($booking['MovieTitle'], ENT_QUOTES, 'UTF-8'); ?></td>
+                <td><?php echo htmlspecialchars($booking['CustomerName'], ENT_QUOTES, 'UTF-8'); ?></td>
+                <td><?php echo htmlspecialchars($booking['BookingDate'], ENT_QUOTES, 'UTF-8'); ?></td>
+                <td><?php echo htmlspecialchars($booking['NumberOfTickets'], ENT_QUOTES, 'UTF-8'); ?></td>
+                <td><?php echo htmlspecialchars($booking['TotalPrice'], ENT_QUOTES, 'UTF-8'); ?></td>
+                <td><?php echo htmlspecialchars($booking['PaymentStatus'], ENT_QUOTES, 'UTF-8'); ?></td>
                 <td>
                     <form method="POST" style="display: inline;">
-                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                        <input type="hidden" name="booking_id" value="<?php echo $booking['Booking_ID']; ?>">
+                        <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
+                        <input type="hidden" name="booking_id" value="<?php echo htmlspecialchars($booking['Booking_ID'], ENT_QUOTES, 'UTF-8'); ?>">
                         <button type="submit" name="delete_booking">Delete</button>
                     </form>
                 </td>
