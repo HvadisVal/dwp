@@ -4,6 +4,14 @@ header('Content-Type: application/json'); // Ensure JSON content type
 
 class SwitchUserController
 {
+    private $connection;
+
+    // Constructor to accept the database connection
+    public function __construct($connection)
+    {
+        $this->connection = $connection;
+    }
+
     public function handleRequest()
     {
         // Clear guest session data
