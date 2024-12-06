@@ -29,3 +29,11 @@ function validate_for_letter_numbers($input) {
     }
     return true; // Valid input
 }
+
+// Function to validate email address
+function validate_email($email) {
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        return false;
+    }
+    return true;
+}

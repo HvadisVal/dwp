@@ -43,6 +43,12 @@ class CompanyController {
         $email = htmlspecialchars(trim($_POST['email']), ENT_QUOTES, 'UTF-8');
         $location = htmlspecialchars(trim($_POST['location']), ENT_QUOTES, 'UTF-8');
     
+        if (!validate_email($email)) {
+            $_SESSION['message'] = "Invalid email address. Please enter a valid email.";
+            header("Location: /dwp/admin/manage-company", true, 303);
+            exit();
+        }
+
         if ($this->model->updateCompanyInfo($this->companyId, $name, $description, $openingHours, $email, $location)) {
             $_SESSION['message'] = "Company information updated successfully!";
         } else {
