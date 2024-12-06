@@ -32,12 +32,12 @@
         <?php foreach ($bookings as $index => $booking): ?>
             <tr>
                 <td><?php echo htmlspecialchars($index + 1, ENT_QUOTES, 'UTF-8'); ?></td>
-                <td><?php echo htmlspecialchars($booking['MovieTitle'], ENT_QUOTES, 'UTF-8'); ?></td>
-                <td><?php echo htmlspecialchars($booking['CustomerName'], ENT_QUOTES, 'UTF-8'); ?></td>
-                <td><?php echo htmlspecialchars($booking['BookingDate'], ENT_QUOTES, 'UTF-8'); ?></td>
-                <td><?php echo htmlspecialchars($booking['NumberOfTickets'], ENT_QUOTES, 'UTF-8'); ?></td>
-                <td><?php echo htmlspecialchars($booking['TotalPrice'], ENT_QUOTES, 'UTF-8'); ?></td>
-                <td><?php echo htmlspecialchars($booking['PaymentStatus'], ENT_QUOTES, 'UTF-8'); ?></td>
+                <td><?php echo htmlspecialchars_decode($booking['MovieTitle'], ENT_QUOTES); ?></td>
+                <td><?php echo htmlspecialchars_decode($booking['CustomerName'], ENT_QUOTES); ?></td>
+                <td><?php echo htmlspecialchars_decode($booking['BookingDate'], ENT_QUOTES); ?></td>
+                <td><?php echo htmlspecialchars_decode($booking['NumberOfTickets'], ENT_QUOTES); ?></td>
+                <td><?php echo htmlspecialchars_decode($booking['TotalPrice'], ENT_QUOTES); ?></td>
+                <td><?php echo htmlspecialchars_decode($booking['PaymentStatus'], ENT_QUOTES); ?></td>
                 <td>
                     <form method="POST" style="display: inline;">
                         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
