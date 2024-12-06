@@ -29,8 +29,24 @@ class CouponController {
                         header("Location: /dwp/admin/manage-coupons");
                         exit();
                     }
-                    $discountAmount = (float)trim($_POST['discount_amount']);
+
+                    // Validate discount_amount (using the reusable function)
+                    $discountAmount = trim($_POST['discount_amount']);
+                    if (!validate_numeric($discountAmount)) {
+                        $_SESSION['message'] = "Please enter a valid discount amount (positive number).";
+                        header("Location: /dwp/admin/manage-coupons");
+                        exit();
+                    }
+                    $discountAmount = (float)$discountAmount;
+
+                    // Validate expire_date (using the reusable function)
                     $expireDate = $_POST['expire_date'];
+                    if (!validate_date($expireDate)) {
+                        $_SESSION['message'] = "Please enter a valid expiration date (YYYY-MM-DD).";
+                        header("Location: /dwp/admin/manage-coupons");
+                        exit();
+                    }
+
                     $this->couponModel->addCoupon($couponCode, $discountAmount, $expireDate);
                     $_SESSION['message'] = "Coupon added successfully!";
                     break;
@@ -43,8 +59,24 @@ class CouponController {
                         header("Location: /dwp/admin/manage-coupons");
                         exit();
                     }
-                    $discountAmount = (float)trim($_POST['discount_amount']);
+
+                    // Validate discount_amount (using the reusable function)
+                    $discountAmount = trim($_POST['discount_amount']);
+                    if (!validate_numeric($discountAmount)) {
+                        $_SESSION['message'] = "Please enter a valid discount amount (positive number).";
+                        header("Location: /dwp/admin/manage-coupons");
+                        exit();
+                    }
+                    $discountAmount = (float)$discountAmount;
+
+                    // Validate expire_date (using the reusable function)
                     $expireDate = $_POST['expire_date'];
+                    if (!validate_date($expireDate)) {
+                        $_SESSION['message'] = "Please enter a valid expiration date (YYYY-MM-DD).";
+                        header("Location: /dwp/admin/manage-coupons");
+                        exit();
+                    }
+
                     $this->couponModel->editCoupon($couponId, $couponCode, $discountAmount, $expireDate);
                     $_SESSION['message'] = "Coupon updated successfully!";
                     break;
