@@ -35,7 +35,7 @@
                 <select name="movie_id" id="movie_id" required>
                     <?php foreach ($movies as $movie): ?>
                         <option value="<?php echo htmlspecialchars($movie['Movie_ID'], ENT_QUOTES, 'UTF-8'); ?>">
-                            <?php echo htmlspecialchars($movie['Title'], ENT_QUOTES, 'UTF-8'); ?>
+                            <?php echo htmlspecialchars_decode($movie['Title'], ENT_QUOTES); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -60,7 +60,7 @@
         <div class="movies-grid">
             <?php foreach ($landingMovies as $movie): ?>
                 <div class="movie-card">
-                    <h3><?php echo htmlspecialchars($movie['Title'], ENT_QUOTES, 'UTF-8'); ?></h3>
+                    <h3><?php echo htmlspecialchars_decode($movie['Title'], ENT_QUOTES); ?></h3>
                     <p>Display Order: <?php echo htmlspecialchars($movie['DisplayOrder'], ENT_QUOTES, 'UTF-8'); ?></p>
 
                     <!-- Update Display Order -->
