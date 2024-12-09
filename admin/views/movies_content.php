@@ -11,46 +11,60 @@
 <body>
     
 <a href="/dwp/admin/dashboard" class="back-to-dashboard"><img src="../images/back-button.png" alt=""></a>
-
 <h1 class="header">Manage Movies</h1>
 
-<!-- Add Movie Section -->
+<?php if (isset($_SESSION['message'])): ?>
+        <p><?php echo htmlspecialchars($_SESSION['message'], ENT_QUOTES, 'UTF-8'); ?></p>
+        <?php unset($_SESSION['message']); ?>
+<?php endif; ?>
+
+<?php if (isset($_SESSION['errors'])): ?>
+    <div class="error-messages">
+        <?php foreach ($_SESSION['errors'] as $error): ?>
+            <p class="error"><?php echo htmlspecialchars($error, ENT_QUOTES, 'UTF-8'); ?></p>
+        <?php endforeach; ?>
+        <?php unset($_SESSION['errors']); ?>
+    </div>
+<?php endif; ?>
+
 <h2 class="header">Add New Movie</h2>
 <form method="POST" enctype="multipart/form-data" class="movie-card">
 
-    <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
+    <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
 
     <label for="title">Title:</label>
-    <input type="text" name="title" required>
+    <input type="text" name="title" value="<?php echo htmlspecialchars($movie['Title'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" required>
 
     <label for="director">Director:</label>
-    <input type="text" name="director" required>
+    <input type="text" name="director" value="<?php echo htmlspecialchars($movie['Director'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" required>
 
     <label for="language">Language:</label>
-    <input type="text" name="language" required>
+    <input type="text" name="language" value="<?php echo htmlspecialchars($movie['Language'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" required>
 
     <label for="year">Year:</label>
-    <input type="number" name="year" required>
+    <input type="number" name="year" value="<?php echo htmlspecialchars($movie['Year'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" required>
 
     <label for="duration">Duration:</label>
-    <input type="time" name="duration" required>
+    <input type="time" name="duration" value="<?php echo htmlspecialchars($movie['Duration'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" required>
 
     <label for="rating">Rating:</label>
-    <input type="number" name="rating" required min="0" max="10">
+    <input type="number" name="rating" value="<?php echo htmlspecialchars($movie['Rating'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" required min="0" max="10">
 
     <label for="agelimit">Age Limit:</label>
-    <input type="number" name="agelimit" required>
+    <input type="number" name="agelimit" value="<?php echo htmlspecialchars($movie['AgeLimit'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" required min="0" max="18">
 
     <label for="description">Description:</label>
-    <textarea name="description" required></textarea>
+    <textarea name="description" required><?php echo htmlspecialchars($movie['Description'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
 
     <label for="trailerlink">Trailer Link:</label>
-    <input type="text" name="trailerlink" required placeholder="e.g., https://youtube.com/watch?v=...">
+    <input type="text" name="trailerlink" value="<?php echo htmlspecialchars($movie['TrailerLink'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" required placeholder="e.g., https://youtube.com/watch?v=...">
 
     <label for="genre_id">Genre:</label>
     <select name="genre_id" id="genre_id" required onchange="toggleOtherInput('genre_id', 'other_genre')">
         <?php foreach ($genres as $genre): ?>
-            <option value="<?php echo $genre['Genre_ID']; ?>"><?php echo htmlspecialchars($genre['Name']); ?></option>
+            <option value="<?php echo htmlspecialchars($genre['Genre_ID'], ENT_QUOTES, 'UTF-8'); ?>">
+                <?php echo htmlspecialchars($genre['Name'], ENT_QUOTES, 'UTF-8'); ?>
+            </option>
         <?php endforeach; ?>
         <option value="other">Other</option>
     </select>
@@ -59,30 +73,29 @@
     <label for="version_id">Version:</label>
     <select name="version_id" id="version_id" required onchange="toggleOtherInput('version_id', 'other_version')">
         <?php foreach ($versions as $version): ?>
-            <option value="<?php echo $version['Version_ID']; ?>"><?php echo htmlspecialchars($version['Format']); ?></option>
+            <option value="<?php echo htmlspecialchars($version['Version_ID'], ENT_QUOTES, 'UTF-8'); ?>">
+                <?php echo htmlspecialchars($version['Format'], ENT_QUOTES, 'UTF-8'); ?>
+            </option>
         <?php endforeach; ?>
         <option value="other">Other</option>
     </select>
     <input type="text" id="other_version" name="other_version" placeholder="Enter new version" style="display: none;">
 
-    <!-- Poster upload -->
-    <label for="image-<?php echo $movie['Movie_ID']; ?>">Upload New Movie Poster (required):</label>     
+    <label for="poster-upload">Upload New Movie Poster (required):</label>
     <input type="file" name="poster" accept="image/*" required id="poster-upload" onchange="displayFileName(event)">
     <label for="poster-upload">Choose Poster Image</label>
-    <div class="file-name" id="fileNameContainer"></div> <!-- Display file name here -->
+    <div class="file-name" id="fileNameContainer"></div>
 
-
-    <!-- Gallery upload (multiple files) -->
-    <label for="gallery-<?php echo $movie['Movie_ID']; ?>">Upload Gallery Images (required, min 1, max 5):</label>
+    <label for="gallery-upload">Upload Gallery Images (required, min 1, max 5):</label>
     <input type="file" name="gallery[]" accept="image/*" multiple id="gallery-upload" onchange="displayGalleryFileNames(event); validateFileCount(this);">
     <label for="gallery-upload">Choose Gallery Images</label>
-    <div class="file-name" id="galleryFileNamesContainer"></div> <!-- Display gallery file names here -->
+    <div class="file-name" id="galleryFileNamesContainer"></div>
 
     <br>
 
     <button type="submit" name="add_movie" class="add-button">Add Movie</button>
-
 </form>
+
 
 
 <!-- Existing Movies Section -->
@@ -96,31 +109,31 @@
 
                 <!-- Movie Details (title, director, etc.) -->
                 <label for="title">Title:</label>
-                <input type="text" name="title" value="<?php echo htmlspecialchars($movie['Title']); ?>" required>
+                <input type="text" name="title" value="<?php echo htmlspecialchars(htmlspecialchars_decode($movie['Title'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" required>
 
                 <label for="director">Director:</label>
-                <input type="text" name="director" value="<?php echo htmlspecialchars($movie['Director']); ?>" required>
+                <input type="text" name="director" value="<?php echo htmlspecialchars(htmlspecialchars_decode($movie['Director'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" required>
 
                 <label for="language">Language:</label>
-                <input type="text" name="language" value="<?php echo htmlspecialchars($movie['Language']); ?>" required>
+                <input type="text" name="language" value="<?php echo htmlspecialchars(htmlspecialchars_decode($movie['Language'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" required>
 
                 <label for="year">Year:</label>
-                <input type="number" name="year" value="<?php echo $movie['Year']; ?>" required>
+                <input type="number" name="year" value="<?php echo (int)$movie['Year']; ?>" required>
 
                 <label for="duration">Duration:</label>
-                <input type="time" name="duration" value="<?php echo $movie['Duration']; ?>" required>
+                <input type="time" name="duration" value="<?php echo htmlspecialchars(htmlspecialchars_decode($movie['Duration'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" required>
 
                 <label for="rating">Rating:</label>
-                <input type="number" name="rating" value="<?php echo $movie['Rating']; ?>" required min="0" max="10">
+                <input type="number" name="rating" value="<?php echo htmlspecialchars(htmlspecialchars_decode($movie['Rating'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" required min="0" max="10">
 
                 <label for="agelimit">Age Limit:</label>
-                <input type="number" name="agelimit" value="<?php echo $movie['AgeLimit']; ?>" required min="0" max="18">
+                <input type="number" name="agelimit" value="<?php echo htmlspecialchars(htmlspecialchars_decode($movie['AgeLimit'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" required min="0" max="18">
 
                 <label for="description">Description:</label>
-                <textarea name="description" required><?php echo htmlspecialchars($movie['Description']); ?></textarea>
+                <textarea name="description" required><?php echo htmlspecialchars(htmlspecialchars_decode($movie['Description'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?></textarea>
 
                 <label for="trailerlink">Trailer Link:</label>
-                <input type="text" name="trailerlink" value="<?php echo htmlspecialchars($movie['TrailerLink']); ?>" required placeholder="e.g., https://youtube.com/watch?v=...">
+                <input type="text" name="trailerlink" value="<?php echo htmlspecialchars(htmlspecialchars_decode($movie['TrailerLink'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" required placeholder="e.g., https://youtube.com/watch?v=...">
 
                 <!-- Genre Select -->
                 <label for="genre_id">Genre:</label>
@@ -128,7 +141,7 @@
                     <?php foreach ($genres as $genre): ?>
                         <option value="<?php echo $genre['Genre_ID']; ?>" 
                             <?php if ($genre['Genre_ID'] == $movie['Genre_ID']) echo 'selected'; ?>>
-                            <?php echo htmlspecialchars($genre['Name']); ?>
+                            <?php echo htmlspecialchars(htmlspecialchars_decode($genre['Name'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -139,7 +152,7 @@
                     <?php foreach ($versions as $version): ?>
                         <option value="<?php echo $version['Version_ID']; ?>" 
                             <?php if ($version['Version_ID'] == $movie['Version_ID']) echo 'selected'; ?>>
-                            <?php echo htmlspecialchars($version['Format']); ?>
+                            <?php echo htmlspecialchars(htmlspecialchars_decode($version['Format'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -147,16 +160,16 @@
                 <!-- Display uploaded poster image -->
                 <?php if (!empty($movie['ImageFileName'])): ?>
                     <div>
-                        <img src="../uploads/poster/<?php echo htmlspecialchars($movie['ImageFileName']); ?>" alt="<?php echo htmlspecialchars($movie['Title']); ?>" style="max-width: 100%; height: auto;">
+                        <img src="../uploads/poster/<?php echo htmlspecialchars(htmlspecialchars_decode($movie['ImageFileName'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars(htmlspecialchars_decode($movie['Title'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" style="max-width: 100%; height: auto;">
                     </div>
                 <?php else: ?>
                     <p>No image available for this movie.</p>
                 <?php endif; ?>
 
                 <label for="poster-<?php echo $movie['Movie_ID']; ?>">Upload New Movie Poster (required):</label>
-<input type="file" name="poster" accept="image/*" id="poster-<?php echo $movie['Movie_ID']; ?>" onchange="displayFileName(event, <?php echo $movie['Movie_ID']; ?>)"> 
-<label for="poster-<?php echo $movie['Movie_ID']; ?>" class="file-label">Choose New Poster</label>
-<div class="file-name" id="fileNameContainer-<?php echo $movie['Movie_ID']; ?>"></div>
+                <input type="file" name="poster" accept="image/*" id="poster-<?php echo $movie['Movie_ID']; ?>" onchange="displayFileName(event, <?php echo $movie['Movie_ID']; ?>)"> 
+                <label for="poster-<?php echo $movie['Movie_ID']; ?>" class="file-label">Choose New Poster</label>
+                <div class="file-name" id="fileNameContainer-<?php echo $movie['Movie_ID']; ?>"></div>
 
                 <!-- Display gallery images with delete checkboxes -->
                 <?php if (!empty($movie['GalleryImages'])): ?>
@@ -166,18 +179,13 @@
                         $galleryImages = explode(',', $movie['GalleryImages']);
                         foreach ($galleryImages as $galleryImage): ?>
                             <div style="display: flex; align-items: center;">
-                                <img src="../uploads/gallery/<?php echo htmlspecialchars($galleryImage); ?>" alt="<?php echo htmlspecialchars($movie['Title']); ?>" style="max-width: 100px; height: auto; margin: 5px;">
+                                <img src="../uploads/gallery/<?php echo htmlspecialchars(htmlspecialchars_decode($galleryImage, ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars(htmlspecialchars_decode($movie['Title'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" style="max-width: 100px; height: auto; margin: 5px;">
                                 <label>
-                                    <input type="checkbox" name="delete_gallery_images[]" value="<?php echo htmlspecialchars($galleryImage); ?>"> Delete
+                                    <input type="checkbox" name="delete_gallery_images[]" value="<?php echo htmlspecialchars(htmlspecialchars_decode($galleryImage, ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>"> Delete
                                 </label>
                             </div>
                         <?php endforeach; ?>
                     </div>
-                <?php endif; ?>
-                <?php if (!empty($movie['GalleryImages'])): ?>
-                    <?php $galleryImages = explode(',', $movie['GalleryImages']); ?>
-                <?php else: ?>
-                    <?php $galleryImages = []; ?>
                 <?php endif; ?>
 
                 <label for="gallery-<?php echo $movie['Movie_ID']; ?>">Upload Gallery Images (required, min 1, max 5 in total):</label>
@@ -196,6 +204,7 @@
         </div>
     <?php endforeach; ?>
 </div>
+
 
 <script src="/dwp/admin/assets/js/movies.js" defer></script>
 <script src="/dwp/includes/functions.js" defer></script>

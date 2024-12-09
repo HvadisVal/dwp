@@ -1,3 +1,18 @@
+document.querySelector(".add-button").addEventListener("click", function (e) {
+  var poster = document.querySelector('input[name="poster"]');
+  var gallery = document.querySelector('input[name="gallery[]"]');
+
+  if (!poster.files.length) {
+    alert("Please upload a poster image.");
+    e.preventDefault(); // Prevent form submission
+  }
+
+  if (!gallery.files.length) {
+    alert("Please upload at least one gallery image.");
+    e.preventDefault(); // Prevent form submission
+  }
+});
+
 function validateFileCount(input) {
   const maxFiles = 5;
   console.log(`Selected files: ${input.files.length}`); // Log the number of files selected
