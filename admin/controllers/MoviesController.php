@@ -31,58 +31,161 @@ class MoviesController {
 
     private function addMovie() {
         global $connection;
+        
+        $errors = [];
+        
+        // Sanitize inputs
+        $title = htmlspecialchars(trim($_POST['title']), ENT_QUOTES, 'UTF-8');
+        $director = htmlspecialchars(trim($_POST['director']), ENT_QUOTES, 'UTF-8');
+        $language = htmlspecialchars(trim($_POST['language']), ENT_QUOTES, 'UTF-8');
+        $year = (int)trim($_POST['year']);
+        $duration = trim($_POST['duration']);
+        $rating = (float)trim($_POST['rating']);
+        $description = htmlspecialchars(trim($_POST['description']), ENT_QUOTES, 'UTF-8');
+        $trailerlink = htmlspecialchars(trim($_POST['trailerlink']), ENT_QUOTES, 'UTF-8');
+        $agelimit = (int)trim($_POST['agelimit']);
+        
+        // Validation
+        if (!validateLettersOnly($director)) {
+            $errors[] = "Director should contain only letters and spaces.";
+        }
+        if (!validateLettersOnly($language)) {
+            $errors[] = "Language should contain only letters.";
+        }
+        if (!validateYear($year)) {
+            $errors[] = "Year must be a valid 4-digit number.";
+        }
+        if (!validateDuration($duration)) {
+            $errors[] = "Duration must be in HH:MM:SS format.";
+        }
+        if (!validateRating($rating)) {
+            $errors[] = "Rating must be a number between 1 and 10.";
+        }
+        if (!validateAgeLimit($agelimit)) {
+            $errors[] = "Age limit must be a number between 0 and 18.";
+        }
+        if (!validateYouTubeEmbedLink($trailerlink)) {
+            $errors[] = "Trailer link must start with 'https://www.youtube.com/embed/'.";
+        }
+    
+        // Check if poster image is uploaded
+        if (!isset($_FILES['poster']) || $_FILES['poster']['error'] === UPLOAD_ERR_NO_FILE) {
+            $errors[] = "Poster image is required.";
+        }
 
-        // Handle new genre
+        // Check if at least one gallery image is uploaded
+        if (!isset($_FILES['gallery']['name']) || count($_FILES['gallery']['name']) === 0) {
+            $errors[] = "At least one gallery image is required.";
+        }
+        
+        // If there are errors, return them to the form
+        if (!empty($errors)) {
+            $_SESSION['errors'] = $errors; // Store errors in session
+            $_SESSION['message'] = "Movie not added due to validation errors."; // Set failure message
+            header("Location: /dwp/admin/manage-movies"); // Redirect back to the form
+            exit();
+        }
+        
+        // Handle new genre and version
         $genreId = ($_POST['genre_id'] === 'other') ? $this->addGenre($_POST['other_genre']) : (int)$_POST['genre_id'];
-
-        // Handle new version
         $versionId = ($_POST['version_id'] === 'other') ? $this->addVersion($_POST['other_version']) : (int)$_POST['version_id'];
-
+        
         $movieData = [
-            htmlspecialchars(trim($_POST['title'])),
-            htmlspecialchars(trim($_POST['director'])),
-            htmlspecialchars(trim($_POST['language'])),
-            (int)trim($_POST['year']),
-            trim($_POST['duration']),
-            (float)trim($_POST['rating']),
-            htmlspecialchars(trim($_POST['description'])),
+            $title,
+            $director,
+            $language,
+            $year,
+            $duration,
+            $rating,
+            $description,
             $genreId,
             $versionId,
-            htmlspecialchars(trim($_POST['trailerlink'])),
-            htmlspecialchars(trim($_POST['agelimit']))
+            $trailerlink,
+            $agelimit
         ];
-
+        
+        // Insert movie data into the database
         if ($this->model->addMovie($movieData)) {
             $movieId = $connection->lastInsertId();
-
             // Handle image uploads
             $this->handleImageUploads($movieId, $connection);
-
             $_SESSION['message'] = "Movie added successfully!";
+            header("Location: /dwp/admin/manage-movies");
+            exit();
+        } else {
+            $_SESSION['message'] = "Movie not added!";
             header("Location: /dwp/admin/manage-movies");
             exit();
         }
     }
+    
+    
+    
 
     private function editMovie() {
         global $connection;
         
+        // Collect input values
         $movieId = (int)$_POST['movie_id'];
+        $title = htmlspecialchars(trim($_POST['title']));
+        $director = htmlspecialchars(trim($_POST['director']));
+        $language = htmlspecialchars(trim($_POST['language']));
+        $year = (int)trim($_POST['year']);
+        $duration = trim($_POST['duration']);
+        $rating = (float)trim($_POST['rating']);
+        $description = htmlspecialchars(trim($_POST['description']));
+        $genre_id = (int)$_POST['genre_id'];
+        $version_id = (int)$_POST['version_id'];
+        $trailerlink = htmlspecialchars(trim($_POST['trailerlink']));
+        $agelimit = (int)$_POST['agelimit'];
+        
+        // Validation
+        $errors = [];
+        if (!validateLettersOnly($director)) {
+            $errors[] = "Director should contain only letters and spaces.";
+        }
+        if (!validateLettersOnly($language)) {
+            $errors[] = "Language should contain only letters.";
+        }
+        if (!validateYear($year)) {
+            $errors[] = "Year must be a valid 4-digit number.";
+        }
+        if (!validateDuration($duration)) {
+            $errors[] = "Duration must be in HH:MM:SS format.";
+        }
+        if (!validateRating($rating)) {
+            $errors[] = "Rating must be a number between 1 and 10.";
+        }
+        if (!validateAgeLimit($agelimit)) {
+            $errors[] = "Age limit must be a number between 0 and 18.";
+        }
+        if (!validateYouTubeEmbedLink($trailerlink)) {
+            $errors[] = "Trailer link must start with 'https://www.youtube.com/embed/'.";
+        }
+    
+        // If there are errors, return with error messages
+        if (!empty($errors)) {
+            $_SESSION['errors'] = $errors;
+            header("Location: /dwp/admin/manage-movies?movie_id=" . $movieId); // Redirect to the form with error messages
+            exit();
+        }
+    
+        // Proceed with updating the movie if no validation errors
         $movieData = [
-            htmlspecialchars(trim($_POST['title'])),
-            htmlspecialchars(trim($_POST['director'])),
-            htmlspecialchars(trim($_POST['language'])),
-            (int)trim($_POST['year']),
-            trim($_POST['duration']),
-            (float)trim($_POST['rating']),
-            htmlspecialchars(trim($_POST['description'])),
-            (int)$_POST['genre_id'],
-            (int)$_POST['version_id'],
-            htmlspecialchars(trim($_POST['trailerlink'])),
-            htmlspecialchars(trim($_POST['agelimit'])),
+            $title,
+            $director,
+            $language,
+            $year,
+            $duration,
+            $rating,
+            $description,
+            $genre_id,
+            $version_id,
+            $trailerlink,
+            $agelimit,
             $movieId
         ];
-    
+        
         if ($this->model->updateMovie($movieData)) {
             // Handle poster replacement if a new one is uploaded
             if (isset($_FILES['poster']) && $_FILES['poster']['error'] === UPLOAD_ERR_OK) {
@@ -109,6 +212,7 @@ class MoviesController {
             exit();
         }
     }
+    
     
     
 
