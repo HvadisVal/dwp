@@ -1,6 +1,11 @@
 <?php
-session_start();
 
+// Start secure session
+session_start([
+    'cookie_secure' => true,
+    'cookie_httponly' => true,
+    'cookie_samesite' => 'Strict',
+]);
 function admin_logged_in() {
     return isset($_SESSION['admin_id']);
 }

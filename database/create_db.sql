@@ -180,6 +180,13 @@ CREATE TABLE Admin (
     Email VARCHAR(100),
     Password VARCHAR(255)
 );
+CREATE TABLE Login_Attempts (
+    Login_Attempts_Id INT AUTO_INCREMENT PRIMARY KEY,
+    Ip_Address VARCHAR(45) NOT NULL,
+    Attempt_Time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Success BOOLEAN NOT NULL DEFAULT 0,
+    Blocked_Until TIMESTAMP NULL
+);
 
 -- Media Table
 CREATE TABLE Media (
