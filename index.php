@@ -73,11 +73,6 @@ $routes = [
 
 // Define a function to handle the routing process
 function routeRequest($path, $routes, $connection) {
-    // Check for login route
-    if ($path == 'admin/login') {
-        loadController('LoginController', $connection, 'login');
-        return;
-    }
 
     // Check for dashboard route
     if ($path == 'admin/dashboard') {

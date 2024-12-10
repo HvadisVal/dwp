@@ -23,7 +23,16 @@ function validate_csrf_token($token) {
 function refresh_csrf_token() {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
-
+function logLoginAttempt($email, $ip, $success) {
+    $status = $success ? 'Success' : 'Failure';
+    file_put_contents('./logs/login_attempts.log', sprintf(
+        "[%s] Email: %s, IP: %s, Status: %s\n",
+        date('Y-m-d H:i:s'),
+        $email,
+        $ip,
+        $status
+    ), FILE_APPEND);
+}
 // Function to validate input for letters only
 function validateLettersOnly($input) {
     return preg_match('/^[a-zA-Z\s]+$/', $input);
