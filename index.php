@@ -171,6 +171,21 @@ function routeRequest($path, $routes, $connection) {
         $controller->submitForm();
         exit;
     }
+
+    if ($path === 'user/forgot-password') {
+        require_once 'user/controllers/ForgotPasswordController.php';
+        $controller = new ForgotPasswordController($connection);
+        $controller->handleRequest();
+        exit;
+    }
+    
+    if ($path === 'user/reset-password') {
+        require_once 'user/controllers/ResetPasswordController.php';
+        $controller = new ResetPasswordController($connection);
+        $controller->handleRequest();
+        exit;
+    }
+
     
      // Handle other dynamic routes based on the $routes array
      if (array_key_exists($path, $routes)) {
