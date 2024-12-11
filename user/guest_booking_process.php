@@ -12,10 +12,12 @@ $booking = $_SESSION['booking'] ?? [];
 $selectedSeats = array_unique($_SESSION['selectedSeats'] ?? []); // Remove duplicates
 $selectedTickets = $_SESSION['selectedTickets'] ?? [];
 $userId = $_SESSION['user_id'] ?? null;
+$guestUserId = $_SESSION['guest_user_id'] ?? null; // For guest users
 $discountedPrice = $_SESSION['totalPrice'] ?? 0;
 
-if (!$userId) {
-    die("No logged-in user detected. Please log in to continue.");
+// Determine if it's a logged-in user or a guest user
+if (!$userId && !$guestUserId) {
+    die("No logged-in user or guest detected. Please log in or continue as a guest.");
 }
 
 // Database connection
@@ -66,6 +68,7 @@ try {
         INSERT INTO Booking (
             Movie_ID,
             User_ID,
+            GuestUser_ID,
             BookingDate,
             NumberOfTickets,
             PaymentStatus,
@@ -73,6 +76,7 @@ try {
         ) VALUES (
             :movie_id,
             :user_id,
+            :guest_user_id,
             CURDATE(),
             :number_of_tickets,
             'Completed',
@@ -82,6 +86,7 @@ try {
     $numberOfTickets = array_sum($selectedTickets);
     $stmt->bindParam(':movie_id', $booking['movie_id'], PDO::PARAM_INT);
     $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+    $stmt->bindParam(':guest_user_id', $guestUserId, PDO::PARAM_INT); // If it's a guest, this value will be used
     $stmt->bindParam(':number_of_tickets', $numberOfTickets, PDO::PARAM_INT);
     $stmt->bindParam(':total_price', $discountedPrice, PDO::PARAM_STR);
 
@@ -111,7 +116,7 @@ try {
         // Save Invoice_ID in session for further use (e.g., PDF generation)
         $_SESSION['invoice_id'] = $invoiceId;
 
-        // Group ticket types by seat to prevent duplication
+        // Group ticket types by seat number to prevent duplication
         $seatTicketTypes = [];
         foreach ($selectedSeats as $index => $seat) {
             $seatTicketTypes[$seat][] = $selectedTickets[$index]; // Associate ticket types with each seat
@@ -168,7 +173,7 @@ try {
 
         // After processing, clear the session and redirect
         unset($_SESSION['booking'], $_SESSION['selectedSeats'], $_SESSION['selectedTickets'], $_SESSION['totalPrice']);
-        header("Location: /dwp/user/profiles?success=1");
+        header("Location: /dwp/frontend/controllers/GuestCheckoutController.php");
         exit();
     } else {
         echo "<p>Failed to save booking.</p>";

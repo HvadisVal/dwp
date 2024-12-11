@@ -1,15 +1,15 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/dbcon.php';
+require_once("./includes/connection.php");
 
 class InvoiceModel {
-    private $db;
+    private $connection;
 
-    public function __construct() {
-        $this->db = dbCon("root", "");
+    public function __construct($connection) {
+        $this->connection = $connection;
     }
 
     public function getInvoiceDetails($invoiceId, $isGuest = false) {
-        $query = "
+        $sql = "
             SELECT i.Invoice_ID, i.InvoiceDate, i.TotalAmount, i.InvoiceStatus,
                    b.BookingDate, b.NumberOfTickets,
                    m.Title AS MovieTitle, s.ShowDate, s.ShowTime, c.Name AS CinemaHall,
@@ -23,20 +23,21 @@ class InvoiceModel {
             JOIN CinemaHall c ON s.CinemaHall_ID = c.CinemaHall_ID
             WHERE i.Invoice_ID = :invoice_id
         ";
-
+    
         // Add guest-specific condition
         if ($isGuest) {
-            $query .= " AND b.Guest_Email IS NOT NULL";
+            $sql .= " AND b.GuestUser_ID IS NOT NULL";  // Corrected to use GuestUser_ID
         } else {
-            $query .= " AND b.User_ID IS NOT NULL";
+            $sql .= " AND b.User_ID IS NOT NULL";
         }
-
-        $query .= " GROUP BY i.Invoice_ID";
-
-        $stmt = $this->db->prepare($query);
+    
+        $sql .= " GROUP BY i.Invoice_ID";
+    
+        $stmt = $this->connection->prepare($sql);
         $stmt->bindParam(':invoice_id', $invoiceId, PDO::PARAM_INT);
         $stmt->execute();
-
+    
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    
 }

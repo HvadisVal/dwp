@@ -1,15 +1,15 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/dbcon.php';
+require_once("../../includes/connection.php");
 
 class GuestCheckoutModel {
-    private $db;
+    private $connection;
 
-    public function __construct() {
-        $this->db = dbCon("root", ""); // Update credentials if necessary
+    public function __construct($connection) {
+        $this->connection = $connection;
     }
 
     public function getInvoiceDetails($invoiceId) {
-        $query = "
+        $sql = "
             SELECT i.Invoice_ID, i.InvoiceDate, i.TotalAmount, i.InvoiceStatus,
                    b.BookingDate, b.NumberOfTickets,
                    m.Title AS MovieTitle, s.ShowDate, s.ShowTime, c.Name AS CinemaHall,
@@ -26,22 +26,17 @@ class GuestCheckoutModel {
         ";
     
         try {
-            $stmt = $this->db->prepare($query);
+            $stmt = $this->connection->prepare($sql);
             $stmt->bindParam(':invoice_id', $invoiceId, PDO::PARAM_INT);
             $stmt->execute();
     
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
     
-            // Debug result
-            echo "<pre>";
-            print_r($result);
-            echo "</pre>";
-            exit;
-    
-            return $result;
+            return $result ? $result : null; // Return null if no result
         } catch (PDOException $e) {
-            die("Database error: " . $e->getMessage());
+            // Optionally log the error and return null
+            error_log("Database error: " . $e->getMessage());
+            return null;
         }
     }
-    
 }
