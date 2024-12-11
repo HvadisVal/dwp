@@ -61,7 +61,7 @@ $navbar->handleRequest();
                                     </a>
                                 <?php endforeach; ?>
                             <?php else: ?>
-                                <div class="no-showtimes"></div>
+                                <div class="no-showtimes">No screenings available</div>
                             <?php endif; ?>
                         </div>
                     <?php endforeach; ?>

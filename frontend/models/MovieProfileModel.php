@@ -1,14 +1,15 @@
 <?php
 require_once("./includes/connection.php");
 
-class MovieModel {
+class MovieProfileModel {
     private $connection;
 
     public function __construct($connection) {
         $this->connection = $connection;
     }
+
     public function getMovieDetails($movieId) {
-        // Fetch movie details with showtimes, poster, and gallery images
+        // SQL query to fetch movie details, showtimes, poster, and gallery images
         $sql = "
             SELECT m.*, 
                    s.CinemaHall_ID, 
@@ -25,11 +26,16 @@ class MovieModel {
             LEFT JOIN Media media ON m.Movie_ID = media.Movie_ID
             WHERE m.Movie_ID = :movieId
             GROUP BY m.Movie_ID, s.ShowDate, s.ShowTime
-            ORDER BY s.ShowDate, s.ShowTime";
+            ORDER BY s.ShowDate, s.ShowTime
+        ";
 
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bindParam(':movieId', $movieId);
+        $stmt = $this->connection->prepare($sql);
+        $stmt->bindParam(':movieId', $movieId);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
+?>
+
+
+
