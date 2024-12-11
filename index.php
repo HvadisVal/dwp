@@ -148,16 +148,6 @@ function routeRequest($path, $routes, $connection) {
         exit;
     }
     
-  /*   if ($path === 'user/booking_process') {
-        require_once 'user/controllers/BookingProcessController.php';
-        $controller = new BookingProcessController($connection);
-        $controller->handleRequest();
-        exit;
-    } */
-    
-    
-    
-
      // Handle other dynamic routes based on the $routes array
      if (array_key_exists($path, $routes)) {
         // Dynamically include the controller
@@ -187,9 +177,7 @@ function loadController($controllerName, $connection, $methodName = 'handleReque
 // Example usage (you would call this function based on the current request path)
 routeRequest($path, $routes, $connection);
 // Footer
-/* require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/controllers/FooterController.php';
-$footer = new FooterController($connection);
-$footer->handleRequest(); */
+
 // Pages where footer should appear
 $pagesWithFooter = [
     'landing',
