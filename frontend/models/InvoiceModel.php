@@ -5,10 +5,10 @@ class InvoiceModel {
     private $db;
 
     public function __construct() {
-        $this->db = dbCon("root", ""); // Update with actual credentials
+        $this->db = dbCon("root", "");
     }
 
-    public function getInvoiceDetails($invoiceId) {
+    public function getInvoiceDetails($invoiceId, $isGuest = false) {
         $query = "
             SELECT i.Invoice_ID, i.InvoiceDate, i.TotalAmount, i.InvoiceStatus,
                    b.BookingDate, b.NumberOfTickets,
@@ -22,8 +22,16 @@ class InvoiceModel {
             JOIN Screening s ON t.Screening_ID = s.Screening_ID
             JOIN CinemaHall c ON s.CinemaHall_ID = c.CinemaHall_ID
             WHERE i.Invoice_ID = :invoice_id
-            GROUP BY i.Invoice_ID
         ";
+
+        // Add guest-specific condition
+        if ($isGuest) {
+            $query .= " AND b.Guest_Email IS NOT NULL";
+        } else {
+            $query .= " AND b.User_ID IS NOT NULL";
+        }
+
+        $query .= " GROUP BY i.Invoice_ID";
 
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':invoice_id', $invoiceId, PDO::PARAM_INT);
