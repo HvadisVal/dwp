@@ -74,5 +74,3 @@ $navbar->handleRequest();
 </div>
 
 
-
-
