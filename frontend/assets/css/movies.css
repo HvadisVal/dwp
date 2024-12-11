@@ -144,3 +144,29 @@ body {
     flex: 1 1 100%;
   }
 }
+
+
+.week-navigation {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.nav-button {
+  background-color: #242424;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1em;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.nav-button:hover {
+  background-color: #444;
+}
+
