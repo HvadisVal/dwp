@@ -199,6 +199,15 @@ CREATE TABLE Login_Attempts (
     Blocked_Until TIMESTAMP NULL
 );
 
+CREATE TABLE PasswordResets (
+    Reset_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Email VARCHAR(255) NOT NULL,
+    Token VARCHAR(255) NOT NULL,
+    Expiry DATETIME NOT NULL,
+    INDEX (Email)
+);
+
+
 -- Media Table
 CREATE TABLE Media (
     Media_ID INT PRIMARY KEY AUTO_INCREMENT,
