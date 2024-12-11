@@ -24,7 +24,7 @@ class ProfileController {
             $bookings = $this->model->getBookingHistory($userId);
             $invoices = $this->model->getInvoices($userId);
     
-            require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/user/views/profile/profile_content.php';
+            require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/user/views/profiles/profile_content.php';
         } catch (Exception $e) {
             die("Error: " . $e->getMessage());
         }
