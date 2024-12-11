@@ -25,6 +25,7 @@ $isLoggedIn = isset($_SESSION['user_id']); // Check login state
             <a href="/dwp/news">NEWS</a>
             <a href="/dwp/movies">MOVIES</a>
             <a href="/dwp/about">ABOUT US</a>
+            <a href="/dwp/contact">CONTACT US</a>
         </div>
         <div class="nav-actions">
             <?php if ($isLoggedIn): ?>
