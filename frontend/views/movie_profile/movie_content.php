@@ -110,3 +110,8 @@ $navbar->handleRequest();
 <script src="/dwp/frontend/assets/js/movie_profile.js"></script>
 </body>
 </html>
+
+
+
+
+
