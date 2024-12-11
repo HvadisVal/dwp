@@ -174,6 +174,17 @@ CREATE TABLE Company (
     Location VARCHAR(255)
 ); 
 
+-- Messages Table
+CREATE TABLE ContactMessages (
+    Message_ID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(255),
+    Email VARCHAR(255),
+    Subject VARCHAR(255),
+    Message TEXT,
+    Submitted_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
 -- Admin Table
 CREATE TABLE Admin (
     Admin_ID INT PRIMARY KEY AUTO_INCREMENT,
