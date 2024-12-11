@@ -157,6 +157,20 @@ function routeRequest($path, $routes, $connection) {
         $controller->handleRequest();
         exit;
     }
+
+    if ($path === 'contact') {
+        require_once 'frontend/controllers/ContactController.php';
+        $controller = new ContactController($connection);
+        $controller->showForm();
+        exit;
+    }
+    
+    if ($path === 'contact/submit') {
+        require_once 'frontend/controllers/ContactController.php';
+        $controller = new ContactController($connection);
+        $controller->submitForm();
+        exit;
+    }
     
      // Handle other dynamic routes based on the $routes array
      if (array_key_exists($path, $routes)) {
