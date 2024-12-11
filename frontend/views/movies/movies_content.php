@@ -72,5 +72,3 @@ $navbar->handleRequest();
         <?php endforeach; ?>
     </div>
 </div>
-
-
