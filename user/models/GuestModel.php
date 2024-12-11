@@ -8,14 +8,14 @@ class GuestModel {
 
     public function createGuest($firstname, $lastname, $email, $phone) {
         try {
-            $stmt = $this->db->prepare("INSERT INTO GuestUser (Firstname, Lastname, Email, TelephoneNumber) VALUES (:firstname, :lastname, :email, :phone)");
+            $stmt = $this->connection->prepare("INSERT INTO GuestUser (Firstname, Lastname, Email, TelephoneNumber) VALUES (:firstname, :lastname, :email, :phone)");
             $stmt->bindParam(':firstname', $firstname);
             $stmt->bindParam(':lastname', $lastname);
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':phone', $phone);
-
+    
             if ($stmt->execute()) {
-                return $this->db->lastInsertId();
+                return $this->connection->lastInsertId();
             } else {
                 return false;
             }
@@ -23,4 +23,5 @@ class GuestModel {
             throw new Exception("Error creating guest: " . $e->getMessage());
         }
     }
+    
 }

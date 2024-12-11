@@ -4,8 +4,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/models/InvoiceModel.php'
 class InvoiceController {
     private $model;
 
-    public function __construct() {
-        $this->model = new InvoiceModel();
+    public function __construct($connection) {
+        $this->model = new InvoiceModel($connection);
     }
 
     public function handleRequest() {
@@ -15,7 +15,10 @@ class InvoiceController {
             die("Invoice not found.");
         }
 
-        $invoice = $this->model->getInvoiceDetails($invoiceId);
+        // Check if the invoice belongs to a guest user
+        $isGuest = isset($_GET['guest']) && $_GET['guest'] == 'true';  // Add this line to check for guest query parameter
+
+        $invoice = $this->model->getInvoiceDetails($invoiceId, $isGuest);
 
         if (!$invoice) {
             die("Invoice not found.");
