@@ -73,7 +73,17 @@ $routes = [
 
 // Define a function to handle the routing process
 function routeRequest($path, $routes, $connection) {
+    // Check if the path is an admin page
+    if (strpos($path, 'admin/') === 0 && $path !== 'admin/login') {
+        // Start session and include admin session management
+        require_once("./includes/admin_session.php"); // Include admin session management
 
+        // Use admin session function to confirm the admin is logged in
+        if (!admin_logged_in()) {
+            header('Location: /dwp/admin/login'); // Redirect to login if not logged in
+            exit;
+        }
+    }
     // Check for dashboard route
     if ($path == 'admin/dashboard') {
         loadController('DashboardController', $connection, 'getAdminEmail');
