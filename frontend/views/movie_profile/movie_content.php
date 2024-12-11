@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($movieDetails['Title']); ?> - Movie Details</title>
+    <title><?= htmlspecialchars_decode($movieDetails['Title']); ?> - Movie Details</title>
     <link rel="stylesheet" href="/dwp/frontend/assets/css/movie_profile.css">
 </head>
 <body>
@@ -21,23 +21,23 @@ $navbar->handleRequest();
             <?php if (!empty($movieDetails['PosterFiles'])): ?>
                 <div class="movie-poster">
                     <?php foreach ($movieDetails['PosterFiles'] as $imagePath): ?>
-                        <img src="<?= "./uploads/poster/" . htmlspecialchars($imagePath); ?>" alt="<?= htmlspecialchars($movieDetails['Title']); ?>" class="poster">
+                        <img src="<?= "./uploads/poster/" . htmlspecialchars($imagePath); ?>" alt="<?= htmlspecialchars_decode($movieDetails['Title']); ?>" class="poster">
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
 
             <!-- Movie Details (Title, Description, Director, etc.) -->
             <div class="movie-details">
-                <h4><?= htmlspecialchars($movieDetails['Title']); ?></h4>
-                <p><strong>Duration:</strong> <?= htmlspecialchars($movieDetails['Duration']); ?></p>
-                <p><strong>Allowed for children over</strong> <?= htmlspecialchars(string: $movieDetails['AgeLimit']); ?> years</p>
-                <p><strong>Rating:</strong> <?= htmlspecialchars(string: $movieDetails['Rating']); ?> </p>
-                <p><strong>Director:</strong> <?= htmlspecialchars($movieDetails['Director']); ?></p>
-                <p><strong>Language:</strong> <?= htmlspecialchars($movieDetails['Language']); ?></p>
-                <p><strong>Year:</strong> <?= htmlspecialchars($movieDetails['Year']); ?></p>
+                <h4><?= htmlspecialchars_decode($movieDetails['Title']); ?></h4>
+                <p><strong>Duration:</strong> <?= htmlspecialchars_decode($movieDetails['Duration']); ?></p>
+                <p><strong>Allowed for children over</strong> <?= htmlspecialchars_decode(string: $movieDetails['AgeLimit']); ?> years</p>
+                <p><strong>Rating:</strong> <?= htmlspecialchars_decode(string: $movieDetails['Rating']); ?> </p>
+                <p><strong>Director:</strong> <?= htmlspecialchars_decode($movieDetails['Director']); ?></p>
+                <p><strong>Language:</strong> <?= htmlspecialchars_decode($movieDetails['Language']); ?></p>
+                <p><strong>Year:</strong> <?= htmlspecialchars_decode($movieDetails['Year']); ?></p>
                 <p><strong>Description:</strong> 
-                    <span id="short-description"><?= htmlspecialchars(substr($movieDetails['Description'], 0, 200)); ?>...</span>
-                    <span id="full-description" style="display: none;"><?= nl2br(htmlspecialchars($movieDetails['Description'])); ?></span>
+                    <span id="short-description"><?= htmlspecialchars_decode(substr($movieDetails['Description'], 0, 200)); ?>...</span>
+                    <span id="full-description" style="display: none;"><?= nl2br(htmlspecialchars_decode($movieDetails['Description'])); ?></span>
                     <a href="javascript:void(0);" id="expand-description" onclick="toggleDescription()">Read more</a>
                 </p>
 
@@ -64,7 +64,7 @@ $navbar->handleRequest();
     <h4>Watch the Trailer</h4>
     <div class="trailer-container">
         <iframe width="560" height="315" 
-                src="<?= nl2br(htmlspecialchars($movieDetails['TrailerLink'])); ?>" 
+                src="<?= nl2br(htmlspecialchars_decode($movieDetails['TrailerLink'])); ?>" 
                 title="YouTube video player" 
                 frameborder="0" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
@@ -89,9 +89,9 @@ $navbar->handleRequest();
                 <?php if (isset($movieDetails['Showtimes'][$date])): ?>
                     <?php foreach ($movieDetails['Showtimes'][$date] as $showtime): ?>
                         <a href="/dwp/frontend/controllers/initialize_booking.php?movie_id=<?= htmlspecialchars($movieDetails['Movie_ID']); ?>&cinema_hall_id=<?= htmlspecialchars($showtime['CinemaHall_ID']); ?>&time=<?= urlencode($showtime['ShowTime']); ?>&date=<?= urlencode($date); ?>" class="showtime-card">
-    <h6><?= htmlspecialchars($showtime['CinemaHall_Name']); ?></h6>
-    <h6><?= date("g:i a", strtotime($showtime['ShowTime'])); ?></h6>
-    <div class="version"><?= htmlspecialchars($showtime['Version'] ?? 'Standard'); ?></div>
+                        <h6><?= htmlspecialchars($showtime['CinemaHall_Name']); ?></h6>
+                        <h6><?= date("g:i a", strtotime($showtime['ShowTime'])); ?></h6>
+                        <div class="version"><?= htmlspecialchars_decode($showtime['Version'] ?? 'Standard'); ?></div>
 </a>
 
 

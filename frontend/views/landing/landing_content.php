@@ -17,15 +17,15 @@ $navbar->handleRequest();
 
 <div class="hero">
     <?php if (!empty($landingMovies)): ?>
-        <img src="uploads/gallery/<?php echo htmlspecialchars($landingMovies[0]['FileName']); ?>" alt="<?php echo htmlspecialchars($landingMovies[0]['Title']); ?>">
+        <img src="uploads/gallery/<?php echo htmlspecialchars_decode($landingMovies[0]['FileName']); ?>" alt="<?php echo htmlspecialchars_decode($landingMovies[0]['Title']); ?>">
         <div class="hero-content">
-            <h1><?php echo htmlspecialchars($landingMovies[0]['Title']); ?></h1>
+            <h1><?php echo htmlspecialchars_decode($landingMovies[0]['Title']); ?></h1>
             <?php if (empty($landingMovies[0]['FirstScreeningDate'])): ?>
                 <p>Coming Soon</p>
             <?php else: ?>
-                <p>From: <?php echo date('F j, Y', strtotime($landingMovies[0]['FirstScreeningDate'])); ?></p>
+                <p>From: <?php echo htmlspecialchars_decode( date('F j, Y', strtotime($landingMovies[0]['FirstScreeningDate']))); ?></p>
             <?php endif; ?>
-            <a href="/dwp/movie?movie_id=<?php echo $landingMovies[0]['Movie_ID']; ?>" class="book-ticket">Read more</a>
+            <a href="/dwp/movie?movie_id=<?php echo htmlspecialchars_decode( $landingMovies[0]['Movie_ID']); ?>" class="book-ticket">Read more</a>
         </div>
     <?php else: ?>
         <p>No movies available to display.</p>
@@ -36,10 +36,10 @@ $navbar->handleRequest();
 <div class="info-cards">
 <?php if (!empty($landingMovies)): ?>
     <div class="info-card">
-        <img src="uploads/gallery/<?php echo htmlspecialchars($landingMovies[0]['FileName']); ?>" alt="<?php echo htmlspecialchars($landingMovies[0]['Title']); ?>">
+        <img src="uploads/gallery/<?php echo htmlspecialchars_decode($landingMovies[0]['FileName']); ?>" alt="<?php echo htmlspecialchars_decode($landingMovies[0]['Title']); ?>">
         <div class="info-card-content">
                 <h3>Description</h3>
-                <p><?php echo htmlspecialchars($landingMovies[0]['Description']); ?></p>
+                <p><?php echo htmlspecialchars_decode($landingMovies[0]['Description']); ?></p>
             </div>
         </div>
         <?php else: ?>
@@ -53,7 +53,7 @@ $navbar->handleRequest();
     <div class="news-slider">
         <h2>Film News</h2>
         <div class="slider">
-            <?php echo $newsHTML; ?>
+            <?php echo htmlspecialchars_decode($newsHTML); ?>
         </div>
         <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
         <button class="next" onclick="moveSlide(1)">&#10095;</button>
@@ -67,8 +67,8 @@ $navbar->handleRequest();
             <select id="select-date" class="filter-dropdown">
                 <option value="" disabled selected>Select date</option>
                 <?php foreach ($dates as $date): ?>
-                    <option value="<?php echo htmlspecialchars($date['ShowDate']); ?>">
-                        <?php echo htmlspecialchars(date("F j, Y", strtotime($date['ShowDate']))); ?>
+                    <option value="<?php echo htmlspecialchars_decode($date['ShowDate']); ?>">
+                        <?php echo htmlspecialchars_decode(date("F j, Y", strtotime($date['ShowDate']))); ?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -77,8 +77,8 @@ $navbar->handleRequest();
             <select id="select-movie" class="filter-dropdown">
                 <option value="" disabled selected>Select movie</option>
                 <?php foreach ($movies as $movie): ?>
-                    <option value="<?php echo htmlspecialchars($movie['Movie_ID']); ?>">
-                        <?php echo htmlspecialchars($movie['Title']); ?>
+                    <option value="<?php echo htmlspecialchars_decode($movie['Movie_ID']); ?>">
+                        <?php echo htmlspecialchars_decode($movie['Title']); ?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -87,8 +87,8 @@ $navbar->handleRequest();
             <select id="select-version" class="filter-dropdown">
                 <option value="" disabled selected>Select version</option>
                 <?php foreach ($versions as $version): ?>
-                    <option value="<?php echo htmlspecialchars($version['Version_ID']); ?>">
-                        <?php echo htmlspecialchars($version['Format']); ?>
+                    <option value="<?php echo htmlspecialchars_decode($version['Version_ID']); ?>">
+                        <?php echo htmlspecialchars_decode($version['Format']); ?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -99,15 +99,15 @@ $navbar->handleRequest();
     <div class="movie-grid">
         <?php foreach ($movies as $movie): ?>
             <div class="movie-card">
-                <a href="/dwp/movie?movie_id=<?php echo htmlspecialchars($movie['Movie_ID']); ?>">
+                <a href="/dwp/movie?movie_id=<?php echo htmlspecialchars_decode($movie['Movie_ID']); ?>">
                     <?php if (!empty($movie['FileName'])): ?>
-                        <img src="uploads/poster/<?php echo htmlspecialchars($movie['FileName']); ?>" 
-                             alt="<?php echo htmlspecialchars($movie['Title']); ?>" 
+                        <img src="uploads/poster/<?php echo htmlspecialchars_decode($movie['FileName']); ?>" 
+                             alt="<?php echo htmlspecialchars_decode($movie['Title']); ?>" 
                              style="width: 100%; border-radius: 8px; margin-bottom: 10px;">
                     <?php else: ?>
                         <p>No Image Available</p>
                     <?php endif; ?>
-                    <p><?php echo htmlspecialchars($movie['Title']); ?></p>
+                    <p><?php echo htmlspecialchars_decode($movie['Title']); ?></p>
                 </a>
             </div>
         <?php endforeach; ?>
@@ -118,7 +118,7 @@ $navbar->handleRequest();
 
     <section class="about">
         <h2>About Us</h2>
-        <p><?php echo htmlspecialchars($shortDescription); ?>...</p>
+        <p><?php echo htmlspecialchars_decode($shortDescription); ?>...</p>
         <div class="readMore">
             <a href="/dwp/about"><p>Read More</p></a>
         </div>

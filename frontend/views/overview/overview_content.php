@@ -16,18 +16,18 @@
 
         <!-- Movie Details Section -->
         <div class="movie-details">
-            <h5>Movie: <?= htmlspecialchars($movie['Title'] ?? 'N/A'); ?></h5>
-            <p><strong>Duration:</strong> <?= htmlspecialchars($movie['Duration'] ?? 'N/A'); ?></p>
-            <p><strong>Rating:</strong> <?= htmlspecialchars($movie['Rating'] ?? 'N/A'); ?> / 10</p>
-            <p><strong>Cinema Hall:</strong> Hall <?= htmlspecialchars($cinema_hall_id); ?></p>
-            <p><strong>Showtime:</strong> <?= htmlspecialchars($showtime); ?></p>
+            <h5>Movie: <?= htmlspecialchars_decode($movie['Title'] ?? 'N/A'); ?></h5>
+            <p><strong>Duration:</strong> <?= htmlspecialchars_decode($movie['Duration'] ?? 'N/A'); ?></p>
+            <p><strong>Rating:</strong> <?= htmlspecialchars_decode($movie['Rating'] ?? 'N/A'); ?> / 10</p>
+            <p><strong>Cinema Hall:</strong> Hall <?= htmlspecialchars_decode($cinema_hall_id); ?></p>
+            <p><strong>Showtime:</strong> <?= htmlspecialchars_decode($showtime); ?></p>
         </div>
 
         <!-- Order Summary -->
         <div class="order-summary">
             <h5>Order Summary</h5>
             <?php foreach ($ticketDetails as $ticket): ?>
-                <p><?= htmlspecialchars($ticket['quantity']) ?> x <?= htmlspecialchars($ticket['type']) ?></p>
+                <p><?= htmlspecialchars_decode($ticket['quantity']) ?> x <?= htmlspecialchars_decode($ticket['type']) ?></p>
             <?php endforeach; ?>
             <p><strong>Total Price: DKK <?= number_format($totalPrice, 2); ?></strong></p>
         </div>
