@@ -18,6 +18,7 @@
         <p><strong>Cinema Hall:</strong> <?= htmlspecialchars($invoice['CinemaHall']); ?></p>
         <p><strong>Number of Tickets:</strong> <?= htmlspecialchars($invoice['NumberOfTickets']); ?></p>
         <p><strong>Seats:</strong> <?= htmlspecialchars($invoice['Seats']); ?></p>
+        <p><strong>Total Price:</strong> DKK <?= number_format($invoice['TotalPrice'], 2); ?></p>
 
 
         <!-- Invoice Details -->

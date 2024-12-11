@@ -12,16 +12,36 @@ $booking = $_SESSION['booking'] ?? [];
 $selectedSeats = array_unique($_SESSION['selectedSeats'] ?? []); // Remove duplicates
 $selectedTickets = $_SESSION['selectedTickets'] ?? [];
 $userId = $_SESSION['user_id'] ?? null;
-$discountedPrice = $_SESSION['totalPrice'] ?? 0;
+$guestUserId = $_SESSION['guest_user_id'] ?? null; // For guest users
+$totalPrice = $_SESSION['totalPrice'] ?? 0; // Original total price
+$couponCode = $_SESSION['couponCode'] ?? null;
 
-if (!$userId) {
-    die("No logged-in user detected. Please log in to continue.");
+// Determine if it's a logged-in user or a guest user
+if (!$userId && !$guestUserId) {
+    die("No logged-in user or guest detected. Please log in or continue as a guest.");
 }
 
 // Database connection
 $dbCon = dbCon($user, $pass);
 
 try {
+    // Retrieve Coupon_ID if a coupon is applied
+    $couponId = null; // Default to NULL
+    $discountedPrice = $totalPrice; // Default to original total price
+
+    if (!empty($couponCode)) {
+        $couponStmt = $dbCon->prepare("SELECT Coupon_ID, DiscountAmount FROM Coupon WHERE CouponCode = :coupon_code");
+        $couponStmt->bindParam(':coupon_code', $couponCode, PDO::PARAM_STR);
+        $couponStmt->execute();
+        $couponResult = $couponStmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($couponResult) {
+            $couponId = $couponResult['Coupon_ID']; // Assign the valid Coupon_ID
+            $discountAmount = $couponResult['DiscountAmount'];
+            $discountedPrice = max(0, $totalPrice - $discountAmount); // Apply discount
+        }
+    }
+
     // Check if selected seats are already booked
     $seatPlaceholders = [];
     foreach ($selectedSeats as $index => $seat) {
@@ -63,30 +83,36 @@ try {
 
     // Insert booking details
     $stmt = $dbCon->prepare("
-        INSERT INTO Booking (
-            Movie_ID,
-            User_ID,
-            BookingDate,
-            NumberOfTickets,
-            PaymentStatus,
-            TotalPrice
-        ) VALUES (
-            :movie_id,
-            :user_id,
-            CURDATE(),
-            :number_of_tickets,
-            'Completed',
-            :total_price
-        )
-    ");
-    $numberOfTickets = array_sum($selectedTickets);
-    $stmt->bindParam(':movie_id', $booking['movie_id'], PDO::PARAM_INT);
-    $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
-    $stmt->bindParam(':number_of_tickets', $numberOfTickets, PDO::PARAM_INT);
-    $stmt->bindParam(':total_price', $discountedPrice, PDO::PARAM_STR);
+    INSERT INTO Booking (
+        Movie_ID,
+        User_ID,
+        GuestUser_ID,
+        BookingDate,
+        NumberOfTickets,
+        PaymentStatus,
+        TotalPrice,
+        Coupon_ID
+    ) VALUES (
+        :movie_id,
+        :user_id,
+        :guest_user_id,
+        CURDATE(),
+        :number_of_tickets,
+        'Completed',
+        :total_price,
+        :coupon_id
+    )
+");
+$numberOfTickets = array_sum($selectedTickets);
+$stmt->bindParam(':movie_id', $booking['movie_id'], PDO::PARAM_INT);
+$stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+$stmt->bindParam(':guest_user_id', $guestUserId, PDO::PARAM_INT);
+$stmt->bindParam(':number_of_tickets', $numberOfTickets, PDO::PARAM_INT);
+$stmt->bindParam(':total_price', $discountedPrice, PDO::PARAM_STR);
+$stmt->bindParam(':coupon_id', $couponId, PDO::PARAM_INT | PDO::PARAM_NULL); // Allow NULL for Coupon_ID
 
-    if ($stmt->execute()) {
-        $bookingId = $dbCon->lastInsertId(); // Get the inserted Booking_ID
+if ($stmt->execute()) {
+    $bookingId = $dbCon->lastInsertId(); // Get the inserted Booking_ID
 
         // Generate the invoice
         $invoiceStmt = $dbCon->prepare("
@@ -111,7 +137,7 @@ try {
         // Save Invoice_ID in session for further use (e.g., PDF generation)
         $_SESSION['invoice_id'] = $invoiceId;
 
-        // Group ticket types by seat to prevent duplication
+        // Group ticket types by seat number to prevent duplication
         $seatTicketTypes = [];
         foreach ($selectedSeats as $index => $seat) {
             $seatTicketTypes[$seat][] = $selectedTickets[$index]; // Associate ticket types with each seat
@@ -167,9 +193,23 @@ try {
         }
 
         // After processing, clear the session and redirect
-        unset($_SESSION['booking'], $_SESSION['selectedSeats'], $_SESSION['selectedTickets'], $_SESSION['totalPrice']);
-        header("Location: /dwp/user/profiles?success=1");
-        exit();
+        unset(
+            $_SESSION['booking'],
+            $_SESSION['selectedSeats'],
+            $_SESSION['selectedTickets'],
+            $_SESSION['totalPrice'],
+            $_SESSION['couponCode'] // Clear the coupon code
+        );
+
+        if ($userId) {
+            // Redirect to the profile page
+            header("Location: /dwp/user/profiles?success=1");
+            exit();
+        } else {
+            // Redirect to the checkout page
+            header("Location: /dwp/frontend/controllers/GuestCheckoutController.php");
+            exit();
+        }
     } else {
         echo "<p>Failed to save booking.</p>";
     }

@@ -11,7 +11,7 @@ class GuestCheckoutModel {
     public function getInvoiceDetails($invoiceId) {
         $sql = "
             SELECT i.Invoice_ID, i.InvoiceDate, i.TotalAmount, i.InvoiceStatus,
-                   b.BookingDate, b.NumberOfTickets,
+                   b.BookingDate, b.NumberOfTickets, b.TotalPrice,
                    m.Title AS MovieTitle, s.ShowDate, s.ShowTime, c.Name AS CinemaHall,
                    GROUP_CONCAT(CONCAT(seat.Row, '-', seat.SeatNumber) ORDER BY seat.Row, seat.SeatNumber) AS Seats
             FROM Invoice i
