@@ -133,11 +133,13 @@ CREATE TABLE Booking (
     TotalPrice DECIMAL(10, 2),
     Payment_ID INT,
     Invoice_ID INT,
+    Coupon_ID INT,
     FOREIGN KEY (Movie_ID) REFERENCES Movie(Movie_ID),
     FOREIGN KEY (User_ID) REFERENCES User(User_ID),
     FOREIGN KEY (GuestUser_ID) REFERENCES GuestUser(GuestUser_ID),
     FOREIGN KEY (Payment_ID) REFERENCES Payment(Payment_ID),
     FOREIGN KEY (Invoice_ID) REFERENCES Invoice(Invoice_ID),
+    FOREIGN KEY (Coupon_ID) REFERENCES Coupon(Coupon_ID),
     CHECK ((User_ID IS NOT NULL AND GuestUser_ID IS NULL) OR (User_ID IS NULL AND GuestUser_ID IS NOT NULL))
 );
 
@@ -147,13 +149,11 @@ CREATE TABLE Ticket (
     Screening_ID INT,
     Seat_ID INT,
     Price_ID INT,
-    Coupon_ID INT,
     Booking_ID INT,
     FOREIGN KEY (Screening_ID) REFERENCES Screening(Screening_ID),
     FOREIGN KEY (Booking_ID) REFERENCES Booking(Booking_ID),
     FOREIGN KEY (Seat_ID) REFERENCES Seat(Seat_ID),
-    FOREIGN KEY (Price_ID) REFERENCES TicketPrice(Price_ID),
-    FOREIGN KEY (Coupon_ID) REFERENCES Coupon(Coupon_ID)
+    FOREIGN KEY (Price_ID) REFERENCES TicketPrice(Price_ID)
 );
 
 -- News Table
@@ -198,15 +198,6 @@ CREATE TABLE Login_Attempts (
     Success BOOLEAN NOT NULL DEFAULT 0,
     Blocked_Until TIMESTAMP NULL
 );
-
-CREATE TABLE PasswordResets (
-    Reset_ID INT AUTO_INCREMENT PRIMARY KEY,
-    Email VARCHAR(255) NOT NULL,
-    Token VARCHAR(255) NOT NULL,
-    Expiry DATETIME NOT NULL,
-    INDEX (Email)
-);
-
 
 -- Media Table
 CREATE TABLE Media (

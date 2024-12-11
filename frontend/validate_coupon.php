@@ -34,7 +34,8 @@ try {
         $discount = (float)$coupon['DiscountAmount'];
         $newTotalPrice = max(0, $_SESSION['totalPrice'] - $discount);
 
-        // Save the discounted total price to the session
+        // Save the coupon code and discounted price to the session
+        $_SESSION['couponCode'] = $couponCode;
         $_SESSION['discountedPrice'] = $newTotalPrice;
 
         echo json_encode(["valid" => true, "discount" => $discount, "newTotalPrice" => $newTotalPrice]);
@@ -44,4 +45,3 @@ try {
 } catch (Exception $e) {
     echo json_encode(["valid" => false, "message" => "An error occurred: " . $e->getMessage()]);
 }
-?>
