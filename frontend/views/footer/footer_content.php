@@ -18,14 +18,14 @@
         <h3>Contact Us</h3>
         <p>
             <img src="https://cdn-icons-png.flaticon.com/512/732/732200.png" alt="email icon" style="width: 18px; margin-right: 8px;">
-            <a href="mailto:<?= htmlspecialchars($footerData['Email']); ?>" style="color: white; text-decoration: underline;">
-            <?= htmlspecialchars($footerData['Email']); ?>
+            <a href="mailto:<?= htmlspecialchars_decode($footerData['Email']); ?>" style="color: white; text-decoration: underline;">
+            <?= htmlspecialchars_decode($footerData['Email']); ?>
             </a>
         </p>
         <p>
-            <a href="https://www.google.com/maps/search/<?= htmlspecialchars($footerData['Location']); ?>" target="_blank">
+            <a href="https://www.google.com/maps/search/<?= htmlspecialchars_decode($footerData['Location']); ?>" target="_blank">
                 <img src="https://cdn-icons-png.flaticon.com/512/684/684908.png" alt="location icon" style="width: 18px; margin-right: 8px;">
-                <?= htmlspecialchars($footerData['Location']); ?>
+                <?= htmlspecialchars_decode($footerData['Location']); ?>
             </a>
         </p>
     </div>

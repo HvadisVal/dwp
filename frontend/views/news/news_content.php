@@ -22,9 +22,9 @@
                             <img src="uploads/news_images/<?= htmlspecialchars($row['FileName']) ?>" alt="News Image">
                         <?php endif; ?>
                         <div class="news-content">
-                            <h2><?= htmlspecialchars($row['Title']) ?></h2>
-                            <div class="date"><?= htmlspecialchars($row['DatePosted']) ?></div>
-                            <p><?= htmlspecialchars($row['Content']) ?></p>
+                            <h2><?= htmlspecialchars_decode($row['Title']) ?></h2>
+                            <div class="date"><?= htmlspecialchars_decode($row['DatePosted']) ?></div>
+                            <p><?= htmlspecialchars_decode($row['Content']) ?></p>
                         </div>
                     </div>
                 <?php endforeach; ?>

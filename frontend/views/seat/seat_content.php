@@ -14,8 +14,8 @@ $navbar->handleRequest();
  ?>
 
 <div class="container">
-    <h4><?= htmlspecialchars($hall['Name']); ?> - Seat Selection</h4>
-    <p>Movie: <?= htmlspecialchars($movie['Title']); ?> | Time: <?= htmlspecialchars($time ?? 'N/A'); ?></p>
+    <h4><?= htmlspecialchars_decode($hall['Name']); ?> - Seat Selection</h4>
+    <p>Movie: <?= htmlspecialchars_decode($movie['Title']); ?> | Time: <?= htmlspecialchars_decode($time ?? 'N/A'); ?></p>
 
     <!-- Instructional Messages -->
     <p id="selection-message" style="font-size: 18px; color: white; text-decoration: underline; ">Please select the ticket quantity and type.</p>
@@ -28,7 +28,7 @@ $navbar->handleRequest();
             <?php foreach ($ticketPrices as $ticketPrice): ?>
                 <div class="ticket-type-row">
                     <div class="ticket-info">
-                        <h6 class="ticket-type"><?= htmlspecialchars($ticketPrice['Type']); ?></h6>
+                        <h6 class="ticket-type"><?= htmlspecialchars_decode($ticketPrice['Type']); ?></h6>
                         <p class="ticket-price">DKK <?= number_format($ticketPrice['Price'], 2); ?></p>
                     </div>
                     <div class="counter-controls">

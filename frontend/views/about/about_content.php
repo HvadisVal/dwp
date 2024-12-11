@@ -32,13 +32,13 @@ $navbar->handleRequest();
 <section class="contact">
     <h3>Contact Us</h3>
     <p><strong>Email:</strong>
-        <a href="mailto:<?= htmlspecialchars($aboutData['Email']); ?>" style="color: white; text-decoration: underline;">
-            <?= htmlspecialchars($aboutData['Email']); ?>
+        <a href="mailto:<?= htmlspecialchars_decode($aboutData['Email']); ?>" style="color: white; text-decoration: underline;">
+            <?= htmlspecialchars_decode($aboutData['Email']); ?>
         </a>
     </p>
-    <p><strong>Location:</strong> <?= htmlspecialchars($aboutData['Location']); ?></p>
+    <p><strong>Location:</strong> <?= htmlspecialchars_decode($aboutData['Location']); ?></p>
     <p><strong>Opening Hours:</strong></p>
-    <p class="openingH"><?= nl2br(htmlspecialchars($aboutData['OpeningHours'])); ?></p>
+    <p class="openingH"><?= nl2br(htmlspecialchars_decode($aboutData['OpeningHours'])); ?></p>
 </section>
 
 <!-- Footer -->
