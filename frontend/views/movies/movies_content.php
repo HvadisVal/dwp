@@ -32,7 +32,7 @@ $navbar->handleRequest();
     <div class="movie-details">
         <h4><?= htmlspecialchars($movieData['details']['Title']); ?></h4>
         <p>Duration: <?= htmlspecialchars($movieData['details']['Duration']); ?></p>
-        <p>Rating: <?= htmlspecialchars($movieData['details']['Rating']); ?> years</p>
+        <p>Rating: <?= htmlspecialchars($movieData['details']['Rating']); ?></p>
         <p>Age Limit: Allowed for children over <?= htmlspecialchars($movieData['details']['Rating']); ?> years</p>
     </div>
 </div>
