@@ -184,6 +184,14 @@ CREATE TABLE ContactMessages (
     Submitted_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Password Table
+CREATE TABLE PasswordResets (
+    Reset_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Email VARCHAR(255) NOT NULL,
+    Token VARCHAR(255) NOT NULL,
+    Expiry DATETIME NOT NULL,
+    INDEX (Email)
+);
 
 -- Admin Table
 CREATE TABLE Admin (
