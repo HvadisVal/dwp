@@ -10,7 +10,6 @@
 
     <div class="container">
         <h1>Contact Us</h1>
-        <a href="/dwp/" class="back-to-dashboard"><img src="./images/back-button.png" alt=""></a>
         <!-- Success/Error Message -->
         <?php if (!empty($successMessage)): ?>
             <p class="success-message"><?= htmlspecialchars($successMessage); ?></p>
@@ -46,6 +45,7 @@
                 <textarea id="message" name="message" required></textarea>
             </div>
             <button id="SendMessage" type="submit">Send Message</button>
+            <a href="/dwp/" class="back-to-dashboard">Go Back</a>
         </form>
     </div>
 </body>

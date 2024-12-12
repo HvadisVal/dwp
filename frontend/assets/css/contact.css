@@ -97,11 +97,11 @@ input:focus, textarea:focus {
 
 
 .back-to-dashboard {
-    position: absolute;
-    top: 20px;
-    margin: 30px;
-    text-decoration: none;
-    font-size: larger;
+    margin-top: 20px;
+    text-decoration: underline;
+    font-size: medium;
+    display: flex;
+    justify-content: center;
     color: #333;
   }
 
