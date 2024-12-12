@@ -113,7 +113,7 @@ $adminEmail = $controller->getAdminEmail();
                         <p>View, edit, or remove contact forms in the system.</p>
                     </div>
                     <div class="card-action">
-                        <a href="manage_users.php" class="btn waves-effect waves-light">Manage Contact Forms</a>
+                        <a href="/dwp/admin/manage-messages" class="btn waves-effect waves-light">Manage Contact Forms</a>
                     </div>
                 </div>
             </div>

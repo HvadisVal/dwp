@@ -181,7 +181,8 @@ CREATE TABLE ContactMessages (
     Email VARCHAR(255),
     Subject VARCHAR(255),
     Message TEXT,
-    Submitted_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    Submitted_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Reply Text Null
 );
 
 -- Password Table

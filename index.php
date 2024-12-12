@@ -33,6 +33,7 @@ $routes = [
     'admin/manage-screenings' => 'admin/controllers/ScreeningController.php',
     'admin/manage-bookings' => 'admin/controllers/BookingController.php',
     'admin/manage-landing' => 'admin/controllers/LandingMoviesController.php',
+    'admin/manage-messages' => 'admin/controllers/MessageController.php',
 
     // payment pages
     'payment/apply-coupon' => 'frontend/payment/apply_coupon.php',
@@ -50,6 +51,8 @@ $routes = [
     'user/forgot-password' => 'frontend/user/forget_password.php',
     'user/edit_user' => 'user/controllers/EditUserController.php',
     'user/delete_user' => 'user/controllers/DeleteUserController.php',
+    'admin/manage-messages/reply' => 'admin/controllers/MessageController.php',
+
 
     // Main pages
     'about' => 'frontend/controllers/AboutController.php',
@@ -185,6 +188,24 @@ function routeRequest($path, $routes, $connection) {
         $controller->handleRequest();
         exit;
     }
+ // Check for the route to reply to a message
+ if (strpos($path, 'admin/manage-messages/reply') === 0) {
+    $pathParts = explode('/', $path);
+    $messageId = isset($pathParts[3]) ? (int)$pathParts[3] : null;
+    if ($messageId) {
+        // Handle the reply action
+        require_once 'admin/controllers/MessageController.php';
+        $controller = new MessageController($connection);
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $reply = $_POST['reply'] ?? '';
+            $controller->replyToMessage($messageId, $reply);
+        } else {
+            $controller->handleRequest();  // Show the message list with reply option
+        }
+        exit;
+    }
+}
 
     
      // Handle other dynamic routes based on the $routes array
