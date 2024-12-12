@@ -1,62 +1,109 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
+    font-family: Arial, sans-serif !important;
+    background-image: url('https://t4.ftcdn.net/jpg/04/61/47/03/360_F_461470323_6TMQSkCCs9XQoTtyer8VCsFypxwRiDGU.jpghttps://t4.ftcdn.net/jpg/04/61/47/03/360_F_461470323_6TMQSkCCs9XQoTtyer8VCsFypxwRiDGU.jpg')!important;
+    background-size: cover!important;
+    position: relative!important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
+
 .container {
-    max-width: 600px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 800px !important;
+    margin: 50px auto !important;
+    padding: 30px !important;
+    background-color: #ffffff !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;
 }
 
 h1 {
-    text-align: center;
-    color: #333;
+    text-align: center !important;
+    color: #111827 !important;
+    font-size: 2.5rem !important;
+    margin-bottom: 30px !important;
+    font-weight: bold !important;
 }
 
 .company-details {
-    margin-bottom: 20px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    margin-bottom: 30px !important;
+    padding: 20px !important;
+    background-color: #f9fafb !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 8px !important;
+    font-size: 1rem !important;
 }
 
 label {
-    display: block;
-    margin-top: 10px;
-    color: #555;
+    display: block !important;
+    margin-top: 15px !important;
+    color: #4b5563 !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    margin-bottom: 5px !important;
 }
 
-input, textarea, button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+input, textarea {
+    width: 96.5% !important;
+    padding: 12px !important;
+    margin-top: 5px auto !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 8px !important;
+    font-size: 1rem !important;
+    color: #374151 !important;
 }
 
-button {
-    background-color: #333;
-    color: white;
-    cursor: pointer;
+input:focus, textarea:focus {
+    border-color: #374151 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3) !important;
 }
 
-button:hover {
-    background-color: #555;
-}
 
 .success-message {
-    color: green;
-    margin-bottom: 15px;
+    color: #10b981 !important;
+    margin-bottom: 20px !important;
+    font-weight: bold !important;
+    text-align: center !important;
 }
 
 .error-message {
-    color: red;
-    margin-bottom: 15px;
+    color: #ef4444 !important;
+    margin-bottom: 20px !important;
+    font-weight: bold !important;
+    text-align: center !important;
 }
+
+
+
+#SendMessage{
+    background-color: #333 !important;
+    width: 100% !important;
+    color: white !important;
+    border: none !important;
+    padding: 10px!important;
+    margin-top: 15px;
+    font-size: 1.1rem !important;
+    cursor: pointer !important;
+    border-radius: 5px !important;
+    transition: 0.4s ease;
+}
+
+#SendMessage:hover {
+    background-color: #4b5563 !important;
+    transform: translateY(-3px) !important;
+
+}
+
+
+.back-to-dashboard {
+    position: absolute;
+    top: 20px;
+    margin: 30px;
+    text-decoration: none;
+    font-size: larger;
+    color: #333;
+  }
+
+
+
