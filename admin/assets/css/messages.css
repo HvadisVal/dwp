@@ -1,0 +1,73 @@
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.container {
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+h1, h2 {
+    text-align: center;
+    color: #333;
+}
+.back-to-dashboard {
+    position: absolute;
+    top: 0;
+    margin: 30px;
+}
+.messages-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    text-align: left;
+}
+.messages-table th, .messages-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+}
+.messages-table th {
+    background-color: #f4f4f4;
+    color: #333;
+    font-weight: bold;
+}
+.messages-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+textarea {
+    width: 90%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 8px;
+    resize: vertical;
+}
+.reply-button {
+    background: black;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 8px;
+}
+.reply-button:hover {
+    background: #1a252d;
+    color: white;
+    transition: 0.3s ease, color 0.3s ease;
+    transform: translateY(-1px);
+}
+.reply-text {
+    color: green;
+    font-weight: bold;
+}
