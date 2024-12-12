@@ -7,16 +7,16 @@
     <link rel="stylesheet" href="/dwp/frontend/assets/css/contact.css">
 </head>
 <body>
+
     <div class="container">
         <h1>Contact Us</h1>
-
+        <a href="/dwp/" class="back-to-dashboard"><img src="./images/back-button.png" alt=""></a>
         <!-- Success/Error Message -->
         <?php if (!empty($successMessage)): ?>
             <p class="success-message"><?= htmlspecialchars($successMessage); ?></p>
         <?php elseif (!empty($errorMessage)): ?>
             <p class="error-message"><?= htmlspecialchars($errorMessage); ?></p>
         <?php endif; ?>
-
         <!-- Company Details -->
         <?php if (!empty($company)): ?>
             <div class="company-details">
@@ -45,7 +45,7 @@
                 <label for="message">Message</label>
                 <textarea id="message" name="message" required></textarea>
             </div>
-            <button type="submit">Send Message</button>
+            <button id="SendMessage" type="submit">Send Message</button>
         </form>
     </div>
 </body>
