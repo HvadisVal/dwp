@@ -39,5 +39,46 @@ class InvoiceModel {
     
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    public function getUserEmail($invoiceId) {
+        try {
+            $query = "
+                SELECT u.Email
+                FROM Invoice i
+                JOIN Booking b ON i.Invoice_ID = b.Invoice_ID
+                JOIN User u ON b.User_ID = u.User_ID
+                WHERE i.Invoice_ID = :invoice_id
+                LIMIT 1
+            ";
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':invoice_id', $invoiceId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            throw new Exception("Failed to fetch user email: " . $e->getMessage());
+        }
+    }
+    
+    public function getGuestEmail($invoiceId) {
+        try {
+            $query = "
+                SELECT g.Email
+                FROM Invoice i
+                JOIN Booking b ON i.Invoice_ID = b.Invoice_ID
+                JOIN GuestUser g ON b.GuestUser_ID = g.GuestUser_ID
+                WHERE i.Invoice_ID = :invoice_id
+                LIMIT 1
+            ";
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(':invoice_id', $invoiceId, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            throw new Exception("Failed to fetch guest email: " . $e->getMessage());
+        }
+    }
+    
+    
+    
     
 }

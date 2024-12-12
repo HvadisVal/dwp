@@ -8,6 +8,8 @@
 </head>
 <body>
     <div class="container">
+    <a href="/dwp/user/profiles" class="btn" style="display:flex;">Back to Profile</a>
+
         <h2>Thank You for Your Order!</h2>
         <p>Your booking has been completed successfully.</p>
 
@@ -30,8 +32,8 @@
 
         <!-- Action Buttons -->
         <div class="action-buttons">
-            <a href="/dwp/invoice?invoice_id=<?= htmlspecialchars($invoice['Invoice_ID']); ?>&guest=true" class="btn">View Full Invoice</a>
-            <a href="/dwp/user/profiles" class="btn">Back to Profile</a>
+            <a href="/dwp/invoice?invoice_id=<?= htmlspecialchars($invoice['Invoice_ID']); ?>&guest=true" class="btn">Save Your Invoice</a>
+            
         </div>
     </div>
 </body>
