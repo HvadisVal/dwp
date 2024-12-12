@@ -73,8 +73,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <!-- Google reCAPTCHA widget -->
             <div class="g-recaptcha" data-sitekey="6LcGh40qAAAAADJ9GhkbB2mb-3wNydnZ11-7ton6" data-callback="onCaptchaCompleted"></div><br>
-            <!-- <button class="btn blue" type="submit" id="continueButton" disabled>Continue</button> -->
-            <button class="btn blue" type="submit" id="continueButton">Continue</button>
+            <button class="btn blue" type="submit" id="continueButton" disabled>Continue</button>
+            <!-- <button class="btn blue" type="submit" id="continueButton">Continue</button> -->
 
         </form>
         <p class="error-message" style="color: red; display: none;"></p>
