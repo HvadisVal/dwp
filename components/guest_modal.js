@@ -9,11 +9,7 @@ $("#guestForm").on("submit", function (e) {
   e.preventDefault(); // Prevent default form submission
 
   // Ensure CAPTCHA is completed
-  var captchaResponse = grecaptcha.getResponse();
-  if (!captchaResponse || captchaResponse.length === 0) {
-    $(".error-message").text("Please complete the CAPTCHA").show();
-    return; // Stop submission if CAPTCHA is not filled
-  }
+  
 
   // Collect form data
   var formData = $(this).serialize(); // Serialize form data
@@ -37,8 +33,36 @@ $("#guestForm").on("submit", function (e) {
   });
 });
 
-// Enable the "Continue" button once CAPTCHA is completed
-function onCaptchaCompleted() {
-  $("#continueButton").prop("disabled", false);
-  console.log("CAPTCHA verified. Continue button enabled.");
-}
+
+
+  function onGuestCaptchaCompleted() {
+    document.getElementById('continueBtn').disabled = false; // Enable the button
+  }
+
+
+
+
+
+$('#guestForm').on('submit', function (e) {
+  e.preventDefault();
+
+  var formData = $(this).serialize();
+
+  // Send AJAX request to server
+  $.ajax({
+      url: '/dwp/user/guest', // Adjust the path as needed
+      type: 'POST',
+      data: formData,
+      success: function (response) {
+          response = JSON.parse(response);
+          if (!response.success) {
+            $('.error-message').text(response.message).show();
+          } 
+      },
+      error: function () {
+          $('.error-message').text('An error occurred, please try again.').show();
+      }
+  });
+});
+
+
