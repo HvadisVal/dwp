@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     if (data.success) {
                         alert(data.message); // Optional: show a success message
-                        window.location.href = 'http://localhost/dwp/'; // Redirect to the homepage
+                        window.location.href = '/dwp/'; // Redirect to the homepage
                     } else {
                         alert(data.message); // Show error message
                     }
