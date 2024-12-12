@@ -37,7 +37,6 @@
                     <th>Message</th>
                     <th>Submitted At</th>
                     <th>Reply</th>
-                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
