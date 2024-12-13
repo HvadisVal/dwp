@@ -1,4 +1,5 @@
 <?php
+
 class LoginModel {
     private $connection;
     private $blockedTime; // Store blocked time
