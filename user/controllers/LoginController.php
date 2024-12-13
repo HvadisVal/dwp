@@ -14,10 +14,18 @@ class LoginController {
         header('Content-Type: application/json');
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Get form data
-            $username = $_POST['user'] ?? '';
-            $password = $_POST['pass'] ?? '';
-            $captcha_response = $_POST['g-recaptcha-response'] ?? '';
+            // Validate CSRF token
+            $csrfToken = $_POST['csrf_token'] ?? '';
+            if (!hash_equals($_SESSION['csrf_token'], $csrfToken)) {
+                echo json_encode(['success' => false, 'message' => 'Invalid CSRF token.']);
+                exit;
+            }
+            
+             // Sanitize input
+        $username = htmlspecialchars(trim($_POST['user'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $password = htmlspecialchars(trim($_POST['pass'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $captcha_response = $_POST['g-recaptcha-response'] ?? '';
+
 
             // Your secret key from Google reCAPTCHA
             $secret_key = '6Ld1cpoqAAAAAIrjjBueOyKBY7M_c-QgigVuEk84'; // Use your actual secret key
@@ -49,11 +57,8 @@ class LoginController {
             
 
             try {
-                // Proceed with user credentials verification
                 $user = $this->model->getUserByUsername($username);
-
                 if ($user && password_verify($password, $user['Password'])) {
-                    // Set session variables for the logged-in user
                     $_SESSION['user_id'] = $user['User_ID'];
                     $_SESSION['user'] = $user['Name'];
                     echo json_encode(['success' => true]);
@@ -64,7 +69,6 @@ class LoginController {
                 echo json_encode(['success' => false, 'message' => $e->getMessage()]);
             }
         } else {
-            // Load the login form view if not a POST request
             require_once($_SERVER['DOCUMENT_ROOT'] . '/dwp/user/views/login_form.php');
         }
     }

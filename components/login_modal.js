@@ -2,36 +2,50 @@ $(document).ready(function () {
   // Function to handle reCAPTCHA execution and form submission
   function handleCaptchaAndSubmit(formId, action, successCallback) {
     grecaptcha.ready(function () {
-      grecaptcha
-        .execute("6Ld1cpoqAAAAALcO07tjTnYTDe4_py7LbfM09gZ1", {
-          action: action,
-        })
-        .then(function (token) {
-          // Set the token value in the hidden input field
-          $("#" + formId + " #g-recaptcha-response").val(token);
+        grecaptcha
+            .execute("6Ld1cpoqAAAAALcO07tjTnYTDe4_py7LbfM09gZ1", { action: action })
+            .then(function (token) {
+                $("#" + formId + " #g-recaptcha-response").val(token);
 
-          // Submit the form data via AJAX
-          $.ajax({
-            url: "/dwp/user/" + action, // Adjust the path based on action (login or new_user)
-            type: "POST",
-            data: $("#" + formId).serialize(),
-            success: function (response) {
-              if (response.success) {
-                successCallback(response);
-              } else {
-                $("#" + formId + " .error-message")
-                  .text(response.message)
-                  .show();
-              }
-            },
-            error: function (xhr, status, error) {
-              console.error(action + " error:", status, error);
-            },
-          });
-        });
+                // Include CSRF token explicitly in AJAX request
+                const formData = $("#" + formId).serialize() + "&csrf_token=" + $('input[name="csrf_token"]').val();
+
+                $.ajax({
+                    url: "/dwp/user/" + action,
+                    type: "POST",
+                    data: formData,
+                    success: function (response) {
+                      console.log("Raw response:", response); // Log raw server response
+                      try {
+                          // Parse JSON response
+                          const jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
+                          if (jsonResponse.success) {
+                              successCallback(jsonResponse);
+                          } else {
+                              $("#" + formId + " .error-message")
+                                  .text(jsonResponse.message)
+                                  .show();
+                          }
+                      } catch (e) {
+                          console.error("Error parsing JSON response:", e, response);
+                          $("#" + formId + " .error-message")
+                              .text("Unexpected server error. Please try again.")
+                              .show();
+                      }
+                  },
+                  
+                    error: function (xhr, status, error) {
+                        console.error(action + " error:", status, error);
+                        $("#" + formId + " .error-message")
+                            .text("Error occurred while processing. Please try again.")
+                            .show();
+                    },
+                });
+            });
     });
-  }
+}
 
+  
   // Login Form Submission
   $("#loginForm").on("submit", function (e) {
     e.preventDefault();
