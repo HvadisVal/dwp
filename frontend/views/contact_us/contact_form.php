@@ -1,36 +1,3 @@
-<?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $subject = $_POST['subject'];
-    $message = $_POST['message'];
-    $captcha_response = $_POST['g-recaptcha-response'];
-
-    $secret_key = '6LcGh40qAAAAAA3ZkV5HXoWBeZFOt7LzGmXwUKGH';
-
-    // Verify CAPTCHA
-    $verify_response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=$secret_key&response=$captcha_response");
-    $response_data = json_decode($verify_response);
-
-    if (!$response_data->success) {
-        echo json_encode(['success' => false, 'message' => 'Please verify that you are not a robot.']);
-        exit;
-    }
-
-    // Proceed with form handling logic
-    // Save data or send email
-    // ...
-
-    echo json_encode(['success' => true, 'message' => 'Your message has been successfully sent.']);
-}
-?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,6 +5,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Us</title>
     <link rel="stylesheet" href="/dwp/frontend/assets/css/contact.css">
+    <!-- Google reCAPTCHA Script -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6Ld1cpoqAAAAALcO07tjTnYTDe4_py7LbfM09gZ1" async defer></script>
 </head>
 <body>
     <div class="container">
@@ -57,6 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <p><strong>Email:</strong> <?= htmlspecialchars($company['Email']); ?></p>
             </div>
         <?php endif; ?>
+        
         <form id="contactForm" method="POST" action="/dwp/contact/submit">
             <div>
                 <label for="name">Name</label>
@@ -74,13 +44,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <label for="message">Message</label>
                 <textarea id="message" name="message" required></textarea>
             </div>
-            <div class="g-recaptcha" data-sitekey="6LcGh40qAAAAADJ9GhkbB2mb-3wNydnZ11-7ton6" data-callback="onFormCaptchaCompleted"></div><br>
-            <button class="SendMessage" id="sendMessage" type="submit" disabled>Send Message</button>
+            
+            <!-- Hidden reCAPTCHA response field -->
+            <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
+
+            <button class="SendMessage" id="sendMessage" type="submit">Send Message</button>
             <a href="/dwp/" class="back-to-dashboard">Go Back</a>
         </form>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/dwp/frontend/assets/js/contact.js"></script>
 </body>
 </html>
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="/dwp/frontend/assets/js/contact.js"></script>
