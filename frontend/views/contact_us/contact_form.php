@@ -83,8 +83,4 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </html>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  function onFormCaptchaCompleted() {
-    document.getElementById('sendMessage').disabled = false;
-  }
-</script>
+<script src="/dwp/frontend/assets/js/contact.js"></script>
