@@ -76,12 +76,12 @@ input:focus, textarea:focus {
 
 
 
-#SendMessage{
+.SendMessage {
     background-color: #333 !important;
     width: 100% !important;
     color: white !important;
     border: none !important;
-    padding: 10px!important;
+    padding: 10px !important;
     margin-top: 15px;
     font-size: 1.1rem !important;
     cursor: pointer !important;
@@ -89,10 +89,16 @@ input:focus, textarea:focus {
     transition: 0.4s ease;
 }
 
-#SendMessage:hover {
+.SendMessage:hover {
     background-color: #4b5563 !important;
     transform: translateY(-3px) !important;
+}
 
+/* Disabled state */
+.SendMessage:disabled {
+    background-color: #d1d5db !important;  /* Light gray color to indicate it is disabled */
+    cursor: not-allowed !important;  /* Prevent the cursor from being a pointer */
+    transform: none !important; /* Remove hover effect when disabled */
 }
 
 
