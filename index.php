@@ -188,6 +188,26 @@ function routeRequest($path, $routes, $connection) {
         $controller->handleRequest();
         exit;
     }
+
+    if (strpos($path, 'admin/manage-messages/reply') === 0) {
+        $pathParts = explode('/', $path);
+        $messageId = isset($pathParts[3]) ? (int)$pathParts[3] : null;
+    
+        require_once 'admin/controllers/MessageController.php';
+        $controller = new MessageController($connection);
+    
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $reply = $_POST['reply'] ?? '';
+            $controller->replyToMessage($messageId, $reply);
+            exit;
+        } else {
+            $controller->handleRequest();  // Show the message list with reply option
+            exit;
+        }
+    }
+    
+    
+    
  // Check for the route to reply to a message
  if (strpos($path, 'admin/manage-messages/reply') === 0) {
     $pathParts = explode('/', $path);

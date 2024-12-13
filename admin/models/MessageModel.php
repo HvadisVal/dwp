@@ -21,4 +21,19 @@ class MessageModel {
         $stmt = $this->connection->prepare($sql);
         return $stmt->execute([$reply, $messageId]);
     }
+
+    public function getMessageById($messageId) {
+        $sql = "SELECT * FROM ContactMessages WHERE Message_ID = ?";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute([$messageId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    public function getMessageDetails($messageId) {
+        $sql = "SELECT Email, Subject FROM ContactMessages WHERE Message_ID = ?";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute([$messageId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC); // Fetch and return the result as an associative array
+    }
+    
 }
