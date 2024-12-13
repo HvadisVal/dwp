@@ -95,6 +95,8 @@ class MessageController {
             <p>Thank you for reaching out. Here is our reply to your query:</p>
             <p>{$reply}</p>
             <p>Best regards,<br>FilmFusion Team</p>
+            <br>
+            <p>Please do not reply to this email as it is an automated reply.</p>
         ";
     }
     

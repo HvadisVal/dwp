@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const versionId = versionFilter.value || "";
   
     // Send AJAX request to fetch filtered movies
-    fetch("/dwp/frontend/fetch_movies.php", {
+    fetch("/dwp/frontend/actions/fetch_movies.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ date, movieId, versionId }),
@@ -72,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>`;
           return;
         }
+        
         
         
   
@@ -150,7 +151,7 @@ function fetchMovies() {
   };
 
   // Send request to the backend with no filters
-  fetch("/dwp/frontend/fetch_movies.php", {
+  fetch("/dwp/frontend/actions/fetch_movies.php", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

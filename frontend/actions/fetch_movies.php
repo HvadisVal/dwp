@@ -4,6 +4,7 @@ ini_set('display_errors', 1); // Display errors on the page
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/controllers/FetchController.php';
 
+
 // Decode incoming JSON data
 $data = json_decode(file_get_contents('php://input'), true);
 

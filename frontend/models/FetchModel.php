@@ -1,5 +1,5 @@
 <?php
-require_once("../includes/connection.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . '/dwp/includes/connection.php');
 
 class MoviesModel {
     private $connection;
