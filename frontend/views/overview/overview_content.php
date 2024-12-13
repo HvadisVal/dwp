@@ -7,9 +7,11 @@
     <link rel="stylesheet" href="/dwp/frontend/assets/css/overview.css">
 </head>
 <body>
-    <div class="logo">
-        <a href="/dwp/"><img src="images/11.png" alt="Logotype" height="40px" width="145px"></a>
-    </div>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/controllers/NavbarController.php';
+$navbar = new NavbarController();
+$navbar->handleRequest();
+ ?>
+ 
 
     <div class="container">
         <h4>Booking Overview</h4>

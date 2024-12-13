@@ -4,7 +4,7 @@ class NewUserModel {
 
     public function __construct($connection) {
         $this->connection = $connection;
-    } 
+    }
 
     public function createNewUser($username, $email, $phone, $password) {
         try {
@@ -20,8 +20,10 @@ class NewUserModel {
                 return ['success' => false, 'message' => 'Username or email already exists.'];
             }
 
-            // Hash the password and insert the new user into the database
+            // Hash the password
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+
+            // Insert the new user into the database
             $insertQuery = "INSERT INTO User (Name, Email, TelephoneNumber, Password) VALUES (:username, :email, :phone, :hashedPassword)";
             $stmt = $this->connection->prepare($insertQuery);
             $stmt->bindParam(':username', $username);
@@ -44,3 +46,4 @@ class NewUserModel {
         }
     }
 }
+?>
