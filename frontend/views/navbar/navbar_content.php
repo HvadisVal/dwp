@@ -57,3 +57,4 @@ $isLoggedIn = isset($_SESSION['user_id']); // Check login state
     </script>
 </body>
 </html>
+<script src="https://www.google.com/recaptcha/api.js?render=6Ld1cpoqAAAAALcO07tjTnYTDe4_py7LbfM09gZ1" async defer></script>
