@@ -64,9 +64,9 @@ $routes = [
     'overview' => 'frontend/controllers/OverviewController.php',
     /* 'save-selection' => 'frontend/save_selection.php',
     'seat' => 'frontend/seat.php', */
-    'save-selection' => 'frontend/save_selection.php',
+    'save-selection' => 'frontend/actions/save_selection.php',
     'seat' => 'frontend/controllers/SeatController.php',
-    'validate-coupon' => 'frontend/validate_coupon.php',
+    'validate-coupon' => 'frontend/actions/validate_coupon.php',
     'invoice' => 'frontend/controllers/InvoiceController.php',
     'movie'=> 'frontend/controllers/MovieProfileController.php',
     'guest-checkout' => 'frontend/controllers/GuestCheckoutController.php',
@@ -101,7 +101,7 @@ function routeRequest($path, $routes, $connection) {
     }
     
     if ($path === 'save-selection') {
-        require_once 'frontend/save_selection.php';
+        require_once 'frontend/actions/save_selection.php';
         exit;
     }
 

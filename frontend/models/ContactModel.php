@@ -1,16 +1,17 @@
 <?php
+require_once("./includes/connection.php");
 
 class ContactModel {
-    private $db;
+    private $connection;
 
     public function __construct($connection) {
-        $this->db = $connection; // Use dependency injection for the database connection
+        $this->connection = $connection;
     }
 
     // Fetch company details
     public function getCompanyDetails() {
         try {
-            $stmt = $this->db->prepare("SELECT * FROM Company LIMIT 1");
+            $stmt = $this->connection->prepare("SELECT * FROM Company LIMIT 1");
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
@@ -21,7 +22,7 @@ class ContactModel {
     // Save a contact message
     public function saveMessage($name, $email, $subject, $message) {
         try {
-            $stmt = $this->db->prepare("
+            $stmt = $this->connection->prepare("
                 INSERT INTO ContactMessages (Name, Email, Subject, Message)
                 VALUES (:name, :email, :subject, :message)
             ");

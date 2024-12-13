@@ -59,7 +59,7 @@
 </div>
 
 <!-- Checkout Button -->
-<form action="/dwp/user/booking_process.php" method="post">
+<form action="/dwp/user/actions/booking_process.php" method="post">
     <?php if ($isGuest): ?>
         <input type="hidden" name="guest" value="1">
     <?php elseif ($isLoggedIn): ?>
