@@ -94,3 +94,37 @@ function validate_email($email) {
     }
     return true;
 }
+
+function validate_username($username) {
+    if (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', $username)) { // Letters, numbers, underscores; length 3-20
+        return false; // Invalid username
+    }
+    return true; // Valid username
+}
+
+
+function validate_phone($phone) {
+    if (!preg_match('/^\+?[0-9]{8,15}$/', $phone)) { // Allows optional "+" and 8-15 digits
+        return false; // Invalid phone number
+    }
+    return true; // Valid phone number
+}
+
+function validate_password($password) {
+    if (strlen($password) < 8 || strlen($password) > 20) {
+        return false; // Password must be 8-20 characters long
+    }
+    if (!preg_match('/[A-Z]/', $password)) {
+        return false; // Must contain at least one uppercase letter
+    }
+    if (!preg_match('/[a-z]/', $password)) {
+        return false; // Must contain at least one lowercase letter
+    }
+    if (!preg_match('/[0-9]/', $password)) {
+        return false; // Must contain at least one number
+    }
+    if (!preg_match('/[\W]/', $password)) {
+        return false; // Must contain at least one special character
+    }
+    return true; // Valid password
+}
