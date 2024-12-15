@@ -17,23 +17,23 @@
         <?php endif; ?>
 
         <!-- Login Form -->
-        <form action="index.php?path=admin/login" method="post">
+        <form id="loginForm" method="post">
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken); ?>">
-
             <!-- Email Input -->
             <div class="input-field">
-                <input id="email" type="email" name="email" required />
+                <input id="email" type="email" name="email" value="" required />
                 <label for="email">Email</label>
             </div>
 
             <!-- Password Input -->
             <div class="input-field">
-                <input id="pass" type="password" name="pass" required />
+                <input id="pass" type="password" name="pass" value="" required />
                 <label for="pass">Password</label>
             </div>
-
+            
+            <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
             <!-- Login Button -->
-            <button class="btn waves-effect waves-light" type="submit" name="submit" id="loginBtn">
+            <button class="btn waves-effect waves-light" type="submit" name="login" id="loginBtn">
                 Login
             </button>
         </form>
@@ -41,6 +41,8 @@
 
     <!-- Including Materialize JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6Ld1cpoqAAAAALcO07tjTnYTDe4_py7LbfM09gZ1" async defer></script>
 
     <script>
         // Get blockedUntil value from PHP (if any)
@@ -62,6 +64,20 @@
                 }, remainingTime);
             }
         }
-    </script>
+        $(document).ready(function () {
+    $('#loginForm').on('submit', function (e) {
+        e.preventDefault(); // Prevent default form submission
+
+        grecaptcha.ready(function () {
+            grecaptcha.execute('6Ld1cpoqAAAAALcO07tjTnYTDe4_py7LbfM09gZ1', { action: 'login' }).then(function (token) {
+                $('#g-recaptcha-response').val(token); // Set the token in the hidden input
+                $('#loginForm').off('submit').submit(); // Submit the form normally
+            });
+        });
+    });
+});
+
+
+   </script>
 </body>
 </html>
