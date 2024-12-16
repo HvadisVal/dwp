@@ -28,7 +28,7 @@ class ForgotPasswordController {
             try {
                 $token = $this->model->generateResetToken($email);
                 if ($token) {
-                    $resetLink = "http://localhost/dwp/user/reset-password?token=$token";
+                    $resetLink = "https://filmfusion.dk/dwp/user/reset-password?token=$token";
                     $this->sendResetEmail($email, $resetLink);
                     echo "Password reset link has been sent to your email.";
                 } else {

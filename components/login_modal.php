@@ -3,22 +3,13 @@
         color: #2196F3;
     }
 </style>
-<?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Generate CSRF token if not already set
-if (empty($_SESSION['csrf_token'])) {
-    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-}
-?>
 
 <!-- Login Modal -->
 <div id="loginModal" class="modal">
     <div class="modal-content">
         <h5 class="header">Login</h5>
         <form id="loginForm">
+        <p class="error-message" style="color: red; display: none;"></p>
         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
             <div class="input-field">
                 <input id="username" type="text" name="user" required>
@@ -48,6 +39,7 @@ if (empty($_SESSION['csrf_token'])) {
     <div class="modal-content">
         <h5 class="header">Create New User</h5>
         <form id="newUserForm">
+        <p class="error-message" style="color: red; display: none;"></p>
         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8'); ?>">
             <div class="input-field">
                 <input id="new_username" type="text" name="user" required>
