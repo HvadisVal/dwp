@@ -13,7 +13,14 @@ class NewUserController {
     }
 
     public function handleRequest() {
+         session_start();
+        header('Content-Type: application/json');
+        $csrfToken = generate_csrf_token();
+        $_SESSION['csrf_token'] = $csrfToken; // Store the token in session
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                        // Validate CSRF token
+                validate_csrf_token($_POST['csrf_token']);
             header('Content-Type: application/json');
 
             // Initialize $response to avoid undefined variable warnings
@@ -28,6 +35,24 @@ class NewUserController {
                 $email = htmlspecialchars(trim($_POST['email'] ?? ''), ENT_QUOTES, 'UTF-8');
                 $phone = htmlspecialchars(trim($_POST['phone'] ?? ''), ENT_QUOTES, 'UTF-8');
                 $password = htmlspecialchars(trim($_POST['pass'] ?? ''), ENT_QUOTES, 'UTF-8');
+
+                if (!validate_username($username)) {
+                    echo json_encode(['success' => false, 'message' => 'Invalid username. Use only letters, numbers, and underscores (3-20 characters).']);
+                    exit;
+                }
+                if (!validate_email($email)) {
+                    echo json_encode(['success' => false, 'message' => 'Invalid email address.']);
+                    exit;
+                }
+                if (!validate_phone($phone)) {
+                    echo json_encode(['success' => false, 'message' => 'Invalid phone number.']);
+                    exit;
+                }
+                if (!validate_password($password)) {
+                    echo json_encode(['success' => false, 'message' => 'Invalid password. Use only letters, numbers, and special characters (8-20 characters).']);
+                    exit;
+                }
+                // Get CAPTCHA response token
                 $captcha_response = $_POST['g-recaptcha-response'] ?? ''; // Get CAPTCHA response token
 
                 // Validate required fields

@@ -7,7 +7,7 @@ use PHPMailer\PHPMailer\Exception;
 use Dotenv\Dotenv;
 
 // Load .env file
-$dotenv = Dotenv::createImmutable('/Applications/XAMPP/xamppfiles/htdocs/DWP');
+$dotenv = Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT'] . '/dwp');
 $dotenv->load();
 
 

@@ -2,50 +2,52 @@ $(document).ready(function () {
   // Function to handle reCAPTCHA execution and form submission
   function handleCaptchaAndSubmit(formId, action, successCallback) {
     grecaptcha.ready(function () {
-        grecaptcha
-            .execute("6Ld1cpoqAAAAALcO07tjTnYTDe4_py7LbfM09gZ1", { action: action })
-            .then(function (token) {
-                $("#" + formId + " #g-recaptcha-response").val(token);
+      grecaptcha
+        .execute("6Ld1cpoqAAAAALcO07tjTnYTDe4_py7LbfM09gZ1", { action: action })
+        .then(function (token) {
+          $("#" + formId + " #g-recaptcha-response").val(token);
 
-                // Include CSRF token explicitly in AJAX request
-                const formData = $("#" + formId).serialize() + "&csrf_token=" + $('input[name="csrf_token"]').val();
+          // Include CSRF token explicitly in AJAX request
+          const formData = $("#" + formId).serialize();
 
-                $.ajax({
-                    url: "/dwp/user/" + action,
-                    type: "POST",
-                    data: formData,
-                    success: function (response) {
-                      console.log("Raw response:", response); // Log raw server response
-                      try {
-                          // Parse JSON response
-                          const jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
-                          if (jsonResponse.success) {
-                              successCallback(jsonResponse);
-                          } else {
-                              $("#" + formId + " .error-message")
-                                  .text(jsonResponse.message)
-                                  .show();
-                          }
-                      } catch (e) {
-                          console.error("Error parsing JSON response:", e, response);
-                          $("#" + formId + " .error-message")
-                              .text("Unexpected server error. Please try again.")
-                              .show();
-                      }
-                  },
-                  
-                    error: function (xhr, status, error) {
-                        console.error(action + " error:", status, error);
-                        $("#" + formId + " .error-message")
-                            .text("Error occurred while processing. Please try again.")
-                            .show();
-                    },
-                });
-            });
+          $.ajax({
+            url: "/dwp/user/" + action,
+            type: "POST",
+            data: formData,
+            success: function (response) {
+              console.log("Raw response:", response); // Debug log
+              try {
+                const jsonResponse =
+                  typeof response === "string"
+                    ? JSON.parse(response)
+                    : response;
+
+                if (jsonResponse.success) {
+                  successCallback(jsonResponse);
+                } else {
+                  // Display error message on the page
+                  $("#" + formId + " .error-message")
+                    .text(jsonResponse.message)
+                    .show();
+                }
+              } catch (e) {
+                console.error("Error parsing JSON response:", e, response);
+                $("#" + formId + " .error-message")
+                  .text("Unexpected server error. Please try again.")
+                  .show();
+              }
+            },
+            error: function (xhr, status, error) {
+              console.error(action + " error:", status, error);
+              $("#" + formId + " .error-message")
+                .text("Error occurred while processing. Please try again.")
+                .show();
+            },
+          });
+        });
     });
-}
+  }
 
-  
   // Login Form Submission
   $("#loginForm").on("submit", function (e) {
     e.preventDefault();
@@ -65,7 +67,7 @@ $(document).ready(function () {
       const modalInstance = M.Modal.getInstance(
         document.getElementById("newUserModal")
       );
-      modalInstance.close(); // Close the modal after success
+      modalInstance.close(); // Close modal
       M.toast({ html: "User account created successfully! Please login." });
     });
   });
