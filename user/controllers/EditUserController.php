@@ -18,7 +18,7 @@ class EditUserController {
             $name = trim($_POST['name']);
             $email = trim($_POST['email']);
             $phone = trim($_POST['phone']);
-            $password = trim($_POST['password']); // Optional field
+            $password = trim($_POST['password']); 
         
             error_log("Edit Request Received: User ID = $user_id, Name = $name, Email = $email, Phone = $phone");
         

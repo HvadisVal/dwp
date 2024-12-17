@@ -17,18 +17,17 @@ class LandingModel {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-// Add this method to your LandingModel class
 public function getLandingMovies() {
     $sql = "SELECT m.Movie_ID, m.Title, m.Description, lm.DisplayOrder,
                    (SELECT FileName 
                     FROM Media 
                     WHERE Media.Movie_ID = m.Movie_ID 
                     AND Media.IsFeatured = 0 
-                    LIMIT 1) AS FileName,  -- Non-featured image from gallery
+                    LIMIT 1) AS FileName,  
                    (SELECT MIN(ShowDate) 
                     FROM Screening 
                     WHERE Screening.Movie_ID = m.Movie_ID 
-                    AND Screening.ShowDate >= CURDATE()) AS FirstScreeningDate  -- Earliest screening date
+                    AND Screening.ShowDate >= CURDATE()) AS FirstScreeningDate  
               FROM LandingMovies lm
               JOIN Movie m ON lm.Movie_ID = m.Movie_ID
               ORDER BY RAND() LIMIT 1"; 

@@ -6,7 +6,6 @@ class OverviewController {
     private $model;
 
     public function __construct($connection) {
-        // Pass the connection to the AboutModel constructor
         $this->model = new OverviewModel($connection);
     }
 
@@ -16,12 +15,10 @@ class OverviewController {
         $selectedSeats = $_SESSION['selectedSeats'] ?? [];
         $selectedTickets = $_SESSION['selectedTickets'] ?? [];
 
-        // Validate ticket selection
         if (empty($selectedTickets) || empty($selectedSeats)) {
             die("No tickets or seats selected. Please go back to select tickets.");
         }
 
-        // Calculate ticket prices and total
         $ticketDetails = [];
         $totalPrice = 0;
         try {
@@ -41,14 +38,12 @@ class OverviewController {
             die("Error calculating prices: " . $e->getMessage());
         }
 
-        // Get movie details
         $movie_id = $_SESSION['booking']['movie_id'] ?? null;
         $cinema_hall_id = $_SESSION['booking']['cinema_hall_id'] ?? null;
         $showtime = $_SESSION['booking']['time'] ?? null;
 
         $movie = $this->model->getMovieDetails($movie_id);
 
-        // Pass data to the view
         require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/views/overview/overview_content.php';
     }
 }

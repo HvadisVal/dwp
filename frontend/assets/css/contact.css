@@ -96,9 +96,9 @@ input:focus, textarea:focus {
 
 /* Disabled state */
 .SendMessage:disabled {
-    background-color: #d1d5db !important;  /* Light gray color to indicate it is disabled */
-    cursor: not-allowed !important;  /* Prevent the cursor from being a pointer */
-    transform: none !important; /* Remove hover effect when disabled */
+    background-color: #d1d5db !important;  
+    cursor: not-allowed !important; 
+    transform: none !important; 
 }
 
 

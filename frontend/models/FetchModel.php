@@ -35,7 +35,6 @@ class MoviesModel {
             $params[':versionId'] = $versionId;
         }
     
-        // Debugging: Print the SQL query and parameters
         error_log("SQL Query: " . $sql);
         error_log("Params: " . print_r($params, true));
     

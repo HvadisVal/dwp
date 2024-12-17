@@ -9,7 +9,6 @@ class MoviesController {
     }
 
     public function handleRequest() {
-        // Fetch all movies and their details
         $moviesData = $this->model->getAllMovies();
         $moviesById = [];
 
@@ -30,7 +29,6 @@ class MoviesController {
                 ];
             }
 
-            // Add poster images
             if ($data['PosterFiles']) {
                 $posterFiles = explode(',', $data['PosterFiles']);
                 $moviesById[$movieId]['details']['PosterPath'] = array_map(function ($image) {
@@ -45,22 +43,18 @@ class MoviesController {
             $moviesById[$movieId]['showtimes'][$date][] = $data;
         }
 
-        // Get the offset for the week (this could be a parameter passed by GET/POST)
         $offset = isset($_GET['week_offset']) ? (int)$_GET['week_offset'] : 0;
 
-        // Calculate the start date based on the offset
         $startDate = new DateTime();
-        $startDate->modify('monday this week'); // Start of the current week
-        $startDate->modify("+$offset weeks"); // Adjust based on the week offset
+        $startDate->modify('monday this week'); 
+        $startDate->modify("+$offset weeks"); 
 
         $allDates = [];
         for ($i = 0; $i < 7; $i++) {
             $allDates[] = $startDate->format('Y-m-d');
             $startDate->modify('+1 day');
         }
-
-
-        // Pass data to the view
+        
         require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/views/movies/movies_content.php';
     }
 }

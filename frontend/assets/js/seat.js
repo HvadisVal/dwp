@@ -22,7 +22,7 @@ document.querySelectorAll('.increase-seat').forEach(button => {
             selectedTickets[type] = currentCount + 1;
             document.getElementById(`count-${type}`).textContent = selectedTickets[type];
             
-            // Reset selected seats when ticket count changes
+            
             selectedSeats = [];
             document.querySelectorAll('.seat.selected').forEach(seat => seat.classList.remove('selected'));
             
@@ -43,7 +43,7 @@ document.querySelectorAll('.decrease-seat').forEach(button => {
             selectedTickets[type] = currentCount - 1;
             document.getElementById(`count-${type}`).textContent = selectedTickets[type];
             
-            // Reset selected seats when ticket count changes
+            
             selectedSeats = [];
             document.querySelectorAll('.seat.selected').forEach(seat => seat.classList.remove('selected'));
             
@@ -55,8 +55,6 @@ document.querySelectorAll('.decrease-seat').forEach(button => {
     });
 });
 
-
-// Function to preview seats in groups based on selected tickets
 function previewSeats(row, startSeat) {
     const totalTickets = Object.values(selectedTickets).reduce((acc, count) => acc + count, 0);
     document.querySelectorAll('.seat.preview').forEach(seat => seat.classList.remove('preview'));
@@ -69,7 +67,6 @@ function previewSeats(row, startSeat) {
     }
 }
 
-// Function to select seats in groups based on selected tickets
 function selectSeats(row, startSeat) {
     const totalTickets = Object.values(selectedTickets).reduce((acc, count) => acc + count, 0);
 
@@ -108,7 +105,7 @@ document.querySelectorAll('.seat').forEach(seat => {
 });
 
 
-// Continue Button: Separate Logic for Final Selection Check and AJAX Call
+
 document.getElementById('continue-button').addEventListener('click', () => {
     const totalTickets = Object.values(selectedTickets).reduce((acc, count) => acc + count, 0);
 
@@ -119,7 +116,7 @@ document.getElementById('continue-button').addEventListener('click', () => {
         alert(`Please select exactly ${totalTickets} seat(s) to match your ticket count.`);
         return;
     } else {
-        // AJAX call to save the selected tickets and seats
+       
         fetch('/dwp/save-selection', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -128,10 +125,8 @@ document.getElementById('continue-button').addEventListener('click', () => {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Redirect to overview if saving was successful
                 window.location.href = '/dwp/overview';
             } else {
-                // Show error if something went wrong
                 alert(data.message || "Failed to save selection. Please try again.");
             }
         })

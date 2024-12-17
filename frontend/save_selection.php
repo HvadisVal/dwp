@@ -2,7 +2,6 @@
 session_start();
 header('Content-Type: application/json');
 
-// Get the incoming JSON data
 $data = json_decode(file_get_contents('php://input'), true);
 
 if (isset($data['selectedSeats'], $data['selectedTickets'])) {
@@ -14,7 +13,6 @@ if (isset($data['selectedSeats'], $data['selectedTickets'])) {
         exit;
     }
 
-    // Save data to the session
     $_SESSION['selectedSeats'] = $data['selectedSeats'];
     $_SESSION['selectedTickets'] = $data['selectedTickets'];
     echo json_encode(['success' => true]);

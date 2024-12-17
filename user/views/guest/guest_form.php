@@ -41,7 +41,7 @@
             .then(data => {
                 if (data.success) {
                     alert('Guest user created successfully!');
-                    window.location.href = '/dwp/overview'; // Redirect to overview
+                    window.location.href = '/dwp/overview'; 
                 } else {
                     alert(data.message || 'Failed to create guest user.');
                 }

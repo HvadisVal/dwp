@@ -1,5 +1,5 @@
 <?php
-require_once($_SERVER['DOCUMENT_ROOT'] . '/dwp/vendor/autoload.php'); // Ensure Postmark is autoloaded
+require_once($_SERVER['DOCUMENT_ROOT'] . '/dwp/vendor/autoload.php'); 
 require_once($_SERVER['DOCUMENT_ROOT'] . '/dwp/includes/connection.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . '/dwp/user/models/ForgotPasswordModel.php');
 
@@ -46,23 +46,20 @@ class ForgotPasswordController {
         $mail = new PHPMailer(true);
 
         try {
-            // SMTP configuration
             $mail->isSMTP();
             $mail->Host = $_ENV['SMTP_HOST'];
             $mail->SMTPAuth = true;
             $mail->Username = $_ENV['SMTP_EMAIL'];
             $mail->Password = $_ENV['SMTP_PASSWORD'];
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // Use SSL
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; 
             $mail->Port = $_ENV['SMTP_PORT'];
 
-            // Email settings
-            $mail->setFrom('noreply@filmfusion.dk', 'FilmFusion Support'); // Sender's email and name
-            $mail->addAddress($email); // Recipient's email
+            $mail->setFrom('noreply@filmfusion.dk', 'FilmFusion Support'); 
+            $mail->addAddress($email);
             $mail->Subject = 'Password Reset Request';
             $mail->Body = "Click the following link to reset your password: $resetLink";
 
             $mail->send();
-            echo "Password reset link has been sent to your email.";
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }

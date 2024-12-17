@@ -14,18 +14,15 @@ class LoginController {
         session_start();
         header('Content-Type: application/json');
         $csrfToken = generate_csrf_token();
-        $_SESSION['csrf_token'] = $csrfToken; // Store the token in session
+        $_SESSION['csrf_token'] = $csrfToken; 
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Validate CSRF token
                 validate_csrf_token($_POST['csrf_token']);
                 refresh_csrf_token();
     
-            // Sanitize input
             $username = htmlspecialchars(trim($_POST['user'] ?? ''), ENT_QUOTES, 'UTF-8');
             $password = htmlspecialchars(trim($_POST['pass'] ?? ''), ENT_QUOTES, 'UTF-8');
     
-            // Validate username
             if (!validate_username($username)) {
                 echo json_encode(['success' => false, 'message' => 'Invalid username. Use only letters, numbers, and underscores (3-20 characters).']);
                 exit;
@@ -35,7 +32,6 @@ class LoginController {
                 exit;
             }
     
-            // Validate reCAPTCHA
             $captcha_response = $_POST['g-recaptcha-response'] ?? '';
             $secret_key = '6Ld1cpoqAAAAAIrjjBueOyKBY7M_c-QgigVuEk84';
             $url = 'https://www.google.com/recaptcha/api/siteverify';
@@ -60,7 +56,6 @@ class LoginController {
                 exit;
             }
     
-            // Check credentials
             try {
                 $user = $this->model->getUserByUsername($username);
                 if ($user && password_verify($password, $user['Password'])) {

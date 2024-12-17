@@ -1,9 +1,8 @@
 <?php
-// Check if session is already started
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-$isLoggedIn = isset($_SESSION['user_id']); // Check login state
+$isLoggedIn = isset($_SESSION['user_id']); 
 ?>
 
 <!DOCTYPE html>
@@ -29,27 +28,24 @@ $isLoggedIn = isset($_SESSION['user_id']); // Check login state
         </div>
         <div class="nav-actions">
             <?php if ($isLoggedIn): ?>
-                <!-- Show Logout Button -->
+                <!-- Logout Button -->
                 <span class="user-info">Welcome, <?= htmlspecialchars($_SESSION['user']); ?></span>
                 <a href="/dwp/user/profiles" class="btn blue">Profile</a>
 
                 <button id="logoutButton" class="btn red">Logout</button>
             <?php else: ?>
-                <!-- Show Login Modal Trigger -->
+                <!-- Login Modal Trigger -->
                 <button class="btn modal-trigger" data-target="loginModal">Login</button>
             <?php endif; ?>
         </div>
     </nav>
 
-    <!-- Include Login Modal -->
     <?php include $_SERVER['DOCUMENT_ROOT'] . '/dwp/components/login_modal.php'; ?>
 
-    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="/dwp/components/login_modal.js"></script>
     <script>
-        // Initialize Materialize Modals
         document.addEventListener('DOMContentLoaded', function () {
             var modals = document.querySelectorAll('.modal');
             M.Modal.init(modals);

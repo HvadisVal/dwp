@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (form) {
     form.addEventListener("submit", function (e) {
-      e.preventDefault(); // Prevent default form submission
+      e.preventDefault(); 
 
       const formData = new FormData(form);
 
@@ -13,13 +13,13 @@ document.addEventListener("DOMContentLoaded", function () {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log("Server Response:", data); // Log the server response for debugging
+          console.log("Server Response:", data); 
 
           if (data.success) {
-            alert(data.message); // Optional: show a success message
-            window.location.href = "/dwp/"; // Redirect to the homepage
+            alert(data.message); 
+            window.location.href = "/dwp/"; 
           } else {
-            alert(data.message); // Show error message
+            alert(data.message); 
           }
         })
         .catch((error) => {

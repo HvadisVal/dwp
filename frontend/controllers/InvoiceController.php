@@ -6,7 +6,6 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use Dotenv\Dotenv;
 
-// Load .env file
 $dotenv = Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT'] . '/dwp');
 $dotenv->load();
 
@@ -32,14 +31,12 @@ class InvoiceController {
             die("Invoice not found.");
         }
 
-        // Determine recipient email
         $email = $isGuest ? $this->model->getGuestEmail($invoiceId) : $this->model->getUserEmail($invoiceId);
 
         if ($email) {
-            $this->sendInvoiceEmail($email, $invoice); // Send invoice via email
+            $this->sendInvoiceEmail($email, $invoice); 
         }
 
-        // Pass data to the view
         require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/views/invoice/invoice_content.php';
     }
 
@@ -49,7 +46,6 @@ class InvoiceController {
         try {
             $mail->isSMTP();
 
-            // Use $_ENV variables directly
             $mail->Host = $_ENV['SMTP_HOST'];
             $mail->SMTPAuth = true;
             $mail->Username = $_ENV['SMTP_EMAIL'];

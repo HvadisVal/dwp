@@ -12,10 +12,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         die("Invalid email address.");
     }
 
-    // Initialize ContactModel
     $contactModel = new ContactModel($connection);
 
-    // Save the message
     if ($contactModel->saveMessage($name, $email, $subject, $message)) {
         echo "Thank you, $name. Your message has been sent successfully.";
     } else {

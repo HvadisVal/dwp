@@ -8,7 +8,6 @@ class NewUserModel {
 
     public function createNewUser($username, $email, $phone, $password) {
         try {
-            // Check if username or email already exists
             $checkQuery = "SELECT COUNT(*) FROM User WHERE Name = :username OR Email = :email";
             $stmt = $this->connection->prepare($checkQuery);
             $stmt->bindParam(':username', $username);
@@ -20,10 +19,8 @@ class NewUserModel {
                 return ['success' => false, 'message' => 'Username or email already exists.'];
             }
 
-            // Hash the password
             $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-            // Insert the new user into the database
             $insertQuery = "INSERT INTO User (Name, Email, TelephoneNumber, Password) VALUES (:username, :email, :phone, :hashedPassword)";
             $stmt = $this->connection->prepare($insertQuery);
             $stmt->bindParam(':username', $username);
@@ -32,7 +29,6 @@ class NewUserModel {
             $stmt->bindParam(':hashedPassword', $hashedPassword);
 
             if ($stmt->execute()) {
-                // Log the user in by setting session variables
                 session_start();
                 $_SESSION['user_id'] = $this->connection->lastInsertId();
                 $_SESSION['user'] = $username;

@@ -24,9 +24,9 @@ class InvoiceModel {
             WHERE i.Invoice_ID = :invoice_id
         ";
     
-        // Add guest-specific condition
+       
         if ($isGuest) {
-            $sql .= " AND b.GuestUser_ID IS NOT NULL";  // Corrected to use GuestUser_ID
+            $sql .= " AND b.GuestUser_ID IS NOT NULL"; 
         } else {
             $sql .= " AND b.User_ID IS NOT NULL";
         }

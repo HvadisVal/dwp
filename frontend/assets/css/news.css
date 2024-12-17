@@ -1,4 +1,3 @@
-/* General Body Styles */
 * {
     box-sizing: border-box!important;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif!important;
@@ -14,14 +13,14 @@ body {
     position: relative!important;
 }
 
-/* Container */
+
 .container {
     width: 80%!important;
     margin: 40px auto!important;
     padding: 0 15px!important;
 }
 
-/* News Section Header */
+
 h1 {
     text-align: center!important;
     margin-bottom: 30px!important;
@@ -29,7 +28,7 @@ h1 {
     font-size: 2rem!important;
 }
 
-/* News Articles Grid */
+
 .news-grid {
     display: grid!important;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))!important;
@@ -37,7 +36,7 @@ h1 {
 }
 
 
-/* Individual Article Card */
+
 .news-article {
     background: linear-gradient(to right, #243642, #1a252d)!important;
     border-radius: 8px!important;
@@ -50,14 +49,14 @@ h1 {
     transform: translateY(-5px)!important;
 }
 
-/* News Image */
+
 .news-article img {
     width: 100%!important;
     height: 200px!important;
     object-fit: cover!important;
 }
 
-/* News Content */
+
 .news-content {
     padding: 15px!important;
 }

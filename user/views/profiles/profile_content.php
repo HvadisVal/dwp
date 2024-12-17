@@ -21,7 +21,6 @@ $navbar->handleRequest();
         <p><strong>Name:</strong> <?= htmlspecialchars($user['Name']); ?></p>
         <p><strong>Email:</strong> <?= htmlspecialchars($user['Email']); ?></p>
         <p><strong>Phone:</strong> <?= htmlspecialchars($user['TelephoneNumber']); ?></p>
-        <!-- Add Edit and Delete Buttons -->
         <button id="editUserButton" class="btn blue">Edit Information</button>
         <button id="deleteAccountButton" class="btn red">Delete Account</button>
         
@@ -31,7 +30,6 @@ $navbar->handleRequest();
 </div>
 
 
-<!-- Edit User Modal -->
 <div id="editUserModal" class="modal">
     <div class="modal-content">
         <h5>Edit Personal Information</h5>

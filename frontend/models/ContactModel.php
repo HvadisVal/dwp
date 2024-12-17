@@ -8,7 +8,6 @@ class ContactModel {
         $this->connection = $connection;
     }
 
-    // Fetch company details
     public function getCompanyDetails() {
         try {
             $stmt = $this->connection->prepare("SELECT * FROM Company LIMIT 1");
@@ -19,7 +18,6 @@ class ContactModel {
         }
     }
 
-    // Save a contact message
     public function saveMessage($name, $email, $subject, $message) {
         try {
             $stmt = $this->connection->prepare("

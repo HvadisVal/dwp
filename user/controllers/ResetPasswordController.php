@@ -1,7 +1,7 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . '/dwp/includes/connection.php');
 require_once($_SERVER['DOCUMENT_ROOT'] . '/dwp/user/models/ForgotPasswordModel.php');
-require_once($_SERVER['DOCUMENT_ROOT'] . '/dwp/includes/functions.php'); // Ensure validate_password is included
+require_once($_SERVER['DOCUMENT_ROOT'] . '/dwp/includes/functions.php'); 
 
 class ResetPasswordController {
     private $model;
@@ -12,7 +12,6 @@ class ResetPasswordController {
 
     public function handleRequest() {
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-            // Show reset password form
             $token = $_GET['token'] ?? null;
             if (!$token) {
                 die("Invalid or missing token.");
@@ -29,7 +28,6 @@ class ResetPasswordController {
                 exit();
             }
 
-            // Validate the password
             if (!validate_password($password)) {
                 echo json_encode(['success' => false, 'message' => 'Invalid password. Use 8-20 characters, including uppercase, lowercase, numbers, and special characters.']);
                 exit();

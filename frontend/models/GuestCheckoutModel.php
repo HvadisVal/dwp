@@ -32,9 +32,8 @@ class GuestCheckoutModel {
     
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
     
-            return $result ? $result : null; // Return null if no result
+            return $result ? $result : null; 
         } catch (PDOException $e) {
-            // Optionally log the error and return null
             error_log("Database error: " . $e->getMessage());
             return null;
         }

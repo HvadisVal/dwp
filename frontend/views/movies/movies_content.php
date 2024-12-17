@@ -45,7 +45,7 @@ $navbar->handleRequest();
                     </div>
                 </div>
 
-                <!-- Movie Showtimes by Date (Vertically) -->
+                <!-- Movie Showtimes by Date -->
                 <div class="schedule">
                     <?php foreach ($allDates as $date): ?>
                         <div class="date-column">

@@ -21,12 +21,10 @@ document.addEventListener("DOMContentLoaded", function () {
   showSlides();
 });
 
-// Get dropdown elements
 const dateDropdown = document.getElementById("select-date");
 const movieDropdown = document.getElementById("select-movie");
 const versionDropdown = document.getElementById("select-version");
 
-// Example function: Log selected values
 const logSelectedFilters = () => {
   const selectedDate = dateDropdown.value;
   const selectedMovie = movieDropdown.value;
@@ -37,7 +35,6 @@ const logSelectedFilters = () => {
   console.log(`Selected Version: ${selectedVersion}`);
 };
 
-// Add event listeners
 [dateDropdown, movieDropdown, versionDropdown].forEach((dropdown) => {
   dropdown.addEventListener("change", logSelectedFilters);
 });
@@ -52,19 +49,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const date = dateFilter.value || "";
     const movieId = movieFilter.value || "";
     const versionId = versionFilter.value || "";
-  
-    // Send AJAX request to fetch filtered movies
+ 
     fetch("/dwp/frontend/actions/fetch_movies.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ date, movieId, versionId }),
     })
-      .then((response) => response.text()) // Use `.text()` to check the raw response
+      .then((response) => response.text()) 
       .then((rawData) => {
-        console.log("Raw response data:", rawData); // Log the raw data to inspect it
-        const data = JSON.parse(rawData); // Then parse it as JSON
-  
-        // Check if data is empty
+        console.log("Raw response data:", rawData); 
+        const data = JSON.parse(rawData); 
+
         if (data.length === 0) {
           movieGrid.innerHTML = `
             <div class="no-movies-message">
@@ -74,9 +69,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         
         
-        
-  
-        // Update the movie grid with movie cards
         movieGrid.innerHTML = data
           .map(
             (movie) => `
@@ -100,38 +92,31 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   
 
-  // Attach change event listeners to filters
   dateFilter.addEventListener("change", fetchMovies);
   movieFilter.addEventListener("change", fetchMovies);
   versionFilter.addEventListener("change", fetchMovies);
 });
 
 document.getElementById("reset-filters").addEventListener("click", function () {
-  // Reset the dropdown values to default (empty or first option)
-  document.getElementById("select-date").selectedIndex = 0; // Reset Date filter
-  document.getElementById("select-movie").selectedIndex = 0; // Reset Movie filter
-  document.getElementById("select-version").selectedIndex = 0; // Reset Version filter
+  document.getElementById("select-date").selectedIndex = 0;
+  document.getElementById("select-movie").selectedIndex = 0; 
+  document.getElementById("select-version").selectedIndex = 0; 
 
-  // Optionally, reset the movie grid by reloading the page or calling fetch_movies with no filters
   resetMovieGrid();
 });
 
 function resetMovieGrid() {
-  // You can reload the movie grid with all movies (no filters applied)
-  // Here, you might want to re-fetch the data without any filters or reload the page to show all movies
-  fetchMovies(); // Assuming fetchMovies handles the request and update
+  fetchMovies(); 
 }
 
 function updateMovieGrid(movies) {
   const movieGrid = document.querySelector(".movie-grid");
-  movieGrid.innerHTML = ""; // Clear the existing movie grid
+  movieGrid.innerHTML = ""; 
 
-  // Iterate over the fetched movies and append them to the grid
   movies.forEach((movie) => {
     const movieCard = document.createElement("div");
     movieCard.classList.add("movie-card");
 
-    // Movie content (e.g., image, title)
     movieCard.innerHTML = `
           <a href="/dwp/movie?movie_id=${movie.Movie_ID}">
               <img src="uploads/poster/${movie.FileName}" alt="${movie.Title}" style="width: 100%; border-radius: 8px; margin-bottom: 10px;">
@@ -145,12 +130,11 @@ function updateMovieGrid(movies) {
 
 function fetchMovies() {
   const filters = {
-    date: "", // Empty date filter to show all movies
-    movieId: "", // Empty movie filter to show all movies
-    versionId: "", // Empty version filter to show all movies
+    date: "", 
+    movieId: "", 
+    versionId: "", 
   };
 
-  // Send request to the backend with no filters
   fetch("/dwp/frontend/actions/fetch_movies.php", {
     method: "POST",
     headers: {
@@ -160,7 +144,6 @@ function fetchMovies() {
   })
     .then((response) => response.json())
     .then((movies) => {
-      // Update the movie grid with all movies
       updateMovieGrid(movies);
     });
 }

@@ -42,7 +42,7 @@ footer a:hover {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    gap: 1.5rem; /* Increase gap for more spacing */
+    gap: 1.5rem; 
     align-items: center;
     margin-top: 1rem;
 }

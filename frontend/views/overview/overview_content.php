@@ -16,7 +16,7 @@ $navbar->handleRequest();
     <div class="container">
         <h4>Booking Overview</h4>
 
-        <!-- Movie Details Section -->
+        <!-- Movie Details -->
         <div class="movie-details">
             <h5>Movie: <?= htmlspecialchars_decode($movie['Title'] ?? 'N/A'); ?></h5>
             <p><strong>Duration:</strong> <?= htmlspecialchars_decode($movie['Duration'] ?? 'N/A'); ?></p>
@@ -53,17 +53,12 @@ $navbar->handleRequest();
     </div>
 <?php endif; ?>
 
-
-
-
-        <!-- Include Modals -->
         <?php include $_SERVER['DOCUMENT_ROOT'] . '/dwp/components/login_modal.php'; ?>
         <?php include $_SERVER['DOCUMENT_ROOT'] . '/dwp/components/guest_modal.php'; ?>
         <?php include $_SERVER['DOCUMENT_ROOT'] . '/dwp/components/checkout_modal.php'; ?>
 
     </div>
 
-    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="/dwp/frontend/assets/js/overview.js"></script>

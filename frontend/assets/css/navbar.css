@@ -1,6 +1,6 @@
 nav {
     display: flex !important;
-    justify-content: space-between; /* Spread items evenly */
+    justify-content: space-between; 
     align-items: center;
     padding: 1rem 2rem;
     background: linear-gradient(to right, #243642, #1a252d);
@@ -20,10 +20,10 @@ nav {
 
 .nav-links {
     display: flex;
-    flex-grow: 1; /* Allow links to take up space */
-    justify-content: center; /* Center the links */
+    flex-grow: 1; 
+    justify-content: center; 
     align-items: center;
-    gap: 4rem; /* Add spacing between links */
+    gap: 4rem; 
 }
 
 .nav-links a {
@@ -41,7 +41,7 @@ nav {
 .nav-actions {
     display: flex;
     align-items: center;
-    gap: 1rem; /* Add spacing between buttons */
+    gap: 1rem; 
 }
 
 button {

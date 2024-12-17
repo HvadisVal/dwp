@@ -1,7 +1,7 @@
 <?php
 require_once("./includes/connection.php"); 
 
-// Autoload classes 
+// autoload classes 
 spl_autoload_register(function ($class_name) {
     $paths = [
         'admin/controllers/',
@@ -16,12 +16,11 @@ spl_autoload_register(function ($class_name) {
     }
 });
 
-// Get the path from the URL, e.g., "admin/manage_movies"
 $path = isset($_GET['path']) ? $_GET['path'] : 'landing';
 
-// Define routes
+// routes
 $routes = [
-    // Admin pages
+    // admin pages
     'admin/login' => 'admin/controllers/LoginController.php',
     'admin/logout' => 'admin/controllers/LogoutController.php',
     'admin/dashboard' => 'admin/controllers/DashboardController.php',
@@ -53,7 +52,7 @@ $routes = [
     'admin/manage-messages/reply' => 'admin/controllers/MessageController.php',
 
 
-    // Main pages
+    // main pages
     'about' => 'frontend/controllers/AboutController.php',
     'landing' => 'frontend/controllers/LandingController.php', 
     'news' => 'frontend/controllers/NewsController.php',
@@ -69,14 +68,11 @@ $routes = [
     
 ];
 
-// Route the request based on the path
+// route the request based on the path
 function routeRequest($path, $routes, $connection) {
-    // Check if the path is an admin page
     if (strpos($path, 'admin/') === 0 && $path !== 'admin/login') {
-        // Start session 
         require_once("./includes/admin_session.php"); 
 
-        // Use admin session function to confirm the admin is logged in
         if (!admin_logged_in()) {
             header('Location: /dwp/admin/login'); 
             exit;
@@ -199,9 +195,6 @@ function routeRequest($path, $routes, $connection) {
         }
     }
     
-    
-    
- // Check for the route to reply to a message
  if (strpos($path, 'admin/manage-messages/reply') === 0) {
     $pathParts = explode('/', $path);
     $messageId = isset($pathParts[3]) ? (int)$pathParts[3] : null;
@@ -221,10 +214,8 @@ function routeRequest($path, $routes, $connection) {
 
     
      if (array_key_exists($path, $routes)) {
-        // Dynamically include the controller
         require_once($routes[$path]);
         
-        // Instantiate the controller class and handle the request
         $controllerName = basename($routes[$path], '.php'); 
         $controllerClass = ucfirst($controllerName);  
         $controller = new $controllerClass($connection);
@@ -237,7 +228,6 @@ function routeRequest($path, $routes, $connection) {
     echo "404 - Page Not Found";
 }
 
-// Helper function to load a controller 
 function loadController($controllerName, $connection, $methodName = 'handleRequest') {
     require_once("admin/controllers/{$controllerName}.php");
     $controller = new $controllerName($connection);
@@ -246,7 +236,7 @@ function loadController($controllerName, $connection, $methodName = 'handleReque
 
 routeRequest($path, $routes, $connection);
 
-// Footer
+// footer
 $pagesWithFooter = [
     'landing',
     'news',

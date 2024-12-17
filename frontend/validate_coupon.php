@@ -10,7 +10,6 @@ try {
     exit;
 }
 
-// Get posted coupon code
 $data = json_decode(file_get_contents('php://input'), true);
 $couponCode = $data['couponCode'] ?? '';
 
@@ -34,7 +33,6 @@ try {
         $discount = (float)$coupon['DiscountAmount'];
         $newTotalPrice = max(0, $_SESSION['totalPrice'] - $discount);
 
-        // Save the coupon code and discounted price to the session
         $_SESSION['couponCode'] = $couponCode;
         $_SESSION['discountedPrice'] = $newTotalPrice;
 

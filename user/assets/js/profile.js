@@ -1,4 +1,3 @@
-// Edit User
 document.addEventListener('DOMContentLoaded', function () {
     const editButton = document.getElementById('editUserButton');
     const editModal = document.getElementById('editUserModal');
@@ -6,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (editButton) {
         editButton.addEventListener('click', function () {
-            modalInstance.open(); // Open the modal
+            modalInstance.open(); 
         });
     } else {
         console.error('Edit Information button not found');
@@ -29,8 +28,8 @@ document.getElementById('editUserForm').addEventListener('submit', function (e) 
 
             if (data.success) {
                 M.toast({ html: 'Profile updated successfully.', classes: 'green' });
-                modalInstance.close(); // Close the modal
-                setTimeout(() => location.reload(), 1000); // Reload after success
+                modalInstance.close(); 
+                setTimeout(() => location.reload(), 1000); 
             } else {
                 M.toast({ html: data.message, classes: 'red' });
             }
@@ -42,8 +41,6 @@ document.getElementById('editUserForm').addEventListener('submit', function (e) 
 });
 
 
-
-// Delete Account
 document.getElementById('deleteAccountButton').addEventListener('click', function () {
     if (confirm('Are you sure you want to delete your account?')) {
         fetch('/dwp/user/delete_user', {
@@ -53,7 +50,6 @@ document.getElementById('deleteAccountButton').addEventListener('click', functio
             .then(data => {
                 if (data.success) {
                     M.toast({ html: data.message });
-                    // Redirect to the landing page
                     window.location.href = '/dwp/landing';
                 } else {
                     M.toast({ html: data.message, classes: 'red' });

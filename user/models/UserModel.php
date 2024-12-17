@@ -59,7 +59,6 @@ class UserModel {
         try {
             $this->connection->beginTransaction();
 
-            // Delete tickets associated with the user's bookings
             $deleteTicketsQuery = "
                 DELETE FROM Ticket
                 WHERE Booking_ID IN (
@@ -69,7 +68,6 @@ class UserModel {
             $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
             $stmt->execute();
 
-            // Delete the user's bookings
             $deleteBookingsQuery = "DELETE FROM Booking WHERE User_ID = :user_id";
             $stmt = $this->connection->prepare($deleteBookingsQuery);
             $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);

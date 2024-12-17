@@ -9,7 +9,6 @@ class MovieProfileModel {
     }
 
     public function getMovieDetails($movieId) {
-        // SQL query to fetch movie details, showtimes, poster, and gallery images
         $sql = "
             SELECT m.*, 
                    s.CinemaHall_ID, 

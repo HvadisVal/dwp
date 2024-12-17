@@ -11,7 +11,7 @@ body {
 .hero {
   position: relative;
   width: 100%;
-  height: 100vh; /* Full screen height */
+  height: 100vh; 
   overflow: hidden;
 }
 
@@ -22,8 +22,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Ensures the image covers the entire container while maintaining aspect ratio */
-  object-position: center center; /* Centers the image */
+  object-fit: cover; 
+  object-position: center center;
 }
 
 .spider-man-img {

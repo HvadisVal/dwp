@@ -3,7 +3,7 @@ class ProfileModel {
     private $db;
 
     public function __construct($connection) {
-        $this->db = $connection; // Ensure $connection is passed correctly
+        $this->db = $connection; 
     }
 
     public function getUserDetails($userId) {
