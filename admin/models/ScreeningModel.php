@@ -1,5 +1,4 @@
 <?php
-// Path: admin/models/ScreeningModel.php
 require_once('./includes/connection.php');
 
 class ScreeningModel {
@@ -31,7 +30,6 @@ class ScreeningModel {
     }
 
     
-    // Add screening with overlap check
     public static function addScreening($movieId, $cinemaHallId, $showTime) {
         global $connection;
         $showDate = date('Y-m-d', strtotime($showTime));
@@ -43,7 +41,6 @@ class ScreeningModel {
         try {
             return $stmt->execute([$showDate, $showTime, $cinemaHallId, $movieId]);
         } catch (PDOException $e) {
-            // Handle SQL error (e.g., overlap error from the trigger)
             return false;
         }
     }
@@ -59,7 +56,6 @@ class ScreeningModel {
         try {
             return $stmt->execute([$showDate, $showTime, $cinemaHallId, $movieId, $screeningId]);
         } catch (PDOException $e) {
-            // Handle SQL error (e.g., overlap error from the trigger)
             return false;
         }
     }

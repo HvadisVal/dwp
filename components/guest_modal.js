@@ -1,68 +1,38 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Initialize Materialize modals
   var modals = document.querySelectorAll(".modal");
   M.Modal.init(modals);
 });
 
-// Guest Checkout Form Submission
 $("#guestForm").on("submit", function (e) {
-  e.preventDefault(); // Prevent default form submission
-
-  // Ensure CAPTCHA is completed
-  
-
-  // Collect form data
-  var formData = $(this).serialize(); // Serialize form data
-
-  // Send the data to the server
-  $.ajax({
-    url: "/dwp/user/guest", // Adjust to your backend endpoint
-    type: "POST",
-    data: formData,
-    success: function (response) {
-      response = JSON.parse(response); // Parse response from server
-      if (response.success) {
-        location.reload(); // Reload page to display guest info
-      } else {
-        $(".error-message").text(response.message).show(); // Show error message
-      }
-    },
-    error: function (xhr, status, error) {
-      $(".error-message").text("An error occurred, please try again.").show();
-    },
-  });
-});
-
-
-
-  function onGuestCaptchaCompleted() {
-    document.getElementById('continueBtn').disabled = false; // Enable the button
-  }
-
-
-
-
-
-$('#guestForm').on('submit', function (e) {
   e.preventDefault();
+  grecaptcha.ready(function () {
+    grecaptcha
+      .execute("6Ld1cpoqAAAAALcO07tjTnYTDe4_py7LbfM09gZ1", {
+        action: "guest_checkout",
+      })
+      .then(function (token) {
+        $("#guestForm #g-recaptcha-response").val(token);
 
-  var formData = $(this).serialize();
+        var formData = $("#guestForm").serialize();
 
-  // Send AJAX request to server
-  $.ajax({
-      url: '/dwp/user/guest', // Adjust the path as needed
-      type: 'POST',
-      data: formData,
-      success: function (response) {
-          response = JSON.parse(response);
-          if (!response.success) {
-            $('.error-message').text(response.message).show();
-          } 
-      },
-      error: function () {
-          $('.error-message').text('An error occurred, please try again.').show();
-      }
+        $.ajax({
+          url: "/dwp/user/guest",
+          type: "POST",
+          data: formData,
+          success: function (response) {
+            response = JSON.parse(response);
+            if (response.success) {
+              location.reload();
+            } else {
+              $(".error-message").text(response.message).show();
+            }
+          },
+          error: function (xhr, status, error) {
+            $(".error-message")
+              .text("An error occurred, please try again.")
+              .show();
+          },
+        });
+      });
   });
 });
-
-

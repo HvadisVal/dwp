@@ -4,42 +4,39 @@ document.querySelector(".add-button").addEventListener("click", function (e) {
 
   if (!poster.files.length) {
     alert("Please upload a poster image.");
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
   }
 
   if (!gallery.files.length) {
     alert("Please upload at least one gallery image.");
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
   }
 });
 
 function validateFileCount(input) {
   const maxFiles = 5;
-  console.log(`Selected files: ${input.files.length}`); // Log the number of files selected
+  console.log(`Selected files: ${input.files.length}`);
   if (input.files.length > maxFiles) {
     alert(`You can only upload a maximum of ${maxFiles} images.`);
-    input.value = ""; // Clear the input
+    input.value = "";
   }
 }
 
-// Function to display file names for multiple uploaded images (gallery) with a limit of 5 files
 function displayGalleryFileNames(event) {
-  var files = event.target.files; // Get the selected files
+  var files = event.target.files;
   var fileNamesContainer = document.getElementById("galleryFileNamesContainer");
-  fileNamesContainer.innerHTML = ""; // Clear previous file names
+  fileNamesContainer.innerHTML = "";
 
-  // Check if the file count exceeds the limit
   if (files.length > 5) {
     alert("You can only upload up to 5 gallery images.");
-    event.target.value = ""; // Clear the file input
+    event.target.value = "";
     return;
   }
 
-  // Loop through each selected file and display its name (up to 5 files)
   for (var i = 0; i < files.length; i++) {
-    var fileName = document.createElement("div"); // Create a new div for each file name
-    fileName.textContent = files[i].name; // Set the text to the file name
-    fileNamesContainer.appendChild(fileName); // Add the file name to the container
+    var fileName = document.createElement("div");
+    fileName.textContent = files[i].name;
+    fileNamesContainer.appendChild(fileName);
   }
 }
 
@@ -58,20 +55,18 @@ function validateExistingFileCount(input) {
     parseInt(input.getAttribute("data-existing-files-count")) || 0;
   const fileCount = input.files.length;
 
-  // Display the file names
   displayFileNames(input);
 
-  // Check if total files exceed the maximum allowed
   if (fileCount + existingFilesCount > maxFiles) {
     alert(
       `You can only upload a maximum of ${
         maxFiles - existingFilesCount
       } additional images.`
     );
-    input.value = ""; // Clear the input if the limit is exceeded
+    input.value = "";
     document.getElementById(
       `gallery-file-names-${input.id.split("-")[1]}`
-    ).innerHTML = ""; // Clear file names
+    ).innerHTML = "";
   }
 }
 
@@ -83,6 +78,5 @@ function displayFileNames(input) {
     .map((file) => file.name)
     .join(", ");
 
-  // Show file names
   fileNamesContainer.textContent = fileNames;
 }

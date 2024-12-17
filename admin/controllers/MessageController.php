@@ -1,5 +1,4 @@
 <?php 
-// admin/controllers/MessageController.php
 require_once('./admin/models/MessageModel.php');
 require_once('./includes/admin_session.php');
 require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/vendor/autoload.php';
@@ -9,7 +8,7 @@ use PHPMailer\PHPMailer\Exception;
 use Dotenv\Dotenv;
 
 // Load .env file
-$dotenv = Dotenv::createImmutable('/Applications/XAMPP/xamppfiles/htdocs/DWP');
+$dotenv = Dotenv::createImmutable($_SERVER['DOCUMENT_ROOT'] . '/dwp');
 $dotenv->load();
 
 class MessageController {
@@ -20,14 +19,13 @@ class MessageController {
     }
 
     public function handleRequest() {
-        // Fetch all contact messages to be passed to the view
+        // Fetch all contact messages 
         $messages = $this->messageModel->getAllMessages();
         include('admin/views/messages_content.php');
     }
 
     // Handle reply to message
     public function replyToMessage($messageId, $reply) {
-        // Fetch the recipient email and subject based on the Message ID
         $message = $this->messageModel->getMessageDetails($messageId);
     
         if (!$message) {
@@ -39,12 +37,9 @@ class MessageController {
         $recipientEmail = $message['Email'];
         $subject = $message['Subject'];
     
-        // Sanitize the reply
         $reply = htmlspecialchars(trim($reply));
     
-        // Store the reply in the database
         if ($this->messageModel->replyToMessage($messageId, $reply)) {
-            // Send the reply email
             if ($this->sendReplyEmail($recipientEmail, 'Re: ' . $subject, $reply)) {
                 $_SESSION['message'] = "Reply sent successfully!";
             } else {
@@ -65,7 +60,6 @@ class MessageController {
         try {
             $mail->isSMTP();
     
-            // Use $_ENV variables directly
             $mail->Host = $_ENV['SMTP_HOST'] ?? 'send.one.com';
             $mail->SMTPAuth = true;
             $mail->Username = $_ENV['SMTP_EMAIL'] ?? 'noreply@filmfusion.dk';
@@ -78,7 +72,6 @@ class MessageController {
             $mail->Subject = $subject;
             $mail->isHTML(true);
     
-            // Compose the email body for the reply
             $mail->Body = $this->generateReplyContent($reply);
     
             $mail->send();

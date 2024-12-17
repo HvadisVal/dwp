@@ -1,10 +1,9 @@
-<!-- admin/views/coupons_content.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="<?php echo $csrfToken; ?>"> <!-- Store CSRF token here -->
+    <meta name="csrf-token" content="<?php echo $csrfToken; ?>"> 
     <title>Manage Coupons</title>
     <link rel="stylesheet" href="/dwp/admin/assets/css/coupons.css">
     <script src="/dwp/admin/assets/js/coupons.js" defer></script>
@@ -21,13 +20,11 @@
     <?php
     if (isset($_SESSION['message'])) {
         echo '<div class="message">' . htmlspecialchars($_SESSION['message']) . '</div>';
-        // Optionally clear the message after displaying it
         unset($_SESSION['message']);
     }
     ?>
 
 
-    <!-- Add Coupon Section -->
     <section class="add-coupon">
         <h2>Add New Coupon</h2>
         <form method="POST" class="form-add">
@@ -49,7 +46,6 @@
         </form>
     </section>
 
-    <!-- Existing Coupons Section -->
     <section class="existing-coupons">
         <h2>Existing Coupons</h2>
         <div class="coupons-grid">

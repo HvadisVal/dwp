@@ -1,4 +1,3 @@
-<!-- views/screenings_content.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,11 +14,9 @@
 <?php
     if (isset($_SESSION['message'])) {
         echo '<div class="message">' . htmlspecialchars($_SESSION['message'], ENT_QUOTES, 'UTF-8') . '</div>';
-        // Optionally clear the message after displaying it
         unset($_SESSION['message']);
     }
 ?>
-<!-- Add Screening Section -->
 <h2>Add New Screening</h2>
 <form method="POST" class="screening-card">
     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
@@ -50,7 +47,6 @@
     <button type="submit" name="add_screening" class="add-button">Add Screening</button>
 </form>
 
-<!-- Existing Screenings Section -->
 <h2>Existing Screenings</h2>
 <div id="screeningContainer">
     <?php foreach ($screenings as $screening): ?>

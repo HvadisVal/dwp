@@ -1,5 +1,4 @@
 <?php 
-// Path: admin/controllers/BookingController.php
 require_once("./includes/functions.php");
 require_once("./includes/admin_session.php");
 require_once("./admin/models/BookingModel.php");
@@ -12,7 +11,6 @@ class BookingController {
     }
 
     public function handleRequest() {
-        // CSRF token generation and validation
         generate_csrf_token();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -42,7 +40,6 @@ class BookingController {
     }
 }
 
-// Instantiate and handle request
 $controller = new BookingController($connection);
 $controller->handleRequest();
 $bookings = $controller->getAllBookings();

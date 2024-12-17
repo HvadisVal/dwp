@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Initialize ContactModel
-    $contactModel = new ContactModel();
+    $contactModel = new ContactModel($connection);
 
     // Save the message
     if ($contactModel->saveMessage($name, $email, $subject, $message)) {

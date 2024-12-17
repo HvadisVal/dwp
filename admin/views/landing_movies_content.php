@@ -23,7 +23,6 @@
     }
     ?>
 
-    <!-- Add Movie Section -->
     <section class="add-movie">
         <h2>Add Movie to Landing Page</h2>
         <form method="POST" class="form-add">
@@ -54,7 +53,6 @@
         </form>
     </section>
 
-    <!-- Existing Landing Page Movies Section -->
     <section class="existing-movies">
         <h2>Movies on Landing Page</h2>
         <div class="movies-grid">
@@ -63,7 +61,6 @@
                     <h3><?php echo htmlspecialchars_decode($movie['Title'], ENT_QUOTES); ?></h3>
                     <p>Display Order: <?php echo htmlspecialchars($movie['DisplayOrder'], ENT_QUOTES, 'UTF-8'); ?></p>
 
-                    <!-- Update Display Order -->
                     <form method="POST" class="form-update-order">
                         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8'); ?>">
                         <input type="hidden" name="action" value="update">
@@ -81,7 +78,6 @@
                         <button type="submit" class="edit-button">Update Order</button>
                     </form>
 
-                    <!-- Delete Movie -->
                     <form method="POST" class="form-delete">
                         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrfToken, ENT_QUOTES, 'UTF-8'); ?>">
                         <input type="hidden" name="action" value="delete">

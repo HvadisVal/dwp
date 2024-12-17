@@ -17,7 +17,6 @@
     <div class="message"><?php echo htmlspecialchars($_SESSION['message'], ENT_QUOTES, 'UTF-8'); unset($_SESSION['message']); ?></div>
 <?php endif; ?>
 
-<!-- Edit Company Information Section -->
 <h2>Edit Company Details</h2>
 
 <form method="POST" class="company-card company-form">

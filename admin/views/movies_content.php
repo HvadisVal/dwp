@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -98,7 +96,6 @@
 
 
 
-<!-- Existing Movies Section -->
 <h2 class="header">Existing Movies</h2>
 <div id="moviesContainer">
     <?php foreach ($movies as $movie): ?>
@@ -107,7 +104,6 @@
                 <input type="hidden" name="csrf_token" value="<?php echo generate_csrf_token(); ?>">
                 <input type="hidden" name="movie_id" value="<?php echo $movie['Movie_ID']; ?>">
 
-                <!-- Movie Details (title, director, etc.) -->
                 <label for="title">Title:</label>
                 <input type="text" name="title" value="<?php echo htmlspecialchars(htmlspecialchars_decode($movie['Title'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" required>
 
@@ -135,7 +131,6 @@
                 <label for="trailerlink">Trailer Link:</label>
                 <input type="text" name="trailerlink" value="<?php echo htmlspecialchars(htmlspecialchars_decode($movie['TrailerLink'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" required placeholder="e.g., https://youtube.com/watch?v=...">
 
-                <!-- Genre Select -->
                 <label for="genre_id">Genre:</label>
                 <select name="genre_id" required>
                     <?php foreach ($genres as $genre): ?>
@@ -146,7 +141,6 @@
                     <?php endforeach; ?>
                 </select>
 
-                <!-- Version Select -->
                 <label for="version_id">Version:</label>
                 <select name="version_id" required>
                     <?php foreach ($versions as $version): ?>
@@ -157,7 +151,6 @@
                     <?php endforeach; ?>
                 </select>
 
-                <!-- Display uploaded poster image -->
                 <?php if (!empty($movie['ImageFileName'])): ?>
                     <div>
                         <img src="../uploads/poster/<?php echo htmlspecialchars(htmlspecialchars_decode($movie['ImageFileName'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars(htmlspecialchars_decode($movie['Title'], ENT_QUOTES), ENT_QUOTES, 'UTF-8'); ?>" style="max-width: 100%; height: auto;">
@@ -171,7 +164,6 @@
                 <label for="poster-<?php echo $movie['Movie_ID']; ?>" class="file-label">Choose New Poster</label>
                 <div class="file-name" id="fileNameContainer-<?php echo $movie['Movie_ID']; ?>"></div>
 
-                <!-- Display gallery images with delete checkboxes -->
                 <?php if (!empty($movie['GalleryImages'])): ?>
                     <div>
                         <h4>Gallery Images:</h4>

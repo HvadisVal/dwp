@@ -20,6 +20,9 @@ function uploadImage($id, $type, $connection) {
         return;
     }
 
+    // Define max file size (5MB for example)
+    $maxFileSize = 5 * 1024 * 1024; // 5MB in bytes
+
     // Ensure we're not exceeding the limit for gallery images
     if ($type === 'gallery') {
         $galleryCountSql = "SELECT COUNT(*) FROM Media WHERE Movie_ID = ? AND IsFeatured = 0";
@@ -43,7 +46,14 @@ function uploadImage($id, $type, $connection) {
         if ($fileErrors[$index] === UPLOAD_ERR_OK) {
             $fileName = $fileNames[$index];
             $fileType = pathinfo($fileName, PATHINFO_EXTENSION);
-            $allowedTypes = ['jpg', 'png'];
+            $allowedTypes = ['jpg', 'png', 'jpeg'];
+
+            // File size check
+            $fileSize = $_FILES['image']['size'][$index];
+            if ($fileSize > $maxFileSize) {
+                echo "File size for $fileName exceeds the 5MB limit.";
+                return;
+            }
 
             if (in_array(strtolower($fileType), $allowedTypes)) {
                 $newFileName = md5(time() . $fileName) . '.' . $fileType;
@@ -63,7 +73,6 @@ function uploadImage($id, $type, $connection) {
                         $mediaStmt = $connection->prepare($mediaSql);
                         $mediaStmt->execute([$newFileName, $fileType, $id, $isFeatured]);
                     }
-                    // echo "Image $fileName uploaded successfully.";
                 } else {
                     echo "Error moving the uploaded file $fileName.";
                 }
@@ -73,6 +82,7 @@ function uploadImage($id, $type, $connection) {
         } 
     }
 }
+
 
 function deleteImage($id, $type, $connection) {
     // Retrieve all file names for this article/movie

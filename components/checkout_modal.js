@@ -1,9 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Initialize Materialize Modals
   var modals = document.querySelectorAll(".modal");
   M.Modal.init(modals);
 
-  // Apply Coupon Logic
   const applyCouponButton = document.getElementById("applyCoupon");
   if (applyCouponButton) {
     applyCouponButton.addEventListener("click", function () {
@@ -11,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const couponMessage = document.getElementById("couponMessage");
       if (!couponMessage) {
         console.error("Element with id 'couponMessage' not found in the DOM.");
-        return; // Exit the function to avoid further errors
+        return;
       }
       const totalPriceDisplay = document.getElementById("totalPriceDisplay");
 
@@ -50,24 +48,19 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Select all radio buttons and payment content sections
   const paymentRadios = document.querySelectorAll(".payment-radio");
   const paymentContents = document.querySelectorAll(".payment-content");
 
-  // Hide all payment content initially
   paymentContents.forEach((content) => {
     content.style.display = "none";
   });
 
-  // Add event listeners to payment method radio buttons
   paymentRadios.forEach((radio) => {
     radio.addEventListener("change", function () {
-      // Hide all payment content
       paymentContents.forEach((content) => {
         content.style.display = "none";
       });
 
-      // Show the selected payment method's content
       if (radio.value === "card") {
         document.getElementById("cardDetails").style.display = "block";
       } else if (radio.value === "mobilepay") {
@@ -76,11 +69,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  // Handle "Checkout" button click
   const checkoutButton = document.getElementById("checkoutButton");
   if (checkoutButton) {
     checkoutButton.addEventListener("click", function () {
-      // Perform any necessary validation before redirecting
       const selectedPaymentMethod = document.querySelector(
         'input[name="paymentMethod"]:checked'
       );
@@ -89,8 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      // Redirect to the secondary page
-      window.location.href = "/dwp/checkout"; // Update with your secondary page path
+      window.location.href = "/dwp/checkout";
     });
   }
 });

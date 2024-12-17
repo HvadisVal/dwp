@@ -1,4 +1,3 @@
-<!-- admin/views/messages_content.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,7 +24,6 @@
     }
     ?>
 
-    <!-- Display Messages -->
     <section class="messages">
         <h2>Received Messages</h2>
         <table class="messages-table">

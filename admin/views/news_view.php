@@ -17,7 +17,6 @@
         <?php unset($_SESSION['message']); ?>
 <?php endif; ?>
 
-<!-- Add News Section -->
 <h2>Add New Article</h2>
 <form method="POST" enctype="multipart/form-data" class="news-card">
     <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars(generate_csrf_token(), ENT_QUOTES, 'UTF-8'); ?>">
@@ -42,7 +41,6 @@
     <button type="submit" class="add-button">Add News</button>
 </form>
 
-<!-- Existing News Section -->
 <h2>Existing Articles</h2>
 <div id="newsContainer">
     <?php foreach ($newsWithImages as $newsId => $data): ?>
