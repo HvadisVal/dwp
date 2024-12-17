@@ -1,5 +1,4 @@
 $(document).ready(function () {
-  // Function to handle reCAPTCHA execution and form submission
   function handleCaptchaAndSubmit(formId, action, successCallback) {
     grecaptcha.ready(function () {
       grecaptcha
@@ -7,7 +6,6 @@ $(document).ready(function () {
         .then(function (token) {
           $("#" + formId + " #g-recaptcha-response").val(token);
 
-          // Include CSRF token explicitly in AJAX request
           const formData = $("#" + formId).serialize();
 
           $.ajax({
@@ -15,7 +13,7 @@ $(document).ready(function () {
             type: "POST",
             data: formData,
             success: function (response) {
-              console.log("Raw response:", response); // Debug log
+              console.log("Raw response:", response); // Debugging
               try {
                 const jsonResponse =
                   typeof response === "string"
@@ -25,7 +23,6 @@ $(document).ready(function () {
                 if (jsonResponse.success) {
                   successCallback(jsonResponse);
                 } else {
-                  // Display error message on the page
                   $("#" + formId + " .error-message")
                     .text(jsonResponse.message)
                     .show();
@@ -53,7 +50,6 @@ $(document).ready(function () {
     e.preventDefault();
 
     handleCaptchaAndSubmit("loginForm", "login", function (response) {
-      // On successful login, reload the page
       location.reload();
     });
   });
@@ -63,7 +59,6 @@ $(document).ready(function () {
     e.preventDefault();
 
     handleCaptchaAndSubmit("newUserForm", "new_user", function (response) {
-      // Close modal after successful user creation
       const modalInstance = M.Modal.getInstance(
         document.getElementById("newUserModal")
       );
@@ -75,11 +70,11 @@ $(document).ready(function () {
   // Logout Button
   $(document).on("click", "#logoutButton", function () {
     $.ajax({
-      url: "/dwp/user/logout", // Path to your logout script
+      url: "/dwp/user/logout",
       type: "POST",
       success: function (response) {
         if (response.success) {
-          location.reload(); // Reload the page to show the login button
+          location.reload();
         } else {
           console.error("Logout failed:", response.message);
         }

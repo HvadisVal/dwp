@@ -1,12 +1,11 @@
 <?php
 require_once("./includes/connection.php"); 
 
-// Autoload classes (optional but recommended)
+// Autoload classes 
 spl_autoload_register(function ($class_name) {
     $paths = [
         'admin/controllers/',
         'admin/models/',
-        // Add other paths if necessary
     ];
     foreach ($paths as $path) {
         $file = __DIR__ . '/' . $path . $class_name . '.php';
@@ -20,7 +19,7 @@ spl_autoload_register(function ($class_name) {
 // Get the path from the URL, e.g., "admin/manage_movies"
 $path = isset($_GET['path']) ? $_GET['path'] : 'landing';
 
-// Define routes - mapping URL paths to file locations
+// Define routes
 $routes = [
     // Admin pages
     'admin/login' => 'admin/controllers/LoginController.php',
@@ -56,14 +55,10 @@ $routes = [
 
     // Main pages
     'about' => 'frontend/controllers/AboutController.php',
-    'landing' => 'frontend/controllers/LandingController.php', // default path if no path specified
+    'landing' => 'frontend/controllers/LandingController.php', 
     'news' => 'frontend/controllers/NewsController.php',
-    /* 'movies' => 'frontend/movies.php', */
     'movies' => 'frontend/controllers/MoviesController.php',
-    /* 'overview' => 'frontend/overview.php',*/
     'overview' => 'frontend/controllers/OverviewController.php',
-    /* 'save-selection' => 'frontend/save_selection.php',
-    'seat' => 'frontend/seat.php', */
     'save-selection' => 'frontend/actions/save_selection.php',
     'seat' => 'frontend/controllers/SeatController.php',
     'validate-coupon' => 'frontend/actions/validate_coupon.php',
@@ -74,27 +69,25 @@ $routes = [
     
 ];
 
-// Define a function to handle the routing process
+// Route the request based on the path
 function routeRequest($path, $routes, $connection) {
     // Check if the path is an admin page
     if (strpos($path, 'admin/') === 0 && $path !== 'admin/login') {
-        // Start session and include admin session management
-        require_once("./includes/admin_session.php"); // Include admin session management
+        // Start session 
+        require_once("./includes/admin_session.php"); 
 
         // Use admin session function to confirm the admin is logged in
         if (!admin_logged_in()) {
-            header('Location: /dwp/admin/login'); // Redirect to login if not logged in
+            header('Location: /dwp/admin/login'); 
             exit;
         }
     }
-    // Check for dashboard route
     if ($path == 'admin/dashboard') {
         loadController('DashboardController', $connection, 'getAdminEmail');
         include 'admin/views/dashboard.php';
         return;
     }
 
-    // Check for logout route
     if ($path == 'admin/logout') {
         loadController('LogoutController', $connection, 'logout');
         return;
@@ -201,7 +194,7 @@ function routeRequest($path, $routes, $connection) {
             $controller->replyToMessage($messageId, $reply);
             exit;
         } else {
-            $controller->handleRequest();  // Show the message list with reply option
+            $controller->handleRequest();  
             exit;
         }
     }
@@ -213,7 +206,6 @@ function routeRequest($path, $routes, $connection) {
     $pathParts = explode('/', $path);
     $messageId = isset($pathParts[3]) ? (int)$pathParts[3] : null;
     if ($messageId) {
-        // Handle the reply action
         require_once 'admin/controllers/MessageController.php';
         $controller = new MessageController($connection);
         
@@ -221,50 +213,47 @@ function routeRequest($path, $routes, $connection) {
             $reply = $_POST['reply'] ?? '';
             $controller->replyToMessage($messageId, $reply);
         } else {
-            $controller->handleRequest();  // Show the message list with reply option
+            $controller->handleRequest(); 
         }
         exit;
     }
 }
 
     
-     // Handle other dynamic routes based on the $routes array
      if (array_key_exists($path, $routes)) {
         // Dynamically include the controller
         require_once($routes[$path]);
         
         // Instantiate the controller class and handle the request
-        $controllerName = basename($routes[$path], '.php'); // Get class name based on file
-        $controllerClass = ucfirst($controllerName);  // Convert to PascalCase
+        $controllerName = basename($routes[$path], '.php'); 
+        $controllerClass = ucfirst($controllerName);  
         $controller = new $controllerClass($connection);
-        $controller->handleRequest(); // Let the controller handle the rendering
+        $controller->handleRequest(); 
         return;
     }
 
 
-    // Default to 404 if no route matched
     http_response_code(404);
     echo "404 - Page Not Found";
 }
 
-// Helper function to load a controller method dynamically
+// Helper function to load a controller 
 function loadController($controllerName, $connection, $methodName = 'handleRequest') {
     require_once("admin/controllers/{$controllerName}.php");
     $controller = new $controllerName($connection);
     $controller->$methodName();
 }
 
-// Example usage (you would call this function based on the current request path)
 routeRequest($path, $routes, $connection);
-// Footer
 
-// Pages where footer should appear
+// Footer
 $pagesWithFooter = [
     'landing',
     'news',
     'movies',
     'movie',
-];// Conditionally include footer
+];
+
 if (in_array($path, $pagesWithFooter)) {
     require_once $_SERVER['DOCUMENT_ROOT'] . '/dwp/frontend/controllers/FooterController.php';
     $footer = new FooterController($connection);

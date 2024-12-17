@@ -1,5 +1,4 @@
 <?php 
-// admin/models/CouponModel.php
 class CouponModel {
     private $connection;
 

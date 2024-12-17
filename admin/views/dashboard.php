@@ -1,5 +1,4 @@
 <?php
-// admin/views/dashboard.php
 require_once('includes/admin_session.php'); 
 require_once('./admin/controllers/DashboardController.php');
 
@@ -13,7 +12,6 @@ $adminEmail = $controller->getAdminEmail();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <!-- Materialize CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/dwp/admin/assets/css/dashboard.css">
 </head>
@@ -119,7 +117,6 @@ $adminEmail = $controller->getAdminEmail();
             </div>
         </div>
 
-    <!-- Logout Button -->
     <div class="container">
         <form action="/dwp/admin/logout" method="POST" style="text-align: center;">
             <button class="btn-red" type="submit">LogOut</button>
@@ -130,7 +127,6 @@ $adminEmail = $controller->getAdminEmail();
         <p>&copy; <?= date("Y"); ?> Admin Panel</p>
     </footer>
 
-    <!-- Materialize JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
 </html>

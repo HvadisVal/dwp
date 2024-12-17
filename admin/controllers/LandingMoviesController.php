@@ -1,5 +1,4 @@
 <?php
-// admin/controllers/LandingMoviesController.php
 require_once('./admin/models/LandingMoviesModel.php');
 require_once('./includes/admin_session.php');
 require_once('./includes/functions.php');
@@ -15,7 +14,6 @@ class LandingMoviesController {
         $csrfToken = generate_csrf_token();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Validate CSRF token
             validate_csrf_token($_POST['csrf_token']);
             refresh_csrf_token();
 
@@ -68,11 +66,9 @@ class LandingMoviesController {
             exit();
         }
 
-        // Fetch all available movies and the movies already on the landing page
         $movies = $this->landingMoviesModel->getAllMoviesNotOnLandingPage();
         $landingMovies = $this->landingMoviesModel->getlandingMovies();
 
-        // Get the used display orders for the dropdown
         $usedOrders = [];
         foreach ($landingMovies as $movie) {
             $usedOrders[] = $movie['DisplayOrder'];

@@ -14,7 +14,7 @@ class LoginController {
 
     public function handleRequest() {
         $csrfToken = generate_csrf_token();
-        $_SESSION['csrf_token'] = $csrfToken; // Store the token in session
+        $_SESSION['csrf_token'] = $csrfToken; 
 
         $blockedUntil = $_SESSION['blocked_until'] ?? null;
 
@@ -87,7 +87,6 @@ class LoginController {
             exit();
         }
     
-        // Login successful
         session_regenerate_id(true);
         $_SESSION['admin_id'] = $admin['Admin_Id'];
         $_SESSION['admin_email'] = $admin['Email'];
