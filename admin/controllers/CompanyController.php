@@ -3,12 +3,11 @@ require_once("./includes/admin_session.php");
 require_once("./includes/functions.php");
 require_once("./admin/models/CompanyModel.php");
 
-// CSRF token handling
 generate_csrf_token();
 
 class CompanyController {
     private $model;
-    private $companyId = 1; // Default company ID
+    private $companyId = 1; 
 
     public function __construct($connection) {
         $this->model = new CompanyModel($connection);
@@ -23,9 +22,8 @@ class CompanyController {
     }
 
     private function handlePostRequest() {
-        // Validate CSRF token
         validate_csrf_token($_POST['csrf_token']);
-        refresh_csrf_token();  // Refresh CSRF token to avoid reuse
+        refresh_csrf_token();  
 
         if (isset($_POST['edit_company'])) {
             $this->editCompany();
@@ -62,7 +60,7 @@ class CompanyController {
 
     private function showCompanyPage() {
         $company = $this->model->getCompanyInfo($this->companyId);
-        include("./admin/views/company.php"); // Only include once here in the controller
+        include("./admin/views/company.php"); 
     }
 }
 

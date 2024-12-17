@@ -21,7 +21,6 @@
                 <label for="phone">Telephone Number</label>
             </div>
 
-            <!-- Google reCAPTCHA widget -->
             <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
 
             <button class="btn blue" type="submit" id="continueBtn">Continue</button>

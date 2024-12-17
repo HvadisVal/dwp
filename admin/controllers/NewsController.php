@@ -1,5 +1,4 @@
 <?php
-// NewsController.php
 require_once("./includes/admin_session.php");
 require_once("./includes/functions.php");
 require_once("./admin/models/NewsModel.php");
@@ -11,12 +10,11 @@ class NewsController {
 
     public function __construct($connection) {
         $this->model = new NewsModel($connection);
-        $this->connection = $connection;  // Store connection for later use
+        $this->connection = $connection;  
     }
 
     public function handleRequest() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Validate CSRF token
             validate_csrf_token($_POST['csrf_token']);
             refresh_csrf_token();
 
@@ -42,7 +40,6 @@ class NewsController {
             }
         }
 
-        // Fetch all news and media for the view
         $newsArticles = $this->model->getAllNews();
         $newsWithImages = [];
         foreach ($newsArticles as $news) {
@@ -50,7 +47,6 @@ class NewsController {
             $newsWithImages[$news['News_ID']] = ['article' => $news, 'images' => $images];
         }
 
-        // Load the view
         include('./admin/views/news_view.php');
     }
 
@@ -64,11 +60,10 @@ class NewsController {
             exit();
         }
 
-        // Add the news article
         $newsId = $this->model->addNews($title, $content, $datePosted);
 
         if ($newsId) {
-            uploadImage($newsId, 'news', $this->connection);  // Pass connection here
+            uploadImage($newsId, 'news', $this->connection);  
             $_SESSION['message'] = "News added successfully!";
         } else {
             $_SESSION['message'] = "Error adding news.";
@@ -91,8 +86,8 @@ class NewsController {
         
         if ($this->model->editNews($newsId, $title, $content, $datePosted)) {
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-                deleteImage($newsId, 'news', $this->connection); // Pass connection here to delete old image
-                uploadImage($newsId, 'news', $this->connection); // Pass connection here to upload new image
+                deleteImage($newsId, 'news', $this->connection); 
+                uploadImage($newsId, 'news', $this->connection); 
             }
 
             $_SESSION['message'] = "News article updated successfully!";
@@ -106,7 +101,7 @@ class NewsController {
 
     private function deleteNews() {
         $newsId = (int)$_POST['news_id'];
-        deleteImage($newsId, 'news', $this->connection); // Pass connection here to delete old image
+        deleteImage($newsId, 'news', $this->connection); 
         $this->model->deleteNews($newsId);
 
         $_SESSION['message'] = "News deleted successfully!";

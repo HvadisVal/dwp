@@ -1,5 +1,4 @@
 <?php 
-// admin/models/MessageModel.php
 class MessageModel {
     private $connection;
 
@@ -7,7 +6,6 @@ class MessageModel {
         $this->connection = $connection;
     }
 
-    // Fetch all contact messages
     public function getAllMessages() {
         $sql = "SELECT Message_ID, Name, Email, Subject, Message, Submitted_At, Reply FROM ContactMessages ORDER BY Submitted_At DESC";
         $stmt = $this->connection->prepare($sql);
@@ -15,7 +13,6 @@ class MessageModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Store the reply to a message
     public function replyToMessage($messageId, $reply) {
         $sql = "UPDATE ContactMessages SET Reply = ? WHERE Message_ID = ?";
         $stmt = $this->connection->prepare($sql);
@@ -33,7 +30,7 @@ class MessageModel {
         $sql = "SELECT Email, Subject FROM ContactMessages WHERE Message_ID = ?";
         $stmt = $this->connection->prepare($sql);
         $stmt->execute([$messageId]);
-        return $stmt->fetch(PDO::FETCH_ASSOC); // Fetch and return the result as an associative array
+        return $stmt->fetch(PDO::FETCH_ASSOC); 
     }
     
 }

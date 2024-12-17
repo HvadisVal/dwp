@@ -9,7 +9,7 @@ class MoviesModel {
     }
 
     public function getAllMovies() {
-        $sql = "SELECT * FROM MovieDetails";  // Using the SQL view
+        $sql = "SELECT * FROM MovieDetails";  
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

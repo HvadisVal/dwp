@@ -12,7 +12,6 @@ class MoviesController {
     }
 
     public function handleRequest() {
-        // CSRF token generation and validation
         generate_csrf_token();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -34,7 +33,6 @@ class MoviesController {
         
         $errors = [];
         
-        // Sanitize inputs
         $title = htmlspecialchars(trim($_POST['title']), ENT_QUOTES, 'UTF-8');
         $director = htmlspecialchars(trim($_POST['director']), ENT_QUOTES, 'UTF-8');
         $language = htmlspecialchars(trim($_POST['language']), ENT_QUOTES, 'UTF-8');
@@ -45,7 +43,6 @@ class MoviesController {
         $trailerlink = htmlspecialchars(trim($_POST['trailerlink']), ENT_QUOTES, 'UTF-8');
         $agelimit = (int)trim($_POST['agelimit']);
         
-        // Validation
         if (!validateLettersOnly($director)) {
             $errors[] = "Director should contain only letters and spaces.";
         }
@@ -78,11 +75,10 @@ class MoviesController {
             $errors[] = "At least one gallery image is required.";
         }
         
-        // If there are errors, return them to the form
         if (!empty($errors)) {
-            $_SESSION['errors'] = $errors; // Store errors in session
-            $_SESSION['message'] = "Movie not added due to validation errors."; // Set failure message
-            header("Location: /dwp/admin/manage-movies"); // Redirect back to the form
+            $_SESSION['errors'] = $errors; 
+            $_SESSION['message'] = "Movie not added due to validation errors."; 
+            header("Location: /dwp/admin/manage-movies"); 
             exit();
         }
         
@@ -104,7 +100,6 @@ class MoviesController {
             $agelimit
         ];
         
-        // Insert movie data into the database
         if ($this->model->addMovie($movieData)) {
             $movieId = $connection->lastInsertId();
             // Handle image uploads
@@ -125,7 +120,6 @@ class MoviesController {
     private function editMovie() {
         global $connection;
         
-        // Collect input values
         $movieId = (int)$_POST['movie_id'];
         $title = htmlspecialchars(trim($_POST['title']));
         $director = htmlspecialchars(trim($_POST['director']));
@@ -139,7 +133,6 @@ class MoviesController {
         $trailerlink = htmlspecialchars(trim($_POST['trailerlink']));
         $agelimit = (int)$_POST['agelimit'];
         
-        // Validation
         $errors = [];
         if (!validateLettersOnly($director)) {
             $errors[] = "Director should contain only letters and spaces.";
@@ -163,14 +156,12 @@ class MoviesController {
             $errors[] = "Trailer link must start with 'https://www.youtube.com/embed/'.";
         }
     
-        // If there are errors, return with error messages
         if (!empty($errors)) {
             $_SESSION['errors'] = $errors;
-            header("Location: /dwp/admin/manage-movies?movie_id=" . $movieId); // Redirect to the form with error messages
+            header("Location: /dwp/admin/manage-movies?movie_id=" . $movieId); 
             exit();
         }
     
-        // Proceed with updating the movie if no validation errors
         $movieData = [
             $title,
             $director,
@@ -187,11 +178,11 @@ class MoviesController {
         ];
         
         if ($this->model->updateMovie($movieData)) {
-            // Handle poster replacement if a new one is uploaded
+            // Handle poster replacement 
             if (isset($_FILES['poster']) && $_FILES['poster']['error'] === UPLOAD_ERR_OK) {
-                deletePosterImage($movieId, $connection); // Delete the existing poster
-                $_FILES['image'] = $_FILES['poster']; // Assign the file to the 'image' input
-                uploadImage($movieId, 'movie', $connection); // Upload the new poster
+                deletePosterImage($movieId, $connection); 
+                $_FILES['image'] = $_FILES['poster']; 
+                uploadImage($movieId, 'movie', $connection);
             }
     
             // Handle gallery image deletions
@@ -220,7 +211,7 @@ class MoviesController {
         global $connection;
     
         $movieId = (int)$_POST['movie_id'];
-        deleteImage($movieId, 'movie', $connection); // Deletes all images (poster + gallery) for the movie
+        deleteImage($movieId, 'movie', $connection); 
     
         if ($this->model->deleteMovie($movieId)) {
             $_SESSION['message'] = "Movie deleted successfully!";
@@ -252,19 +243,18 @@ class MoviesController {
         // Upload new poster
         if (isset($_FILES['poster']) && $_FILES['poster']['error'] === UPLOAD_ERR_OK) {
             $_FILES['image'] = $_FILES['poster'];
-            uploadImage($movieId, 'movie', $connection); // Handles the poster upload
+            uploadImage($movieId, 'movie', $connection); 
         }
     
         // Upload new gallery images
         if (isset($_FILES['gallery']['name']) && count($_FILES['gallery']['name']) > 0) {
             $_FILES['image'] = $_FILES['gallery'];
-            uploadImage($movieId, 'gallery', $connection); // Handles the gallery images upload
+            uploadImage($movieId, 'gallery', $connection); 
         }
     }
     
 }
 
-// Instantiate and handle request
 $controller = new MoviesController($connection);
 $controller->handleRequest();
 $movies = $controller->model->getAllMovies();

@@ -1,5 +1,4 @@
 <?php 
-// admin/controllers/CouponController.php
 require_once('./admin/models/CouponModel.php');
 require_once('./includes/admin_session.php');
 require_once('./includes/functions.php');
@@ -15,7 +14,6 @@ class CouponController {
         $csrfToken = generate_csrf_token();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Validate CSRF token
             validate_csrf_token($_POST['csrf_token']);
             refresh_csrf_token();
 
@@ -30,8 +28,7 @@ class CouponController {
                         exit();
                     }
 
-                    // Validate discount_amount (using the reusable function)
-                    $discountAmount = trim($_POST['discount_amount']);
+                    $discountAmount = trim(string: $_POST['discount_amount']);
                     if (!validate_numeric($discountAmount)) {
                         $_SESSION['message'] = "Please enter a valid discount amount (positive number).";
                         header("Location: /dwp/admin/manage-coupons");
@@ -39,7 +36,6 @@ class CouponController {
                     }
                     $discountAmount = (float)$discountAmount;
 
-                    // Validate expire_date (using the reusable function)
                     $expireDate = $_POST['expire_date'];
                     if (!validate_date($expireDate)) {
                         $_SESSION['message'] = "Please enter a valid expiration date (YYYY-MM-DD).";
@@ -60,7 +56,6 @@ class CouponController {
                         exit();
                     }
 
-                    // Validate discount_amount (using the reusable function)
                     $discountAmount = trim($_POST['discount_amount']);
                     if (!validate_numeric($discountAmount)) {
                         $_SESSION['message'] = "Please enter a valid discount amount (positive number).";
@@ -69,7 +64,6 @@ class CouponController {
                     }
                     $discountAmount = (float)$discountAmount;
 
-                    // Validate expire_date (using the reusable function)
                     $expireDate = $_POST['expire_date'];
                     if (!validate_date($expireDate)) {
                         $_SESSION['message'] = "Please enter a valid expiration date (YYYY-MM-DD).";
@@ -96,7 +90,6 @@ class CouponController {
             exit();
         }
 
-        // Fetch all coupons to be passed to the view
         $coupons = $this->couponModel->getAllCoupons();
         include('admin/views/coupons_content.php');
     }

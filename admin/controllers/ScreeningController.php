@@ -1,5 +1,4 @@
 <?php
-// controllers/ScreeningController.php
 require_once("./includes/admin_session.php");
 require_once("./includes/functions.php");
 require_once("./admin/models/ScreeningModel.php");
@@ -12,26 +11,21 @@ class ScreeningController {
     }
 
     public function handleRequest() {
-        // Handle form submissions (Add, Edit, Delete screenings)
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->handleFormSubmission();
         }
 
-        // Fetch data for the view (screenings, cinema halls, movies)
         $screenings = ScreeningModel::fetchAllScreenings();
         $cinemaHalls = ScreeningModel::fetchCinemaHalls();
         $movies = ScreeningModel::fetchMovies();
 
-        // Load the view (screenings content)
         require_once("./admin/views/screenings_content.php");
     }
 
     private function handleFormSubmission() {
-        // Validate CSRF token
         validate_csrf_token($_POST['csrf_token']);
         refresh_csrf_token();
 
-        // Add screening
         if (isset($_POST['add_screening'])) {
             $movieId = (int)$_POST['movie_id'];
             $cinemaHallId = (int)$_POST['cinemahall_id'];
@@ -46,7 +40,6 @@ class ScreeningController {
             exit();
         }
 
-        // Edit screening
         if (isset($_POST['edit_screening'])) {
             $screeningId = (int)$_POST['screening_id'];
             $movieId = (int)$_POST['movie_id'];
@@ -62,7 +55,6 @@ class ScreeningController {
             exit();
         }
 
-        // Delete screening
         if (isset($_POST['delete_screening'])) {
             $screeningId = (int)$_POST['screening_id'];
 

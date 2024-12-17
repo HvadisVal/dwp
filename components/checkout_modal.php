@@ -3,12 +3,10 @@
         <h4>Checkout</h4>
         <p>Review your details and confirm the payment below:</p>
 
-        <!-- Display Total Price -->
         <div id="checkoutTotalSection">
             <p><strong>Total Price: </strong><span id="totalPriceDisplay">DKK <?= number_format($_SESSION['totalPrice'] ?? 0, 2) ?></span></p>
         </div>
 
-        <!-- Coupon Code Section -->
         <div id="couponSection">
             <div class="input-field">
                 <input type="text" id="couponCode" name="couponCode" placeholder="Enter Coupon Code">
@@ -21,7 +19,6 @@
 
         <h5>Payment Method</h5>
 <div class="payment-container" style="display: flex; align-items: center; gap: 20px;">
-    <!-- Payment Option: Pay with Card -->
     <label style="display: flex; align-items: center; gap: 10px;">
         <input name="paymentMethod" type="radio" value="card" class="with-gap payment-radio" />
         <span>Pay with Card</span>
@@ -41,7 +38,6 @@
         </div>
     </div>
 
-    <!-- Payment Option: MobilePay -->
     <label style="display: flex; align-items: center; gap: 10px; margin-left: 20px;">
         <input name="paymentMethod" type="radio" value="mobilepay" class="with-gap payment-radio" />
         <span>MobilePay</span>
@@ -58,7 +54,6 @@
     </div>
 </div>
 
-<!-- Checkout Button -->
 <form action="/dwp/user/actions/booking_process.php" method="post">
     <?php if ($isGuest): ?>
         <input type="hidden" name="guest" value="1">
